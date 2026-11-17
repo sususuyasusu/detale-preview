@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="平城苑、新宿さぼてん、ロイヤルホールディングスなど、取引先ごとの制作事例と制作実績。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="制作実績 — ディテールアンドワークス">
+<meta property="og:description" content="平城苑、新宿さぼてん、ロイヤルホールディングスなど、取引先ごとの制作事例と制作実績。">
+<meta property="og:image" content="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#B0986A">
+<title>制作実績 — ディテールアンドワークス</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Shippori+Mincho:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F0EDE6}
+a{color:inherit;text-decoration:none}
+.bb{font-family:'Cormorant Garamond', serif;font-weight:400;letter-spacing:.04em}
+@keyframes up{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes marqL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ch{display:inline-block;transform:translateY(105%);animation:up .9s cubic-bezier(.2,.8,.2,1) forwards}
+.chip{transition:background .3s,color .3s}
+.chip:hover{background:#B0986A!important;color:#161514!important}
+.card{break-inside:avoid;margin:0 0 16px;display:block;position:relative;overflow:hidden;animation:fadeUp .7s cubic-bezier(.2,.8,.2,1) both}
+.card img{display:block;width:100%;height:auto;transition:transform 1.2s cubic-bezier(.2,.8,.2,1),filter .6s}
+.card:hover img{transform:scale(1.06)}
+.card .cap{position:absolute;left:0;right:0;bottom:0;padding:40px 14px 12px;background:linear-gradient(transparent,rgba(22,21,20,.85));color:#F0EDE6;transform:translateY(100%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.card:hover .cap,.card:focus-visible .cap{transform:none}
+.nv{position:relative;overflow:hidden}
+.nv::before{content:"";position:absolute;inset:0;background:#B0986A;transform:translateY(101%);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.nv:hover::before{transform:none}
+.nv>*{position:relative}
+.btn{transition:transform .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,21,20,.25)}
+
+/* ===== トップと共通の動き ===== */
+@keyframes marqL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes marqR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes fadeInX{from{opacity:0}to{opacity:1}}
+@keyframes pourOut{0%,55%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}100%{clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%)}}
+@keyframes liquidPour{
+ 0%,50%{clip-path:shape(from 0% 0%, curve to 25% 0% with 12% 0%, curve to 50% 0% with 37% 0%, curve to 75% 0% with 62% 0%, curve to 100% 0% with 87% 0%, vline to 100%, hline to 0%, close)}
+ 78%{clip-path:shape(from 0% 34%, curve to 25% 52% with 12% 18%, curve to 50% 40% with 37% 78%, curve to 75% 58% with 62% 22%, curve to 100% 38% with 87% 84%, vline to 100%, hline to 0%, close)}
+ 100%{clip-path:shape(from 0% 112%, curve to 25% 130% with 12% 104%, curve to 50% 118% with 37% 150%, curve to 75% 134% with 62% 106%, curve to 100% 116% with 87% 156%, vline to 100%, hline to 0%, close)}}
+.pour{position:fixed;inset:0;height:100vh;z-index:60;background:#B0986A;color:#161514;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:pourOut 1.9s cubic-bezier(.55,0,.25,1) forwards}
+@supports (clip-path: shape(from 0px 0px, line to 10px 10px, close)){.pour{animation:liquidPour 1.9s cubic-bezier(.55,0,.25,1) forwards}}
+.hero{position:relative;overflow:hidden}
+.hero > *{position:relative;z-index:1}
+.hero > .hscene{position:absolute;inset:0;z-index:0;pointer-events:none;animation:fadeInX .45s both}
+.blob{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);animation:blobPop 2.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes blobPop{0%{transform:translate(-50%,-50%) scale(0)}22%{transform:translate(calc(-50% + var(--dx) * .45),calc(-50% + var(--dy) * .45)) scale(1.18)}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.85)}}
+.bigamp{position:absolute;left:62%;top:50%;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(110vmin,900px);line-height:1;color:#161514;opacity:.14;transform:translate(-50%,-56%);animation:ampIn 2.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:.14}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
+.htiles{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr))}
+.htiles .tile{opacity:.2}
+.tile{display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(7vw,10vh);line-height:1;transform:scale(0) rotate(var(--rot));animation:tilePop .55s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes tilePop{to{transform:scale(1) rotate(var(--rot))}}
+.glowlogo{position:relative}
+.glowover{position:absolute;inset:0;pointer-events:none;transition:opacity .45s ease;opacity:var(--lop);
+ background:radial-gradient(circle min(26vw,360px) at var(--lx) var(--ly),var(--c1) 0%,var(--c2) 42%,rgba(176,152,106,0) 74%);-webkit-background-clip:text;background-clip:text}
+.glowover,.glowover *{color:transparent!important;-webkit-text-fill-color:transparent}
+.bigmark{font-family:'Cormorant Garamond', serif;font-size:clamp(80px,21vw,330px);line-height:.78;letter-spacing:.01em;white-space:nowrap;margin:0}
+.lfield{position:relative;height:560px;overflow:hidden;background:#0F0E0D;color:#F0EDE6;perspective:1100px}
+.lplane{position:absolute;left:50%;top:50%;width:240%;height:240%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1);
+ background-image:linear-gradient(rgba(240,237,230,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,.07) 1px,transparent 1px);background-size:220px 120px}
+.lrow{display:flex;width:max-content;gap:.9em;white-space:nowrap;line-height:1.35}
+.lrow.l{animation:marqL var(--dur) linear infinite}
+.lrow.r{animation:marqR var(--dur) linear infinite}
+.lw{font-family:'Cormorant Garamond', serif;letter-spacing:.02em}
+.lw.it{font-family:'Cormorant Garamond', serif;font-style:italic;letter-spacing:0}
+.lw.jp{font-family:'Shippori Mincho', serif;font-weight: 600;letter-spacing:-.04em}
+.lw.amp{color:#B0986A}
+@media (max-width: 700px){.htiles{grid-template-columns:repeat(5,minmax(0,1fr))}.lfield{height:440px}}
+
+/* ===== ふわふわの玉（溶け合い・色が移る） ===== */
+@keyframes gbColor{0%{background:#B0986A}16%{background:#C9B48A}32%{background:#9E3B2E}48%{background:#8A6B4E}64%{background:#7D8471}80%{background:#E3D8C4}100%{background:#B0986A}}
+@keyframes gbFloat{0%{transform:translate(0,0) scale(1)}33%{transform:translate(var(--x1),var(--y1)) scale(1.12)}66%{transform:translate(var(--x2),var(--y2)) scale(.9)}100%{transform:translate(0,0) scale(1)}}
+.gsec{position:relative;isolation:isolate}
+.goo-field{position:absolute;pointer-events:none;z-index:-1;filter:url(#dwGooA);opacity:.78}
+.gb{position:absolute;border-radius:50%;animation:gbFloat var(--d) ease-in-out infinite,gbColor var(--c) linear infinite;animation-delay:var(--dl),var(--dl)}
+.gcur{position:fixed;inset:0;pointer-events:none;z-index:70;filter:url(#dwGooC)}
+.cb{position:fixed;left:0;top:0;border-radius:50%;transform:translate(-200px,-200px);animation:gbColor 7s linear infinite;will-change:transform}
+@media (hover: hover) and (pointer: fine){.curhide,.curhide *{cursor:none!important}}
+@media (hover: none), (pointer: coarse){.gcur{display:none}}
+@media (max-width: 700px){.goo-field{transform:scale(.6);transform-origin:top left}}
+
+/* ===== 見出しと玉の融合 ===== */
+@keyframes gtDrift{0%{transform:translate(var(--sx),0) scale(.9)}50%{transform:translate(calc((var(--sx) + var(--ex)) / 2),var(--dy)) scale(1.15)}100%{transform:translate(var(--ex),0) scale(.9)}}
+.gooT{position:relative;filter:url(#dwGooT);isolation:isolate}
+.gtb{position:absolute;border-radius:50%;pointer-events:none;animation:gtDrift var(--d) ease-in-out infinite alternate,gbColor var(--c) linear infinite;animation-delay:var(--dl),var(--dl)}
+
+/* ===== 取引先ごとの事例 ===== */
+.cases{position:relative;isolation:isolate}
+.case{display:flex;flex-wrap:wrap;gap:24px 40px;padding:44px 0;border-top:2px solid #161514}
+.case-l{flex:1 1 320px;max-width:440px;display:flex;flex-direction:column;gap:14px}
+.case-r{flex:3 1 520px;min-width:0;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
+.case-r img{flex:0 0 auto;height:340px;width:auto;aspect-ratio:auto;max-width:520px;object-fit:cover;scroll-snap-align:start;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s}
+.case-r img:hover{transform:translateY(-8px) rotate(-1deg);box-shadow:0 20px 40px rgba(22,21,20,.25)}
+.chip2{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #161514;padding:5px 10px;font-size:13px;font-weight: 500;background:#F0EDE6}
+.cnum{font-family:'Cormorant Garamond', serif;font-size:96px;line-height:.8;color:#7A6440}
+.crow{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:18px 0;border-bottom:1px solid rgba(22,21,20,.2)}
+.crow:hover .cthumb img{transform:translateY(-4px)}
+.cthumb{display:flex;gap:6px;flex:0 0 auto}
+.cthumb img{width:64px;height:64px;object-fit:cover;transition:transform .4s}
+@media (max-width: 700px){.case-r img{height:220px}.cnum{font-size:64px}.cthumb img{width:48px;height:48px}}
+
+/* ===== /jury 指摘の修正 ===== */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-60px;z-index:90;background:#161514;color:#F0EDE6;padding:12px 18px;font-weight: 500;transition:top .2s}
+.skip:focus{top:12px}
+header a:first-child{transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s}
+header a:first-child:hover{transform:translateY(-2px);background:#B0986A}
+a[href^="mailto:"],a[href^="tel:"]{background-image:linear-gradient(#B0986A,#B0986A);background-size:0 4px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .45s cubic-bezier(.2,.8,.2,1)}
+a[href^="mailto:"]:hover,a[href^="tel:"]:hover{background-size:100% 4px}
+.snav{background-image:linear-gradient(currentColor,currentColor);background-size:0 3px;background-repeat:no-repeat;background-position:100% 100%;transition:background-size .4s cubic-bezier(.2,.8,.2,1),color .3s,transform .3s}
+.snav:hover{background-size:100% 3px;background-position:0 100%}
+@media (max-width: 700px){.stage{height:clamp(520px,88svh,720px)!important}form [style*="minmax(240px"]{grid-template-columns:1fr!important}}
+@media (prefers-reduced-motion: reduce){.gtb{animation:none!important;opacity:0}}
+@media (prefers-reduced-motion: reduce){.gcur{display:none!important}.curhide,.curhide *{cursor:auto!important}.gb{animation:none!important;background:#B0986A}}
+@media (prefers-reduced-motion: reduce){.pour{display:none!important}*{animation:none!important;transition:none!important}.ch{transform:none}}
+.case{scroll-margin-top:84px}
+.case-hit{animation:caseHit 1.6s ease-out 1}
+@keyframes caseHit{0%{box-shadow:0 0 0 0 rgba(176,152,106,.9)}100%{box-shadow:0 0 0 28px rgba(176,152,106,0)}}
+@media (prefers-reduced-motion: reduce){.case-hit{animation:none}}
+
+/* 和紙の地（細かな紙の繊維） */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .36  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+body{font-feature-settings:'palt' 1;}
+/* スマホ幅の崩れ直し */
+@media (max-width: 700px){
+ header nav[aria-label="メインメニュー"]{width:100%;flex-wrap:nowrap!important;border-top:1px solid rgba(22,21,20,.2)}
+ header nav[aria-label="メインメニュー"] a{flex:1 1 0;text-align:center;padding:11px 4px!important;border-left:none!important}
+ header nav[aria-label="メインメニュー"] a + a{border-left:1px solid rgba(22,21,20,.2)!important}
+ header nav[aria-label="メインメニュー"] a .bb{font-size:15px!important}
+ header > a:first-child{padding:8px 14px!important}
+}
+/* 墨の玉（ゆらゆら） */
+@keyframes inkMorph{0%{border-radius:58% 42% 55% 45%/47% 58% 42% 53%}20%{border-radius:42% 58% 40% 60%/58% 44% 56% 42%}40%{border-radius:63% 37% 52% 48%/40% 62% 38% 60%}60%{border-radius:45% 55% 64% 36%/55% 40% 60% 45%}80%{border-radius:54% 46% 38% 62%/62% 52% 48% 38%}100%{border-radius:58% 42% 55% 45%/47% 58% 42% 53%}}
+.gtb{animation-name:gtDrift,inkMorph!important;animation-timing-function:ease-in-out,ease-in-out!important;animation-direction:alternate,normal!important}
+/* 墨の玉 調整2 */
+.gtb{background:currentColor!important;z-index:-1}
+/* 墨のにじみ（全見出し・カーソル） */
+.cb{background:#161514!important;animation:none!important}
+.gcb{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:currentColor;z-index:-1;pointer-events:none;translate:-999px -999px;scale:0;transition:scale .16s ease-out;will-change:translate,scale}
+@media (hover: none), (pointer: coarse){.gcb{display:none}}
+@media (prefers-reduced-motion: reduce){.gcb{display:none}}
+/* 写真の高さ自動 */
+:where(img[width][height]){height:auto}
+/* 文字は黒 */
+/* ロゴは本物の文字を光らせる（v2） */
+.gl-on{background:radial-gradient(circle 230px at var(--lx,-999px) var(--ly,-999px),#E8D3A0 0%,#B0986A 34%,currentColor 74%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.gl-on *{-webkit-text-fill-color:transparent}
+.glowlogo .ch,h1.gooT .ch{animation-fill-mode:backwards!important;transform:none}
+/* 暗い背景では白いカーソル */
+.gcur.ondark .cb{background:#F0EDE6!important}
+.cb{transition:background-color .2s ease}
+</style>
+</helmet>
+<div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
+  <a class="skip" href="#main">本文へ移動</a>
+  <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwGooA"><feGaussianBlur in="SourceGraphic" stdDeviation="20" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"></feColorMatrix></filter><filter id="dwGooT" x="-15%" y="-60%" width="130%" height="220%"><feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -12" result="g"></feColorMatrix><feMerge><feMergeNode in="g"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><filter id="dwGooC"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -10"></feColorMatrix></filter></svg>
+  <div class="gcur" aria-hidden="true"><span ref="{{cur3}}" class="cb" style="width: 12px; height: 12px; margin: -6px 0 0 -6px; animation-delay: -5.2s;"></span><span ref="{{cur2}}" class="cb" style="width: 16px; height: 16px; margin: -8px 0 0 -8px; animation-delay: -3.5s;"></span><span ref="{{cur1}}" class="cb" style="width: 21px; height: 21px; margin: -10.5px 0 0 -10.5px; animation-delay: -1.7s;"></span><span ref="{{cur0}}" class="cb" style="width: 28px; height: 28px; margin: -14px 0 0 -14px;"></span></div>
+  <sc-if value="{{pourOn}}" hint-placeholder-val="{{ false }}"><div class="pour" aria-hidden="true"><div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#161514" stroke-width="3"><path d="M60 4 L114 40 L60 76 L6 40 Z"></path><text x="60" y="49" text-anchor="middle" fill="#161514" stroke="none" style="font-family: 'Cormorant Garamond', serif; font-size: 26px;">D&amp;W</text></svg><span class="bb" style="font-size: 44px;">WORKS</span></div></div></sc-if>
+
+  <header style="position: sticky; top: 0; z-index: 30; background: #F0EDE6; display: flex; flex-wrap: wrap; align-items: stretch; border-bottom: 2px solid #161514;">
+    <a href="Final.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; flex: 1 1 260px;">
+      <svg viewBox="0 0 120 80" width="54" height="36" fill="none" stroke="#161514" stroke-width="3" aria-hidden="true"><path d="M60 4 L114 40 L60 76 L6 40 Z"></path><text x="60" y="49" text-anchor="middle" fill="#161514" stroke="none" style="font-family: 'Cormorant Garamond', serif; font-size: 26px;">D&amp;W</text></svg>
+      <span class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; display: inline-block;"><span class="bb" style="font-size: 28px;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: inherit;">&amp;</span>WORKS</span><span class="bb glowover" aria-hidden="true" style="font-size: 28px;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: inherit;">&amp;</span>WORKS</span></span>
+    </a>
+    <nav aria-label="メインメニュー" style="display: flex; flex-wrap: wrap;">
+      <a class="nv" href="Final.dc.html#about" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2);"><span class="bb" style="font-size: 18px;">ABOUT</span></a>
+      <a class="nv" href="Works.dc.html" aria-current="page" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2); background: #B0986A;"><span class="bb" style="font-size: 18px;">WORKS</span></a>
+      <a class="nv" href="Service.dc.html" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2);"><span class="bb" style="font-size: 18px;">SERVICE</span></a>
+      <a class="btn" href="Contact.dc.html" style="padding: 14px 22px; background: #161514; color: #F0EDE6;"><span class="bb" style="font-size: 18px; color: inherit;">CONTACT →</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+  <section class="hero" style="min-height: 420px; padding: 72px 16px 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; background-image: linear-gradient(to right, rgba(22,21,20,.12) 1px, transparent 1px); background-size: calc(100% / 6) 100%;">
+    <sc-if value="{{hs0}}" hint-placeholder-val="{{ false }}">
+      <div class="hscene" aria-hidden="true" style="filter: url(#dwGooS);">
+        <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
+          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{hs1}}" hint-placeholder-val="{{ false }}">
+      <div class="hscene" aria-hidden="true"><span class="bigamp">&amp;</span></div>
+    </sc-if>
+    <sc-if value="{{hs2}}" hint-placeholder-val="{{ false }}">
+      <div class="hscene htiles" aria-hidden="true">
+        <sc-for list="{{tiles}}" as="t" hint-placeholder-count="0">
+          <span class="tile" style="background: {{t.bg}}; color: {{t.fg}}; border-radius: {{t.radius}}; --rot: {{t.rot}}; animation-delay: {{t.delay}};">&amp;</span>
+        </sc-for>
+      </div>
+    </sc-if>
+    <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwGooS"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"></feColorMatrix></filter></svg>
+    <div class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0;">
+      <h1 class="gooT bb" style="margin: 0; font-size: clamp(56px, 14vw, 220px); line-height: .82; display: flex; overflow: hidden;"><span class="sr-only">制作実績 WORKS</span><span aria-hidden="true" class="ch" style="animation-delay: .05s;">W</span><span aria-hidden="true" class="ch" style="animation-delay: .1s;">O</span><span aria-hidden="true" class="ch" style="animation-delay: .15s;">R</span><span aria-hidden="true" class="ch" style="animation-delay: .2s;">K</span><span aria-hidden="true" class="ch" style="animation-delay: .25s;">S</span><span class="gtb" aria-hidden="true" style="left: 0; top: 36%; width: 0.28em; height: 0.28em; --sx: 3.80em; --ex: 6.36em; --dy: -0.01em; --d: 6.7s; --c: 11.2s; --dl: -1.0s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 26%; width: 0.30em; height: 0.30em; --sx: 4.06em; --ex: 5.65em; --dy: 0.07em; --d: 9.6s; --c: 9.1s; --dl: -2.0s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 43%; width: 0.44em; height: 0.44em; --sx: 3.85em; --ex: 6.87em; --dy: -0.18em; --d: 9.6s; --c: 11.7s; --dl: -6.8s;"></span><span class="gcb" aria-hidden="true"></span></h1>
+    </div>
+    <p style="margin: 0; max-width: 440px; font-size: 15px; line-height: 1.9; animation: fadeUp .8s both .4s;">大手外食企業から個人店まで。ロイヤルホストを中心とした各ブランドの下支えや、125年以上続く食品企業の鮮度を保つ仕事も手がけています。</p>
+  </section>
+
+    <section id="cases" class="cases" style="padding: 20px 16px 80px;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 18px;">
+      <h2 class="gooT bb" style="margin: 0; font-size: clamp(64px, 9vw, 140px); line-height: .85;">CLIENT CASES<span class="gtb" aria-hidden="true" style="left: 0; top: 49%; width: 0.28em; height: 0.28em; --sx: 1.73em; --ex: 6.11em; --dy: 0.15em; --d: 9.1s; --c: 11.2s; --dl: -2.7s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 15%; width: 0.30em; height: 0.30em; --sx: 1.05em; --ex: 5.64em; --dy: -0.10em; --d: 6.8s; --c: 9.5s; --dl: -4.1s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 33%; width: 0.35em; height: 0.35em; --sx: 2.99em; --ex: 5.49em; --dy: -0.08em; --d: 7.9s; --c: 8.5s; --dl: -5.2s;"></span><span class="gcb" aria-hidden="true"></span></h2>
+      <p style="margin: 0; max-width: 460px; font-size: 15px; line-height: 1.9;">取引先ごとに、手がけた制作物をまとめました。写真は横にスクロールできます。</p>
+    </div>
+    <article class="case" id="case-01">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">01</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">HEIJOEN</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">平城苑</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">関東の老舗焼肉専門店。売上上位の浅草店で、郊外店とは違うテイストとインバウンドを見据えた表現を求められ、継続してご依頼をいただいています。同じブランドの表現を守りながら、高単価・低単価・地域性に合わせた販促物を制作しました。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ グランドメニュー</span><span class="chip2">◆ ランチメニュー</span><span class="chip2">◆ ポスター</span><span class="chip2">◆ 商品撮影</span><span class="chip2">◆ インバウンド対応</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">8 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 8 点 ／ サービス 5 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="平城苑 の制作物"><img width="707" height="1000" src="_blob/90cb0bfb0bcdf1c830f5b2e4e28413e6.jpg" alt="平城苑 の制作物 1" loading="lazy"><img width="706" height="1000" src="_blob/721343915fad6a8fba7f617043569af3.jpg" alt="平城苑 の制作物 2" loading="lazy"><img width="1000" height="684" src="_blob/4bcc831633d78628854b9337d6a903dd.jpg" alt="平城苑 の制作物 3" loading="lazy"><img width="1000" height="684" src="_blob/959ffd7d7fc1b956c15fba8f7ed7d509.jpg" alt="平城苑 の制作物 4" loading="lazy"><img width="1000" height="684" src="_blob/bfe58e5981ee9d417c40e5008480777c.jpg" alt="平城苑 の制作物 5" loading="lazy"><img width="1000" height="684" src="_blob/0400c928aca79bfc910cd7936c104416.jpg" alt="平城苑 の制作物 6" loading="lazy"><img width="1000" height="667" src="_blob/22bf6f4990f2f1f85e314654db71972a.jpg" alt="平城苑 の制作物 7" loading="lazy"><img width="1600" height="1067" src="_blob/fb25269849194d10f09c19ae7876c673.jpg" alt="平城苑 の制作物 8" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-02">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">02</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">SABOTEN</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">新宿さぼてん</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">とんかつ　TONKATSU</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">大手で歴史あるブランドの、旧来のデザインのテコ入れとして、レストランのすべての販促物を刷新。ブランドの物語を活かしながら写真とデザインの質を一つずつ積み上げ、前年の売上を上回る成果に協力しました。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 全販促物の刷新</span><span class="chip2">◆ グランドメニュー</span><span class="chip2">◆ 季節ポスター</span><span class="chip2">◆ 店頭コルトン</span><span class="chip2">◆ お弁当・お惣菜メニュー</span><span class="chip2">◆ 商品撮影</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">11 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 11 点 ／ サービス 6 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="新宿さぼてん の制作物"><img width="707" height="1000" src="_blob/2bc1f57557baf874bded1109c3515bcd.jpg" alt="新宿さぼてん の制作物 1" loading="lazy"><img width="1000" height="1000" src="_blob/e9f637a7e60d62a35c43225559495a22.jpg" alt="新宿さぼてん の制作物 2" loading="lazy"><img width="1000" height="1000" src="_blob/05f05beb352cf6c7356d3244797d8c67.jpg" alt="新宿さぼてん の制作物 3" loading="lazy"><img width="1000" height="1000" src="_blob/33d0b3e7b03d562a28f0712422ff9842.jpg" alt="新宿さぼてん の制作物 4" loading="lazy"><img width="706" height="1000" src="_blob/274172c3869fe74cee452cc6a913d55c.jpg" alt="新宿さぼてん の制作物 5" loading="lazy"><img width="999" height="1000" src="_blob/8e7a4b648179c286f775bfb5177a592e.jpg" alt="新宿さぼてん の制作物 6" loading="lazy"><img width="1000" height="653" src="_blob/d7d3fb5641d9b3284093c8da99fd51cb.jpg" alt="新宿さぼてん の制作物 7" loading="lazy"><img width="1000" height="707" src="_blob/09f4b881bccbfd9d29b21c19efba760d.jpg" alt="新宿さぼてん の制作物 8" loading="lazy"><img width="1000" height="1000" src="_blob/33cb6ad00e84368132281021040254c9.jpg" alt="新宿さぼてん の制作物 9" loading="lazy"><img width="1000" height="667" src="_blob/e0c3de8010835582b64aa92dab9f4265.jpg" alt="新宿さぼてん の制作物 10" loading="lazy"><img width="1000" height="667" src="_blob/d883edb1115d832424db4f1b0d06595f.jpg" alt="新宿さぼてん の制作物 11" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-03">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">03</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">TOKYO YAKINIKU</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">ITTOUYA</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">黒を基調にした世界観で、ブランドポスター、メニュー、料理撮影までを一貫して制作。</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ ブランドポスター</span><span class="chip2">◆ メニュー</span><span class="chip2">◆ 料理撮影</span><span class="chip2">◆ 世界観づくり</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">10 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 10 点 ／ サービス 4 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="ITTOUYA の制作物"><img width="392" height="826" src="_blob/6563568cc363b185fff5891e505354c0.jpg" alt="ITTOUYA の制作物 1" loading="lazy"><img width="381" height="826" src="_blob/81b241f2c176fecd461a86839ae75e12.jpg" alt="ITTOUYA の制作物 2" loading="lazy"><img width="393" height="826" src="_blob/10c7d0a6afc24afa190b9381a0739a0d.jpg" alt="ITTOUYA の制作物 3" loading="lazy"><img width="707" height="1000" src="_blob/93570b01a3d39932ed52ead229d56b66.jpg" alt="ITTOUYA の制作物 4" loading="lazy"><img width="706" height="1000" src="_blob/5839d744bfe4e9efd0720a91722e95a1.jpg" alt="ITTOUYA の制作物 5" loading="lazy"><img width="558" height="1000" src="_blob/de461ae90acbc019c0ebf36606add571.jpg" alt="ITTOUYA の制作物 6" loading="lazy"><img width="558" height="1000" src="_blob/e8ff7cd931c4af0e55f8a0383c8bd21e.jpg" alt="ITTOUYA の制作物 7" loading="lazy"><img width="558" height="1000" src="_blob/cec7b8abb143222f92ee3b15d54d8629.jpg" alt="ITTOUYA の制作物 8" loading="lazy"><img width="558" height="1000" src="_blob/89a50e2c78a215b48bcdb7c359f8416e.jpg" alt="ITTOUYA の制作物 9" loading="lazy"><img width="1066" height="1600" src="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg" alt="ITTOUYA の制作物 10" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-04">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">04</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">ROYAL HOLDINGS</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">ロイヤルホールディングス</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">外食企業　RESTAURANT GROUP</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">多くの外食ブランドを持つロイヤルホールディングスの、既存ブランド・新ブランドを含めた多くのデザインと撮影をお手伝いしています。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 新ブランドのロゴ・パッケージ</span><span class="chip2">◆ ウェブデザイン</span><span class="chip2">◆ 商品撮影</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">6 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 6 点 ／ サービス 3 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="ロイヤルホールディングス の制作物"><img width="1000" height="620" src="_blob/334bcdbe2896c1884bb17a24e4f371e6.jpg" alt="ロイヤルホールディングス の制作物 1" loading="lazy"><img width="1000" height="610" src="_blob/52174f3aa7e72e8f29b917a6f7dd2d39.jpg" alt="ロイヤルホールディングス の制作物 2" loading="lazy"><img width="1000" height="620" src="_blob/8b7b28326846ed27fccd1a0d617769f0.jpg" alt="ロイヤルホールディングス の制作物 3" loading="lazy"><img width="1000" height="620" src="_blob/7f2425717b4415d8de133974939dab44.jpg" alt="ロイヤルホールディングス の制作物 4" loading="lazy"><img width="843" height="597" src="_blob/0d9da2aaad54a25b4468fc020d80826c.jpg" alt="ロイヤルホールディングス の制作物 5" loading="lazy"><img width="667" height="1000" src="_blob/e7ef2c6b2f8dbe1076b2f0a044f54ceb.jpg" alt="ロイヤルホールディングス の制作物 6" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-05">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">05</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">MARY'S</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">メリーチョコレート</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">洋菓子　SWEETS</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">商品撮影から、店頭のメニュー・POP、ブランドサイトまで。</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 商品撮影</span><span class="chip2">◆ メニュー・POP</span><span class="chip2">◆ ウェブデザイン</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">5 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 5 点 ／ サービス 3 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="メリーチョコレート の制作物"><img width="1600" height="1067" src="_blob/d17421c18edf4cf18bdd59392a947e05.jpg" alt="メリーチョコレート の制作物 1" loading="lazy"><img width="1000" height="682" src="_blob/0d771027ed087da1383bd618319e0c7d.jpg" alt="メリーチョコレート の制作物 2" loading="lazy"><img width="635" height="899" src="_blob/51361dcef8a6f2e3c2bb48c5c0fc5fcc.jpg" alt="メリーチョコレート の制作物 3" loading="lazy"><img width="706" height="1000" src="_blob/608a3d27b2dd64ca91f37968a6521954.jpg" alt="メリーチョコレート の制作物 4" loading="lazy"><img width="1600" height="1594" src="_blob/3285580cb0f4dc2200e17c9131e99749.jpg" alt="メリーチョコレート の制作物 5" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-06">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">06</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">ASAKUSA IMAHAN</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">浅草今半</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">すき焼　SUKIYAKI</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">お弁当のリーフレットと料理撮影。</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ お弁当リーフレット</span><span class="chip2">◆ 料理撮影</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">4 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 4 点 ／ サービス 2 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="浅草今半 の制作物"><img width="1000" height="706" src="_blob/7f065067617d28ac5c917bb4bd7c092f.jpg" alt="浅草今半 の制作物 1" loading="lazy"><img width="1000" height="707" src="_blob/a8e6ec507c63805a5dcb6f6fed8fd2a6.jpg" alt="浅草今半 の制作物 2" loading="lazy"><img width="1600" height="1067" src="_blob/cdf3675cb590754f6a00a180f216ac6d.jpg" alt="浅草今半 の制作物 3" loading="lazy"><img width="1000" height="667" src="_blob/17215f8c9b46cadcc892fe6d01c2cebd.jpg" alt="浅草今半 の制作物 4" loading="lazy"></div>
+    </article>
+    <article class="case" id="case-07">
+      <div class="case-l">
+        <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">07</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">SHERATON GRANDE</span></div>
+        <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">シェラトン・グランデ</h3>
+        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">ホテル　HOTEL</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.9;">レストランのコース料理とデザートの撮影。</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 料理撮影</span><span class="chip2">◆ スタイリング</span></div>
+        <p class="bb" style="margin: 4px 0 0; font-size: 22px;">5 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 5 点 ／ サービス 2 種</span></p>
+      </div>
+      <div class="case-r" tabindex="0" aria-label="シェラトン・グランデ の制作物"><img width="1000" height="667" src="_blob/6975a8ecefe5b31304dc812cf1cd722d.jpg" alt="シェラトン・グランデ の制作物 1" loading="lazy"><img width="1067" height="1600" src="_blob/c7a3966cb8cf3b6c54c1eaf379312d2c.jpg" alt="シェラトン・グランデ の制作物 2" loading="lazy"><img width="1067" height="1600" src="_blob/f24dc1aa25e80c82edd295a8274636d1.jpg" alt="シェラトン・グランデ の制作物 3" loading="lazy"><img width="667" height="1000" src="_blob/15681c2ec5125be7fb1b23128cf48b96.jpg" alt="シェラトン・グランデ の制作物 4" loading="lazy"><img width="1067" height="1600" src="_blob/e432699e705909e9936961d535c26d95.jpg" alt="シェラトン・グランデ の制作物 5" loading="lazy"></div>
+    </article>
+  </section>
+
+  <section class="gsec" style="padding: 0 16px 100px;">
+    <div class="goo-field" aria-hidden="true" style="right: -40px; top: -30px; width: 460px; height: 420px;"><span class="gb" style="left: 183px; top: 86px; width: 68px; height: 68px; --x1: 51px; --y1: -24px; --x2: 8px; --y2: 4px; --d: 13.3s; --c: 14.5s; --dl: -0.5s;"></span><span class="gb" style="left: 278px; top: 94px; width: 117px; height: 117px; --x1: 6px; --y1: 43px; --x2: -32px; --y2: 60px; --d: 9.9s; --c: 16.5s; --dl: -8.3s;"></span><span class="gb" style="left: 294px; top: 226px; width: 127px; height: 127px; --x1: 38px; --y1: -14px; --x2: 45px; --y2: 64px; --d: 10.0s; --c: 15.0s; --dl: -7.6s;"></span><span class="gb" style="left: 35px; top: 126px; width: 135px; height: 135px; --x1: 66px; --y1: -47px; --x2: -5px; --y2: 26px; --d: 13.8s; --c: 14.1s; --dl: -9.0s;"></span><span class="gb" style="left: 203px; top: 68px; width: 105px; height: 105px; --x1: -48px; --y1: 23px; --x2: -37px; --y2: -52px; --d: 13.1s; --c: 15.1s; --dl: -5.2s;"></span><span class="gb" style="left: 225px; top: 136px; width: 121px; height: 121px; --x1: -10px; --y1: 50px; --x2: 73px; --y2: 67px; --d: 12.1s; --c: 15.0s; --dl: -10.4s;"></span><span class="gb" style="left: 106px; top: 200px; width: 137px; height: 137px; --x1: -28px; --y1: -18px; --x2: 63px; --y2: 68px; --d: 13.4s; --c: 14.3s; --dl: -11.7s;"></span></div>
+    <div role="toolbar" aria-label="種類で絞り込む" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; border-top: 2px solid #161514; padding: 16px 0 28px;">
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="7">
+        <button type="button" class="chip bb" aria-pressed="{{c.sel}}" onClick="{{c.pick}}" style="min-height: 44px; padding: 6px 16px; border: 2px solid #161514; background: {{c.bg}}; color: {{c.fg}}; font-size: 19px; cursor: pointer;">{{c.label}} <span style="font-size: 14px; opacity: .7;">{{c.count}}</span></button>
+      </sc-for>
+      <span style="flex: 1 1 20px;"></span>
+      <span class="bb" style="font-size: 18px; color: #5E5A54;">{{shown}} WORKS</span>
+    </div>
+
+    <div style="column-width: 300px; column-gap: 16px;">
+      <sc-for list="{{items}}" as="w" hint-placeholder-count="12">
+        <a class="card" href="Contact.dc.html" style="animation-delay: {{w.delay}};">
+          <img src="{{w.img}}" width="{{w.iw}}" height="{{w.ih}}" alt="{{w.title}}の作例">
+          <span class="bb" style="position: absolute; left: 10px; top: 10px; background: #B0986A; color: #161514; padding: 2px 8px; font-size: 14px;">{{w.tag}}</span>
+          <span class="cap"><span class="bb" style="display: block; font-size: 14px; color: inherit;">{{w.cat}}</span><span style="font-size: 15px; font-weight: 500;">{{w.title}}</span></span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section aria-label="取引先一例" style="background: #B0986A; padding: 22px 0; overflow: hidden;">
+    <div style="display: flex; width: max-content; gap: 44px; animation: marqL 46s linear infinite; font-size: 26px; font-weight: 600; white-space: nowrap;">
+      <span>浅草今半</span><span>◆</span><span>新宿さぼてん</span><span>◆</span><span>メリーチョコレート</span><span>◆</span><span>キリン</span><span>◆</span><span>ロイヤルホールディングス</span><span>◆</span><span>フォーシーズ</span><span>◆</span><span>平城苑</span><span>◆</span><span>シェラトン・グランデ</span><span>◆</span><span>LDH kitchen</span><span>◆</span><span>天丼てんや</span><span>◆</span>
+      <span>浅草今半</span><span>◆</span><span>新宿さぼてん</span><span>◆</span><span>メリーチョコレート</span><span>◆</span><span>キリン</span><span>◆</span><span>ロイヤルホールディングス</span><span>◆</span><span>フォーシーズ</span><span>◆</span><span>平城苑</span><span>◆</span><span>シェラトン・グランデ</span><span>◆</span><span>LDH kitchen</span><span>◆</span><span>天丼てんや</span><span>◆</span>
+    </div>
+  </section>
+
+  <!-- ===== ロゴの3Dフィールド（カーソルで傾く） ===== -->
+  <section class="lfield" aria-label="DETALE&amp;WORKS" onMouseMove="{{fieldMove}}" onMouseLeave="{{fieldLeave}}">
+    <div class="lplane" aria-hidden="true" style="transform: translate(-50%,-50%) rotateX(var(--frx, 46deg)) rotateY(var(--fry, 0deg)) rotateZ(-19deg);">
+      <sc-for list="{{lrows}}" as="row" hint-placeholder-count="0">
+        <div class="lrow {{row.dir}}" style="--dur: {{row.dur}}; font-size: {{row.size}}; margin-left: {{row.shift}};">
+          <sc-for list="{{row.words}}" as="w" hint-placeholder-count="0">
+            <span class="lw {{w.cls}}" style="opacity: {{w.op}};">{{w.t}}</span>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+    <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(15,14,13,0) 30%, #0F0E0D 92%); pointer-events: none;"></div>
+    <p class="bb" style="position: absolute; left: 16px; bottom: 16px; margin: 0; font-size: 14px; color: #B8B2A6;">MOVE YOUR CURSOR — DETALE &amp; WORKS</p>
+  </section>
+  <div class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; padding: 40px 0 0; display: flex; justify-content: center; overflow: hidden; margin-bottom: -0.16em;">
+    <p class="bigmark" aria-label="DETALE&amp;WORKS" style="color: #DCD8CF;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: italic;">&amp;</span>WORKS</p>
+  </div>
+
+  </main>
+  <footer style="background: #161514; color: #F0EDE6; padding: 56px 16px 40px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center;">
+    <span class="bb" style="font-size: clamp(30px, 3.6vw, 52px); line-height: 1;">TEL:03-6674-9763　MAIL:<span style="color: inherit;">info@detale.jp</span></span>
+    <a class="btn" href="Contact.dc.html" style="background: #B0986A; color: #161514; padding: 16px 26px; min-height: 44px; box-sizing: border-box; font-weight: 600;">似たものを相談する →</a>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":9600}}'>
+class Component extends DCLogic {
+  calm() {
+    try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+  componentDidMount() {
+    const jump = () => {
+      let cid = '';
+      try { cid = sessionStorage.getItem('dwCaseJump') || ''; } catch (er) {}
+      if (!cid && !this._hashDone) { this._hashDone = true; cid = (location.hash || '').replace('#', ''); }
+      if (!/^case-\d+$/.test(cid)) return;
+      const el = document.getElementById(cid);
+      if (!el || !window.innerHeight || !el.getBoundingClientRect().height) return;
+      try { sessionStorage.removeItem('dwCaseJump'); } catch (er) {}
+      el.scrollIntoView({ block: 'start', behavior: this.calm() ? 'auto' : 'smooth' });
+      el.classList.remove('case-hit'); void el.offsetWidth; el.classList.add('case-hit');
+    };
+    setTimeout(jump, 200);
+    this._casePoll = setInterval(jump, 200);
+    this._ct = { x: -200, y: -200, hot: false };
+    this._cp = [0, 1, 2, 3].map(() => ({ x: -200, y: -200 }));
+    this._onMove = (e) => {
+      this._ct.x = e.clientX; this._ct.y = e.clientY;
+      const t = e.target;
+      this._ct.hot = !!(t && t.closest && t.closest('a, button, [role="tab"], input, textarea, label'));
+    };
+    window.addEventListener('mousemove', this._onMove, { passive: true });
+    this._onWheel = (e) => {
+      if (e.ctrlKey || this.calm() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      let n = e.target;
+      while (n && n !== document.body && n.nodeType === 1) {
+        const cs = getComputedStyle(n);
+        if ((cs.overflowY === 'auto' || cs.overflowY === 'scroll') && n.scrollHeight > n.clientHeight + 2) return;
+        n = n.parentElement;
+      }
+      e.preventDefault();
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const d = e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? innerHeight : 1);
+      const base = this._sT == null ? scrollY : this._sT;
+      this._sT = Math.max(0, Math.min(max, base + d));
+      this._sLast = scrollY;
+    };
+    window.addEventListener('wheel', this._onWheel, { passive: false });
+    const K = [1, 0.42, 0.26, 0.16];
+    const tick = () => {
+      const els = this._cb || [];
+      { this._dkF = (this._dkF || 0) + 1;
+        if (this._ct && this._dkF % 5 === 0) {
+          let n = document.elementFromPoint(this._ct.x, this._ct.y), dark = false;
+          while (n && n.nodeType === 1) {
+            if (n.classList && (n.classList.contains('gcur') || n.classList.contains('mphl'))) { n = n.parentElement; continue; }
+            const m = /rgba?\(([\d.]+), ([\d.]+), ([\d.]+)(?:, ([\d.]+))?\)/.exec(getComputedStyle(n).backgroundColor);
+            if (m && (m[4] === undefined || +m[4] > 0.5)) { dark = (0.2126 * m[1] + 0.7152 * m[2] + 0.0722 * m[3]) / 255 < 0.35; break; }
+            n = n.parentElement;
+          }
+          if (dark !== this._dk) { this._dk = dark; const g = document.querySelector('.gcur'); if (g) g.classList.toggle('ondark', dark); }
+        } }
+      { const G = this._glw || (this._glw = Array.prototype.slice.call(document.querySelectorAll('#h1-d, #h1-a, #h1-w, h1.gooT .ch, .bigmark')));
+        const gx = this._ct ? this._ct.x : -999, gy = this._ct ? this._ct.y : -999;
+        for (let q = 0; q < G.length; q++) { const el = G[q]; const r = el.getBoundingClientRect();
+          const on = gx > r.left - 40 && gx < r.right + 40 && gy > r.top - 40 && gy < r.bottom + 40;
+          if (on) { el.style.setProperty('--lx', (gx - r.left).toFixed(0) + 'px'); el.style.setProperty('--ly', (gy - r.top).toFixed(0) + 'px'); }
+          if (on !== !!el._gl) { el.classList.toggle('gl-on', on); el._gl = on; } } }
+      if (this._sT != null) {
+        if (this._sLast != null && Math.abs(scrollY - this._sLast) > 2) { this._sT = null; }
+        else { const df = this._sT - scrollY; if (Math.abs(df) < 0.6) { window.scrollTo(0, this._sT); this._sT = null; } else { window.scrollTo(0, scrollY + df * 0.09); } this._sLast = scrollY; }
+      }
+      if (this._ct) { const rs = document.documentElement.style; rs.setProperty('--gx', this._ct.x + 'px'); rs.setProperty('--gy', this._ct.y + 'px'); }
+      { const ink = this._ink || (this._ink = { t: 0, hs: [] }); const tn = performance.now();
+        if (tn - ink.t > 800) { ink.t = tn; ink.hs = Array.prototype.map.call(document.querySelectorAll('.gooT'), (h) => [h, h.querySelector('.gcb')]).filter((x) => x[1]); }
+        const cx = this._ct ? this._ct.x : -999, cy = this._ct ? this._ct.y : -999;
+        for (let q = 0; q < ink.hs.length; q++) { const h = ink.hs[q][0], g = ink.hs[q][1]; const r = h.getBoundingClientRect();
+          if (r.bottom < -60 || r.top > innerHeight + 60) { if (g._on) { g.style.scale = '0'; g._on = false; } continue; }
+          const x = cx - r.left, y = cy - r.top, on = x > -46 && y > -46 && x < r.width + 46 && y < r.height + 46;
+          if (on || g._on) { g.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px'; if (on !== g._on) g.style.scale = on ? '1' : '0'; g._on = on; } } }
+      for (let i = 0; i < 4; i++) {
+        const p = this._cp[i], tgt = i === 0 ? this._ct : this._cp[i - 1];
+        p.x += (tgt.x - p.x) * K[i]; p.y += (tgt.y - p.y) * K[i];
+        const el = els[i];
+        if (el) el.style.transform = 'translate(' + p.x.toFixed(1) + 'px, ' + p.y.toFixed(1) + 'px) scale(' + (i === 0 && this._ct.hot ? 2.3 : 1) + ')';
+      }
+      this._craf = requestAnimationFrame(tick);
+    };
+    if (!this.calm()) this._craf = requestAnimationFrame(tick);
+    this._gen = this.makeGen();
+    this.setState({ hs: 0 });
+    this._pourT = setTimeout(() => this.setState({ pourDone: true }), 2100);
+    if (!this.calm()) this._hs = setInterval(() => this.setState({ hs: ((this.state && this.state.hs) || 0) + 1 }), 2700);
+  }
+  componentWillUnmount() {
+    clearInterval(this._casePoll);
+    window.removeEventListener('mousemove', this._onMove); window.removeEventListener('wheel', this._onWheel); cancelAnimationFrame(this._craf); clearInterval(this._hs); clearTimeout(this._pourT); }
+  makeGen() {
+    let seed = 23;
+    const r = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const C = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#E3D8C4', '#8A6B4E', '#161514', '#C9B48A'];
+    const pick = () => C[Math.floor(r() * C.length)];
+    const blobs = [];
+    for (let i = 0; i < 26; i++) {
+      blobs.push({ left: (45 + r() * 50) + '%', top: (20 + r() * 70) + '%', size: (3 + r() * 11) + 'vmin', color: pick(),
+        delay: (r() * 0.5).toFixed(2) + 's', dx: ((r() - 0.5) * 50).toFixed(1) + 'vmin', dy: ((r() - 0.5) * 40).toFixed(1) + 'vmin' });
+    }
+    const BG = ['#B0986A', '#9E3B2E', '#7D8471', '#161514', '#E3D8C4', '#8A6B4E', '#F0EDE6'];
+    const tiles = [];
+    for (let i = 0; i < 40; i++) {
+      const bg = BG[Math.floor(r() * BG.length)];
+      const dark = bg === '#161514' || bg === '#9E3B2E' || bg === '#8A6B4E';
+      tiles.push({ bg: bg, fg: dark ? '#F0EDE6' : '#161514', radius: r() < 0.5 ? '50%' : '0', rot: (Math.floor(r() * 4) * 90) + 'deg', delay: (r() * 0.45).toFixed(2) + 's' });
+    }
+    const W = [['DETALE&WORKS', ''], ['D&W', 'amp'], ['ディテールアンドワークス', 'jp'], ['detale & works', 'it'], ['DETALE', ''], ['& WORKS', '']];
+    const lrows = [];
+    for (let i = 0; i < 12; i++) {
+      const words = [];
+      for (let k = 0; k < 12; k++) {
+        const w = W[Math.floor(r() * W.length)];
+        words.push({ t: w[0], cls: w[1], op: r() < 0.28 ? 1 : (0.18 + r() * 0.32).toFixed(2) });
+      }
+      lrows.push({ dir: i % 2 ? 'r' : 'l', dur: (38 + r() * 30).toFixed(0) + 's', size: (30 + r() * 40).toFixed(0) + 'px', shift: (-r() * 400).toFixed(0) + 'px', words: words.concat(words) });
+    }
+    return { blobs, tiles, lrows };
+  }
+  curRefs() {
+    if (!this._curRefs) {
+      this._cb = [];
+      this._curRefs = [0, 1, 2, 3].map((i) => (el) => { this._cb[i] = el; });
+    }
+    return this._curRefs;
+  }
+  mix(a, b, t) {
+    const h = (x) => [parseInt(x.slice(1, 3), 16), parseInt(x.slice(3, 5), 16), parseInt(x.slice(5, 7), 16)];
+    const A = h(a), B = h(b);
+    return 'rgb(' + A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',') + ')';
+  }
+  motionVals() {
+    const g = this._gen || { blobs: [], tiles: [], lrows: [] };
+    const hs = ((this.state && this.state.hs) || 0) % 3;
+    const colorsAt = (fx) => [
+      fx < 0.5 ? this.mix('#9E3B2E', '#C9B48A', fx * 2) : this.mix('#C9B48A', '#7D8471', (fx - 0.5) * 2),
+      fx < 0.5 ? this.mix('#8A6B4E', '#B0986A', fx * 2) : this.mix('#B0986A', '#5E6B5C', (fx - 0.5) * 2)];
+    return {
+      pourOn: !(this.state && this.state.pourDone),
+      cur0: this.curRefs()[0], cur1: this.curRefs()[1], cur2: this.curRefs()[2], cur3: this.curRefs()[3],
+      hs0: hs === 0, hs1: hs === 1, hs2: hs === 2,
+      blobs: g.blobs, tiles: g.tiles, lrows: g.lrows,
+      logoMove: (e) => {
+        const el = e.currentTarget; if (!el) return;
+        const rc = el.getBoundingClientRect();
+        const lx = e.clientX - rc.left, ly = e.clientY - rc.top;
+        const c = colorsAt(Math.max(0, Math.min(1, lx / (rc.width || 1))));
+        el.style.setProperty('--lx', Math.round(lx) + 'px'); el.style.setProperty('--ly', Math.round(ly) + 'px');
+        el.style.setProperty('--c1', c[0]); el.style.setProperty('--c2', c[1]); el.style.setProperty('--lop', '1');
+      },
+      logoLeave: (e) => { if (e.currentTarget) e.currentTarget.style.setProperty('--lop', '0'); },
+      fieldMove: (e) => {
+        const el = e.currentTarget; if (!el) return;
+        const rc = el.getBoundingClientRect();
+        const fx = ((e.clientX - rc.left) / (rc.width || 1)) * 2 - 1, fy = ((e.clientY - rc.top) / (rc.height || 1)) * 2 - 1;
+        el.style.setProperty('--frx', (46 - fy * 14).toFixed(2) + 'deg'); el.style.setProperty('--fry', (fx * 16).toFixed(2) + 'deg');
+      },
+      fieldLeave: (e) => { const el = e.currentTarget; if (!el) return; el.style.setProperty('--frx', '46deg'); el.style.setProperty('--fry', '0deg'); }
+    };
+  }
+  renderVals() {
+    return Object.assign({}, this.baseVals(), this.motionVals());
+  }
+  baseVals() {
+    const W = [
+      ['menu', '焼肉　YAKINIKU', 'グランドメニューデザイン', '_blob/73b682f6f9b42529d2a90645cc6de6ec.jpg'],
+      ['photo', '和牛　WAGYU', '料理撮影', '_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg'],
+      ['poster', 'とんかつ　TONKATSU', '季節限定ポスター', '_blob/551c67b10b93708eb401e67b70c765bc.jpg'],
+      ['book', 'MENU BOOK', 'オリジナルメニューブック', '_blob/a0282a3274764060441e0bd802bde720.jpg'],
+      ['photo', '洋食　WESTERN', 'コース料理の撮影', '_blob/48b96b594a10213dc1ab54f414498f46.jpg'],
+      ['brand', 'BRANDING', '冷凍食品ブランドのロゴ・パッケージ', '_blob/0d9da2aaad54a25b4468fc020d80826c.jpg'],
+      ['poster', 'ダイニング　DINING', '開店告知ポスター', '_blob/4d211dc730947a48630c0e567de4f1a7.jpg'],
+      ['photo', '中華　CHINESE', '料理撮影', '_blob/6e206029d8f82269ca3a7bd24d141b56.jpg'],
+      ['web', '洋菓子　SWEETS', 'ブランドサイト', '_blob/3285580cb0f4dc2200e17c9131e99749.jpg'],
+      ['book', 'MENU BOOK', '箔押しメニューカバー', '_blob/a341cd7137e619113e85cfe59aba264d.jpg'],
+      ['menu', '焼肉　YAKINIKU', '店頭メニュー', '_blob/8f30c03f20a8b328c2d524c8e4bd84f9.jpg'],
+      ['photo', '和牛　WAGYU', '盛り合わせの撮影', '_blob/fb25269849194d10f09c19ae7876c673.jpg'],
+      ['poster', 'とんかつ　TONKATSU', '定食ポスター', '_blob/eed16c49c1c3c1bd66af318c800b7082.jpg'],
+      ['brand', 'OPENING KIT', 'オープニングツール一式', '_blob/ac6357d32c6c351adc3eb1a01db3f880.jpg'],
+      ['photo', 'スイーツ　SWEETS', 'ケーキの撮影', '_blob/e432699e705909e9936961d535c26d95.jpg'],
+      ['book', 'MENU BOOK', 'ブランドロゴ入りメニューブック', '_blob/63bf69e8455947f25b227f93f10fb804.jpg'],
+      ['photo', '和食　JAPANESE', 'すき焼きの撮影', '_blob/cdf3675cb590754f6a00a180f216ac6d.jpg'],
+      ['menu', '冊子　BOOKLET', '冊子型メニュー', '_blob/92967d1ec5b927938d29435d72ef162a.jpg'],
+      ['photo', '韓国料理　KOREAN', '鍋料理の撮影', '_blob/b6efd94ccb0406369a25b9e7ad895f47.jpg'],
+      ['poster', 'とんかつ　TONKATSU', 'ポスターデザイン', '_blob/fbfa9694f947c7531714f1bc426c41cd.jpg'],
+      ['brand', 'PACKAGE', '缶入り菓子のパッケージ', '_blob/baf3c87d627fd14ac7b85030be08e719.jpg'],
+      ['photo', 'シェフ　CHEF', '調理風景の撮影', '_blob/64d7cbea7da79d1853f125de45c183bf.jpg'],
+      ['book', 'MENU BOOK', 'レザーメニューブック', '_blob/d536c17f8a0e6ae06722cf7708c75424.jpg'],
+      ['photo', '焼肉　YAKINIKU', '焼肉の撮影', '_blob/52b27543fcfcdffe15738afd27425c94.jpg'],
+      ['web', 'カフェ　CAFE', 'ウェブデザイン', '_blob/87009cc4dda0ea0f055f44c1b1d8e825.jpg'],
+      ['photo', 'うどん　UDON', '料理撮影', '_blob/3bb878470c9a402e189e45eaf7e55fb8.jpg'],
+      ['menu', 'とんかつ　TONKATSU', 'メニューデザイン', '_blob/db044855d5545d8f5a1ede2e10bc8ec8.jpg'],
+      ['photo', 'ホテル　HOTEL', 'コース料理の撮影', '_blob/f24dc1aa25e80c82edd295a8274636d1.jpg'],
+      ['book', 'MENU BOOK', 'クロス張りメニューブック', '_blob/444cac76c3579eb87631087976a3f192.jpg'],
+      ['photo', '和食　JAPANESE', '土瓶蒸しの撮影', '_blob/595b350735310757541a9cd155572d22.jpg']
+    ];
+    const DIMS = {"3285580cb0f4dc2200e17c9131e99749": [1600, 1594], "0d9da2aaad54a25b4468fc020d80826c": [843, 597], "4d211dc730947a48630c0e567de4f1a7": [1133, 1600], "444cac76c3579eb87631087976a3f192": [1600, 1067], "a0282a3274764060441e0bd802bde720": [1600, 1067], "ac6357d32c6c351adc3eb1a01db3f880": [1600, 967], "3bb878470c9a402e189e45eaf7e55fb8": [1600, 1576], "f24dc1aa25e80c82edd295a8274636d1": [1067, 1600], "db044855d5545d8f5a1ede2e10bc8ec8": [1328, 1400], "595b350735310757541a9cd155572d22": [800, 1200], "a341cd7137e619113e85cfe59aba264d": [1600, 1067], "92967d1ec5b927938d29435d72ef162a": [1600, 1067], "e432699e705909e9936961d535c26d95": [1067, 1600], "73b682f6f9b42529d2a90645cc6de6ec": [1600, 1241], "8f30c03f20a8b328c2d524c8e4bd84f9": [1131, 1600], "48b96b594a10213dc1ab54f414498f46": [1600, 1067], "fb25269849194d10f09c19ae7876c673": [1600, 1067], "63bf69e8455947f25b227f93f10fb804": [1600, 1067], "b6efd94ccb0406369a25b9e7ad895f47": [1600, 1067], "8b738f26f6b75c46ead20eadcb7ad841": [1066, 1600], "551c67b10b93708eb401e67b70c765bc": [1131, 1600], "fbfa9694f947c7531714f1bc426c41cd": [1134, 1600], "baf3c87d627fd14ac7b85030be08e719": [985, 1400], "d536c17f8a0e6ae06722cf7708c75424": [1600, 1067], "52b27543fcfcdffe15738afd27425c94": [1600, 1067], "eed16c49c1c3c1bd66af318c800b7082": [1131, 1600], "6e206029d8f82269ca3a7bd24d141b56": [1600, 1067], "64d7cbea7da79d1853f125de45c183bf": [1600, 1066], "87009cc4dda0ea0f055f44c1b1d8e825": [1323, 1400], "cdf3675cb590754f6a00a180f216ac6d": [1600, 1067]};
+    const CAT = { menu: 'MENU', book: 'MENU BOOK', photo: 'PHOTOGRAPH', poster: 'POSTER', brand: 'BRANDING', web: 'WEB' };
+    const f = (this.state && this.state.f) || 'all';
+    const list = W.filter((w) => f === 'all' || w[0] === f);
+    const keys = ['all', 'menu', 'book', 'photo', 'poster', 'brand', 'web'];
+    return {
+      shown: list.length,
+      chips: keys.map((k) => ({
+        label: k === 'all' ? 'ALL' : CAT[k],
+        count: k === 'all' ? W.length : W.filter((w) => w[0] === k).length,
+        sel: k === f ? 'true' : 'false',
+        bg: k === f ? '#161514' : 'transparent',
+        fg: k === f ? '#F0EDE6' : '#161514',
+        pick: () => this.setState({ f: k })
+      })),
+      items: list.map((w, i) => ({ cat: CAT[w[0]], tag: w[1], title: w[2], img: w[3], iw: (DIMS[w[3].slice(7)] || [4, 5])[0], ih: (DIMS[w[3].slice(7)] || [4, 5])[1], delay: (i * 0.04) + 's' }))
+    };
+  }
+}
+</script>
+</body>
+</html>
