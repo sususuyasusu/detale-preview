@@ -1243,9 +1243,10 @@ class Component extends DCLogic {
       const col = Math.random() < 0.45 + k * 0.55 ? PAL[Math.floor(Math.random() * PAL.length)] : p.c;
       const o = mk(p.x + ca * d, p.y + sn * d, 0, p.c, p.hx + ca * (p.tr + cr2) * 1.0, p.hy + sn * (p.tr + cr2) * 1.0, cr2);
       o.vx = p.vx + ca * p.tr * 7; o.vy = p.vy + sn * p.tr * 7; o.c = col; p.tr *= 0.86; p.vx -= ca * p.tr * 1.5; p.vy -= sn * p.tr * 1.5;
-      balls.push(o); requestAnimationFrame(() => { o.el.style.backgroundColor = col; }); };
+      balls.push(o); requestAnimationFrame(() => { if (!o.zoom) o.el.style.backgroundColor = col; }); };
     const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
       if (phase === 0 && t > 0.5) phase = 1;
+      const SW = t > 1.05 ? Math.pow(Math.min(1, (t - 1.05) / 0.95), 2.2) : 0;
       if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 2.0) phase = 2; }
       if (phase === 2) { phase = 3; let zb = null, zs = -1e9; balls.forEach((q) => { const dd = Math.hypot(q.x - gx, q.y - gy), sc2 = q.tr * 3 - dd; if (q.tr > 6 && sc2 > zs) { zs = sc2; zb = q; } });
         if (zb) { zb.zoom = 1; zb.zx = zb.x; zb.zy = zb.y; zb.zr = zb.r; zb.c = INK; zb.el.style.transition = 'none'; zb.el.style.backgroundColor = INK; }
@@ -1260,12 +1261,12 @@ class Component extends DCLogic {
           if (q.r * 2 > q.base * 1.9) { q.base = q.r * 1.2; q.el.style.width = q.el.style.height = (q.base * 2).toFixed(0) + 'px'; }
           q.el.style.zIndex = '5'; q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (q.r / q.base).toFixed(3) + ')'; continue; }
         if (q.born && now >= q.born) { q.tr = q.tr0; q.born = 0; }
-        if (phase < 2) { const fx = q.hx + Math.sin(now * 0.0021 + q.ph) * q.tr * 0.14, fy = q.hy + Math.cos(now * 0.0018 + q.ph) * q.tr * 0.14;
+        if (phase < 2) { const fx = gx + (q.hx - gx) * (1 + 0.45 * SW) + (Math.random() - 0.5) * SW * UV * 0.012 + Math.sin(now * 0.0021 + q.ph) * q.tr * 0.14, fy = gy + (q.hy - gy) * (1 + 0.45 * SW) + (Math.random() - 0.5) * SW * UV * 0.012 + Math.cos(now * 0.0018 + q.ph) * q.tr * 0.14;
           q.vx += (fx - q.x) * 26 * dt; q.vy += (fy - q.y) * 26 * dt; q.vx *= 1 - 3.6 * dt; q.vy *= 1 - 3.6 * dt; }
         else if (phase === 2) { q.vx += (gx - q.x) * 34 * dt; q.vy += (gy - q.y) * 34 * dt; q.vx *= 1 - 7 * dt; q.vy *= 1 - 7 * dt; q.tr = q.tr * (1 - 1.6 * dt); }
         else { q.vx *= 1 - 0.8 * dt; q.vy *= 1 - 0.8 * dt; q.tr = Math.max(0, q.tr - q.tr0 * dt / 1.3); }
         q.x += q.vx * dt; q.y += q.vy * dt;
-        q.vr += (q.tr - q.r) * 150 * dt; q.vr *= 1 - 8 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
+        q.vr += (q.tr * (phase < 2 ? 1 + 0.42 * SW : 1) - q.r) * 150 * dt; q.vr *= 1 - 8 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
         const sc = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05) / q.base;
         q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')'; }
       if (t < 3.6) requestAnimationFrame(step); };
