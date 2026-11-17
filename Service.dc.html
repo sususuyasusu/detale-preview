@@ -408,7 +408,7 @@ class Component extends DCLogic {
           if (!o.svg) { o.svg = document.createElementNS(NS, 'svg'); o.svg.setAttribute('class', 'goosvg'); o.svg.setAttribute('aria-hidden', 'true');
             const fid = 'gsf' + q + Math.random().toString(36).slice(2, 6);
             o.svg.innerHTML = '<defs><filter id="' + fid + '" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (fs * (jp ? 0.022 : 0.07)).toFixed(1) + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + (jp ? '40 -20' : '22 -9') + '"/></filter></defs><g filter="url(#' + fid + ')"><g class="gt"></g><g class="gc"></g></g><g class="gtop"></g>';
-            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); o.gtop = o.svg.querySelector('.gtop'); o.col = cs.color; if (jp) h.classList.add('goo-svgon'); }
+            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); o.gtop = o.svg.querySelector('.gtop'); o.col = cs.color; if (jp) h.classList.add('goo-svgon'); const f0 = o.svg.querySelector('filter'); const f1 = f0.cloneNode(true); f1.id = f0.id + 'b'; f0.parentNode.appendChild(f1); o.fid = [f0.id, f1.id]; o.fg = o.svg.querySelector('g[filter]'); }
           o.svg.setAttribute('width', Math.ceil(hr.width)); o.svg.setAttribute('height', Math.ceil(hr.height));
           o.svg.style.color = o.col; o.gt.setAttribute('fill', o.col); o.gc.setAttribute('fill', o.col); o.gtop.setAttribute('fill', o.col);
           if (o.sig !== sig) { o.sig = sig; o.gt.innerHTML = ''; o.gtop.innerHTML = '';
@@ -426,7 +426,7 @@ class Component extends DCLogic {
           for (let i = 0; i < bl.length; i++) { const el = bl[i]; const m = /(-?[\d.]+)px (-?[\d.]+)px/.exec(el.style.translate || ''); if (!m) continue; if (!el.offsetWidth) continue; const r = el.offsetWidth / 2;
             circ += '<circle cx="' + (+m[1] + r).toFixed(1) + '" cy="' + (+m[2] + r).toFixed(1) + '" r="' + r.toFixed(1) + '"/>'; }
           const g = h.querySelector('.gcb'); if (g && g._on && this._ct) { const r = (g.offsetWidth || 50) / 2; circ += '<circle cx="' + (this._ct.x - hr.left).toFixed(1) + '" cy="' + (this._ct.y - hr.top).toFixed(1) + '" r="' + r.toFixed(1) + '"/>'; }
-          o.gc.innerHTML = circ; } }
+          o.gc.innerHTML = circ; o.flip = !o.flip; o.fg.setAttribute('filter', 'url(#' + o.fid[o.flip ? 1 : 0] + ')'); } }
       { this._dkF = (this._dkF || 0) + 1;
         if (this._ct && this._dkF % 5 === 0) {
           let n = document.elementFromPoint(this._ct.x, this._ct.y), dark = false;
