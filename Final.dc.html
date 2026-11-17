@@ -138,7 +138,6 @@ nav a{box-sizing:border-box}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
-.dw-sf .ampcells .acell{visibility:hidden}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
 .plane{position:absolute;left:-35%;top:8%;width:170%;transform-origin:50% 50%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px;animation:planeMove 2.8s linear both}
 @keyframes planeMove{from{transform:rotateX(48deg) rotateZ(-24deg) translateY(14%)}to{transform:rotateX(48deg) rotateZ(-24deg) translateY(-14%)}}
@@ -1244,15 +1243,9 @@ class Component extends DCLogic {
     if (SF) document.documentElement.classList.add('dw-sf');
     const INK = cs.color, PAL = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#C9B48A', '#8A6B4E', '#E3D8C4', '#161514'];
     cont.querySelectorAll('.acell').forEach((e) => e.remove());
-    const SFG = document.documentElement.classList.contains('dw-sf'); let sg = null, gg = null;
-    cont.querySelectorAll('.asvg').forEach((e) => e.remove());
-    if (SFG) { const NS = 'http://www.w3.org/2000/svg'; sg = document.createElementNS(NS, 'svg'); sg.setAttribute('class', 'asvg'); sg.setAttribute('width', cr.width); sg.setAttribute('height', cr.height);
-      sg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible;pointer-events:none';
-      sg.innerHTML = '<defs><filter id="dwGooS" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter></defs><g filter="url(#dwGooS)" fill="' + INK + '"></g>';
-      cont.appendChild(sg); gg = sg.querySelector('g'); }
     const mk = (x, y, r, c, hx, hy, tr) => { const e = document.createElement('span'); e.className = 'acell'; const base = Math.max(r, tr) * 1.3 + 1;
       e.style.cssText = 'left:0;top:0;width:' + (base * 2).toFixed(1) + 'px;height:' + (base * 2).toFixed(1) + 'px;background:' + c + ';transition:background-color .6s ease;transform:translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (r / base).toFixed(3) + ')';
-      cont.appendChild(e); let ci = null; if (gg) { ci = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); ci.setAttribute('r', '0'); gg.appendChild(ci); } return { ci: ci, el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: tr, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, born: 0 }; };
+      cont.appendChild(e); return { el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: tr, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, born: 0 }; };
     const t0 = performance.now(); let last = t0, sw = 0, sx = 0, sy = 0;
     const balls = seeds.map((q) => { const o = mk(q.x, q.y, 0, INK, q.x, q.y, q.r * 0.86); o.born = t0 + Math.random() * 200; o.tr0 = o.tr; o.tr = 0; sw += q.r * q.r; sx += q.x * q.r * q.r; sy += q.y * q.r * q.r; return o; });
     const gx = sx / sw, gy = sy / sw, UV = Math.min(cr.width, cr.height), DG = Math.hypot(cr.width, cr.height);
@@ -1266,7 +1259,7 @@ class Component extends DCLogic {
       o.vx = p.vx + ca * p.tr * 7; o.vy = p.vy + sn * p.tr * 7; o.c = col; p.tr *= 0.86; p.vx -= ca * p.tr * 1.5; p.vy -= sn * p.tr * 1.5;
       balls.push(o); requestAnimationFrame(() => { if (!o.zoom) o.el.style.backgroundColor = col; }); };
     const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
-      if (cont._blk && now - cont._blk > 280) { for (const q of balls) q.el.style.display = 'none'; if (sg) sg.style.display = 'none'; return; }
+      if (cont._blk && now - cont._blk > 280) { for (const q of balls) q.el.style.display = 'none'; return; }
       if (phase === 0 && t > 0.5) phase = 1;
       const SW = t > 1.05 ? Math.pow(Math.min(1, (t - 1.05) / 0.95), 2.2) : 0;
       if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 2.0) phase = 2; }
@@ -1301,9 +1294,6 @@ class Component extends DCLogic {
         q.vr += (q.tr * (phase < 2 ? 1 + 0.42 * SW : 1) - q.r) * 150 * dt; q.vr *= 1 - 8 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
         const sc = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05) / q.base;
         q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')'; }
-      if (gg) { for (const q of balls) { if (!q.ci) continue; if (q.hid) { q.ci.setAttribute('r', '0'); continue; } const rr = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05);
-          q.ci.setAttribute('cx', q.x.toFixed(1)); q.ci.setAttribute('cy', q.y.toFixed(1)); q.ci.setAttribute('r', Math.max(0, rr).toFixed(1)); }
-        if (phase === 3 && t > 2.6 && gg.getAttribute('filter')) gg.removeAttribute('filter'); }
       if (t < 3.6) requestAnimationFrame(step); };
     requestAnimationFrame(step);
   }
@@ -1328,8 +1318,8 @@ class Component extends DCLogic {
         const d = P - z; let b = 0, o = 1;
         c.far = 0; if (d < FOC) b = Math.min(mob ? 5 : 7, (FOC - d) / S * 5);
         else { b = Math.min(mob ? 5 : 6, (d - FOC) / S * (mob ? 2.6 : 2.4)); c.far = 1; if (mob) o = Math.max(0.45, 1 - (d - FOC) / (S * 10)); }
-        c.nb = Math.round(b * 2) / 2; if (c.nb < 1) c.nb = 0; c.no = Math.round(o * 10) / 10; }
-      if (mob) { const vs = cubes.filter((c) => !c.off && c.nb > 0).sort((a, b) => b.nb - a.nb); let nn = 0, nf = 0; for (const c of vs) { if (c.far) { if (++nf > 8) c.nb = 0; } else if (++nn > 4) c.nb = 0; } }
+        c.nb = mob ? Math.round(b * 2) / 2 : Math.round(b); if (c.nb < 1) c.nb = 0; c.no = Math.round(o * 10) / 10; }
+      { const vs = cubes.filter((c) => !c.off && c.nb > 0).sort((a, b) => b.nb - a.nb); let nn = 0, nf = 0; const NN = mob ? 4 : 3, NF = mob ? 8 : 5; for (const c of vs) { if (c.far) { if (++nf > NF) c.nb = 0; } else if (++nn > NN) c.nb = 0; } }
       for (const c of cubes) { if (c.off) continue; const b = c.nb, o = c.no;
         if (b !== c.b) { c.b = b; if (b) { c.e.style.setProperty('--bl', b + 'px'); c.e.setAttribute('data-b', ''); } else c.e.removeAttribute('data-b'); }
         if (o !== c.o) { c.o = o; if (o < 1) { c.e.style.setProperty('--op', o); c.e.setAttribute('data-f', ''); } else c.e.removeAttribute('data-f'); } }
