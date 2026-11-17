@@ -335,7 +335,7 @@ body{font-feature-settings:'palt' 1;}
 .ph4.cf .ph4-cube{opacity:1;animation:cfCube 7.9s linear both}
 @keyframes cfCube{0%{opacity:1;visibility:visible}92%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 .ph4.cf:not(.go)>:not(.ph4-cube),.ph4.cf:not(.go)>:not(.ph4-cube) *{animation-play-state:paused}
-.ph4-cube{position:absolute;inset:0;z-index:6;background:#121110;perspective:1000px;opacity:0;animation:ph4Fade .7s ease 5.6s forwards;overflow:hidden;--S:320px;--h:calc(var(--S) / 2)}
+.ph4-cube{position:absolute;inset:0;z-index:6;background:#121110;perspective:1000px;opacity:0;animation:ph4Fade .7s ease 5.6s forwards;overflow:hidden;--S:440px;--h:calc(var(--S) / 2)}
 .cw-par{position:absolute;left:50%;top:50%;transform-style:preserve-3d;transform:rotateY(calc(var(--px, 0) * 10deg)) rotateX(calc(var(--py, 0) * -8deg))}
 .cw{position:absolute;left:0;top:0;transform-style:preserve-3d;animation:cwCam 6.4s cubic-bezier(.45,0,.2,1) 5.6s both}
 @keyframes cwCam{from{transform:translateZ(-1700px) rotateX(58deg) rotateZ(-38deg)}to{transform:translateZ(var(--camZ, 560px)) rotateX(18deg) rotateY(-24deg) rotateZ(-10deg)}}
@@ -348,10 +348,10 @@ body{font-feature-settings:'palt' 1;}
 .cw-f:nth-child(2)::after{animation-delay:-.7s}.cw-f:nth-child(3)::after{animation-delay:-1.4s}.cw-f:nth-child(4)::after{animation-delay:-2.1s}.cw-f:nth-child(5)::after{animation-delay:-1s}.cw-f:nth-child(6)::after{animation-delay:-1.8s}
 .cw-c:nth-child(3n)>.cw-f::after{animation-duration:3.3s}.cw-c:nth-child(3n+1)>.cw-f::after{animation-duration:2.1s}
 .ph4.cf .cw{animation:cwIn 7.4s cubic-bezier(.3,0,.25,1) 0s both;--inZ:1150px}
-@keyframes cwIn{from{transform:translateZ(-380px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(1000px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
+@keyframes cwIn{from{transform:translateZ(250px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(1250px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 .ph4.cf .cw-w.hi{animation-delay:calc(var(--hd) - 5.2s)}
 @media (max-width:700px){.ph4.cf .cw{animation-name:cwInM}}
-@keyframes cwInM{from{transform:translateZ(-380px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(700px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
+@keyframes cwInM{from{transform:translateZ(150px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(600px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 @keyframes cwCorner{0%{opacity:.25}60%{opacity:.7}100%{opacity:1}}
 @media (max-width:700px){.cw-f[style*="rotateY(180deg)"]::after,.cw-f[style*="rotateY(-90deg)"]::after,.cw-f[style*="rotateX(-90deg)"]::after{display:none}}
 @media (prefers-reduced-motion: reduce){.cw-f::after{animation:none;opacity:.6}}
@@ -361,7 +361,7 @@ body{font-feature-settings:'palt' 1;}
 .cw-w.hi{animation:cwHi 2.2s ease var(--hd) both}
 @keyframes cwHi{0%{color:rgba(240,237,230,.26);text-shadow:none}35%{color:#F0EDE6;text-shadow:0 0 18px rgba(240,237,230,.55)}100%{color:#F0EDE6;text-shadow:0 0 10px rgba(240,237,230,.3)}}
 .ph4-dark,.ph4-cap2{animation-name:ph4Fade}
-@media (max-width:700px){.ph4-cube{--S:150px;perspective:800px}.cw{--camZ:-60px}.cw-x{display:none}.cw-s rect.g{stroke-width:7}.cw-f[style*="rotateY(180deg)"] .cw-s,.cw-f[style*="rotateY(-90deg)"] .cw-s,.cw-f[style*="rotateX(-90deg)"] .cw-s{display:none}.cw-s rect{stroke-width:2}}
+@media (max-width:700px){.ph4-cube{--S:250px;perspective:800px}.cw{--camZ:-60px}.cw-x{display:none}.cw-s rect.g{stroke-width:7}.cw-f[style*="rotateY(180deg)"] .cw-s,.cw-f[style*="rotateY(-90deg)"] .cw-s,.cw-f[style*="rotateX(-90deg)"] .cw-s{display:none}.cw-s rect{stroke-width:2}}
 @media (prefers-reduced-motion: reduce){.ph4-cube{display:none}.cw-s rect{animation:none}}
 /* 鏡文字を出さない */
 .cw-f{transform-style:preserve-3d}
@@ -1246,8 +1246,8 @@ class Component extends DCLogic {
       balls.push(o); requestAnimationFrame(() => { o.el.style.backgroundColor = col; }); };
     const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
       if (phase === 0 && t > 0.5) phase = 1;
-      if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 1.85) phase = 2; }
-      if (phase === 2 && t > 2.0) { phase = 3; let zb = null, zs = -1e9; balls.forEach((q) => { const dd = Math.hypot(q.x - gx, q.y - gy), sc2 = q.tr * 3 - dd; if (q.tr > 6 && sc2 > zs) { zs = sc2; zb = q; } });
+      if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 2.0) phase = 2; }
+      if (phase === 2) { phase = 3; let zb = null, zs = -1e9; balls.forEach((q) => { const dd = Math.hypot(q.x - gx, q.y - gy), sc2 = q.tr * 3 - dd; if (q.tr > 6 && sc2 > zs) { zs = sc2; zb = q; } });
         if (zb) { zb.zoom = 1; zb.zx = zb.x; zb.zy = zb.y; zb.zr = zb.r; zb.c = INK; zb.el.style.transition = 'none'; zb.el.style.backgroundColor = INK; }
         balls.forEach((q) => { if (q.zoom) return; const dx = q.x - gx, dy = q.y - gy, dd = Math.sqrt(dx * dx + dy * dy) || 1, an = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.5, sp = UV * (3.8 + Math.random() * 3.2) * (0.75 + Math.min(1, dd / (UV * 0.4)) * 0.6);
         q.vx = Math.cos(an) * sp; q.vy = Math.sin(an) * sp; q.tr0 = q.tr; }); }
