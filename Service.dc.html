@@ -3,7 +3,7 @@
 <head>
 <meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="メニューデザイン、メニューブック、料理撮影、ポスター、チラシ、ロゴ、ウェブの料金表とサービスパック、製作期間。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="サービスと料金 — ディテールアンドワークス">
@@ -168,6 +168,8 @@ h1.gooT{overflow:visible!important}
 .gsv-on{filter:none!important}
 .gsv-on > :not(svg.gfsvg){opacity:0!important}
 .gfsvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+/* 画面上端まで地続き */
+header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 </style>
 </helmet>
 <div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
