@@ -164,6 +164,10 @@ h1.gooT{overflow:visible!important}
 /* 日本語見出しは同じ層で描く */
 .gooJ.goo-svgon{color:transparent!important}
 .gooJ.goo-svgon *:not(svg):not(text){color:transparent!important}
+/* 色の玉もSVGで溶かす（Safari） */
+.gsv-on{filter:none!important}
+.gsv-on > :not(svg.gfsvg){opacity:0!important}
+.gfsvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
 </style>
 </helmet>
 <div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
@@ -352,6 +356,27 @@ class Component extends DCLogic {
     const K = [1, 0.42, 0.26, 0.16];
     const tick = () => {
       const els = this._cb || [];
+      { const FS = this._gfs || (this._gfs = { t: 0, list: [], sf: /iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent)) || /[?&]gsv=1/.test(location.search) });
+        if (FS.sf) { const NS = 'http://www.w3.org/2000/svg'; const nowF = performance.now();
+          if (nowF - FS.t > 700) { FS.t = nowF;
+            document.querySelectorAll('.goo-field, .scene, .scene > div').forEach((c) => { if (c._gf) return; const f = getComputedStyle(c).filter || '';
+              const m = /url\(["']?#(dwGooA|dwGoo)["']?\)/.exec(f); if (!m) return;
+              const sd = m[1] === 'dwGooA' ? 20 : 12, mx = m[1] === 'dwGooA' ? '24 -10' : '22 -9';
+              const sv = document.createElementNS(NS, 'svg'); sv.setAttribute('class', 'gfsvg'); sv.setAttribute('aria-hidden', 'true');
+              const id = 'gf' + Math.random().toString(36).slice(2, 8);
+              sv.innerHTML = '<defs><filter id="' + id + '" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + sd + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + mx + '"/></filter></defs><g filter="url(#' + id + ')"></g>';
+              c.appendChild(sv); c.classList.add('gsv-on'); c._gf = { sv: sv, g: sv.querySelector('g') }; FS.list.push(c); });
+            FS.list = FS.list.filter((c) => c.isConnected); }
+          for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const cr = c.getBoundingClientRect();
+            if (cr.bottom < -80 || cr.top > innerHeight + 80 || cr.width < 1) continue;
+            const sc = cr.width / (c.offsetWidth || cr.width); const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height;
+            G.sv.setAttribute('width', Math.ceil(W)); G.sv.setAttribute('height', Math.ceil(H));
+            let out = ''; const kids = c.children;
+            for (let k = 0; k < kids.length; k++) { const e = kids[k]; if (e === G.sv) continue; const r = e.getBoundingClientRect(); if (r.width < 1) continue;
+              const bg = getComputedStyle(e).backgroundColor; if (!bg || bg === 'rgba(0, 0, 0, 0)') continue;
+              const cx = (r.left + r.width / 2 - cr.left) / sc, cy = (r.top + r.height / 2 - cr.top) / sc;
+              out += '<ellipse cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" rx="' + (r.width / 2 / sc).toFixed(1) + '" ry="' + (r.height / 2 / sc).toFixed(1) + '" fill="' + bg + '"/>'; }
+            G.g.innerHTML = out; } } }
       { const GT = this._gtk || (this._gtk = { t: 0, hs: [] }); const nowT = performance.now();
         if (nowT - GT.t > 1000) { GT.t = nowT; GT.hs = Array.prototype.map.call(document.querySelectorAll('.gooT'), (h) => {
           const rg = document.createRange(); const bl = Array.prototype.slice.call(h.querySelectorAll('.gtb'));
