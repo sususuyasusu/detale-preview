@@ -1203,33 +1203,40 @@ class Component extends DCLogic {
         if ((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) < rr * rr) U[yy * W + xx] = 0; }
     if (!seeds.length) return;
     const INK = cs.color, PAL = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#C9B48A', '#8A6B4E', '#E3D8C4', '#161514'];
-    const mk = (b) => { const e = document.createElement('span'); e.className = 'acell';
-      e.style.cssText = 'left:' + b.x.toFixed(1) + 'px;top:' + b.y.toFixed(1) + 'px;width:' + (b.r * 2).toFixed(1) + 'px;height:' + (b.r * 2).toFixed(1) + 'px;background:' + b.c + ';transform:translate(-50%,-50%)';
-      cont.appendChild(e); b.el = e; return b; };
     cont.querySelectorAll('.acell').forEach((e) => e.remove());
-    let balls = seeds.map((b) => mk({ x: b.x, y: b.y, r: b.r, c: INK }));
+    const mk = (x, y, r, c, hx, hy) => { const e = document.createElement('span'); e.className = 'acell'; const base = r * 1.3;
+      e.style.cssText = 'left:0;top:0;width:' + (base * 2).toFixed(1) + 'px;height:' + (base * 2).toFixed(1) + 'px;background:' + c + ';transition:background-color .8s ease;transform:translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (r / base).toFixed(3) + ')';
+      cont.appendChild(e); return { el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: r, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, sa: 0 }; };
+    let balls = seeds.map((q) => mk(q.x, q.y, q.r, INK, q.x, q.y));
     amp.classList.add('gone');
     const T = this._acT || (this._acT = []), CAP = 128, PC = [0.35, 0.7, 0.95];
-    const divide = (g) => { const out = []; let room = CAP - balls.length;
-      balls.sort(() => Math.random() - 0.5).forEach((b) => {
-        if (room <= 0 || b.r < 4) { out.push(b); return; } room--;
-        const a = Math.random() * Math.PI * 2, rc = b.r * 0.76, off = b.r * 1.08, d0 = Math.random() * 260;
-        [1, -1].forEach((sg) => { const c = { x: b.x + Math.cos(a) * off * sg, y: b.y + Math.sin(a) * off * sg, r: rc, c: Math.random() < PC[g] ? PAL[Math.floor(Math.random() * PAL.length)] : b.c };
-          const keep = c.c; c.c = b.c; mk(c); c.c = keep;
-          c.el.style.transform = 'translate(-50%,-50%) translate(' + (b.x - c.x).toFixed(1) + 'px,' + (b.y - c.y).toFixed(1) + 'px) scale(' + (b.r / rc).toFixed(3) + ')';
-          void c.el.offsetWidth;
-          T.push(setTimeout(() => { c.el.style.transition = 'transform .6s cubic-bezier(.34,1.75,.5,1), background-color .55s ease';
-            c.el.style.transform = 'translate(-50%,-50%)'; c.el.style.backgroundColor = keep; }, d0));
-          out.push(c); });
-        b.el.remove(); });
-      balls = out; };
-    T.push(setTimeout(() => divide(0), 380));
-    T.push(setTimeout(() => divide(1), 880));
-    T.push(setTimeout(() => divide(2), 1380));
-    T.push(setTimeout(() => { const mx = cr.width / 2, my = cr.height / 2;
-      balls.forEach((b) => { const dx = (b.x - mx) * 0.5 + (Math.random() - 0.5) * 80, dy = cr.height * (0.35 + Math.random() * 0.4), dl = Math.random() * 300;
-        T.push(setTimeout(() => { b.el.style.transition = 'transform 1s cubic-bezier(.55,0,.8,.2)';
-          b.el.style.transform = 'translate(-50%,-50%) translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(0)'; }, dl)); }); }, 2000));
+    let rel = 0, t0 = performance.now(), last = t0; const mx = cr.width / 2, GR = cr.height * 1.5;
+    const split = (q, g) => { const an = Math.random() * 6.283, ca = Math.cos(an), sn = Math.sin(an), rc = q.tr * 0.76, off = q.tr * 0.85, sp = q.tr * 7;
+      const nc = () => Math.random() < PC[g] ? PAL[Math.floor(Math.random() * PAL.length)] : q.c;
+      const o = mk(q.x, q.y, q.r, q.c, q.hx - ca * off, q.hy - sn * off); o.vx = q.vx - ca * sp; o.vy = q.vy - sn * sp; o.tr = rc; o.c = nc(); o.ph = q.ph + 3;
+      q.hx += ca * off; q.hy += sn * off; q.vx += ca * sp; q.vy += sn * sp; q.tr = rc; q.c = nc();
+      balls.push(o); requestAnimationFrame(() => { o.el.style.backgroundColor = o.c; q.el.style.backgroundColor = q.c; }); };
+    const divide = (g) => { const now = performance.now(); let room = CAP - balls.length;
+      balls.slice().sort(() => Math.random() - 0.5).forEach((q) => { if (room <= 0 || q.tr < 4 || q.sa) return; room--; q.sa = now + Math.random() * 320; q.sg = g; }); };
+    const step = () => { if (!cont.isConnected) return; const now = performance.now(); let dt = (now - last) / 1000; last = now; if (dt > 0.04) dt = 0.04;
+      const n0 = balls.length; for (let i = 0; i < n0; i++) { const q = balls[i]; if (q.sa && now >= q.sa) { q.sa = 0; split(q, q.sg); } }
+      const n = balls.length;
+      for (let i = 0; i < n; i++) { const p = balls[i]; for (let j = i + 1; j < n; j++) { const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.78, d2 = dx * dx + dy * dy;
+        if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 26 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } }
+      for (let i = 0; i < n; i++) { const q = balls[i];
+        if (!rel) { const fx = q.hx + Math.sin(now * 0.0013 + q.ph) * q.tr * 0.12, fy = q.hy + Math.cos(now * 0.0011 + q.ph) * q.tr * 0.12;
+          q.vx += (fx - q.x) * 34 * dt; q.vy += (fy - q.y) * 34 * dt; q.vx *= 1 - 4.2 * dt; q.vy *= 1 - 4.2 * dt; }
+        else { q.vy += GR * dt; q.vx *= 1 - 0.8 * dt; q.tr = Math.max(0, q.tr - q.tr0 * dt / 1.3); }
+        q.x += q.vx * dt; q.y += q.vy * dt;
+        q.vr += (q.tr - q.r) * 160 * dt; q.vr *= 1 - 9 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
+        const sc = q.r * (1 + Math.sin(now * 0.005 + q.ph) * 0.045) / q.base;
+        q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')'; }
+      if (now - t0 < 3600) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+    T.push(setTimeout(() => divide(0), 320));
+    T.push(setTimeout(() => divide(1), 860));
+    T.push(setTimeout(() => divide(2), 1400));
+    T.push(setTimeout(() => { rel = 1; balls.forEach((q) => { q.tr0 = q.tr; q.sa = 0; q.vx += (q.x - mx) * 0.9 + (Math.random() - 0.5) * 120; q.vy -= 120 + Math.random() * 260; }); }, 2150));
   }
   nextScene(n) {
     if (this.calm()) { this.setState({ scene: 4 }); return; }
