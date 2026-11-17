@@ -347,7 +347,7 @@ class Component extends DCLogic {
     const tick = () => {
       const els = this._cb || [];
       { const FS = this._gfs || (this._gfs = { t: 0, list: [], sf: /iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent)) || /[?&]gsv=1/.test(location.search) });
-        if (FS.sf) { const nowF = performance.now(); const Q = 2;
+        if (FS.sf) { const nowF = performance.now();
           if (nowF - FS.t > 700) { FS.t = nowF;
             document.querySelectorAll('.goo-field, .scene, .scene > div').forEach((c) => { if (c._gf) return; const f = getComputedStyle(c).filter || '';
               if (!/url\(["']?#(dwGooA|dwGoo)["']?\)/.test(f)) return;
@@ -357,22 +357,27 @@ class Component extends DCLogic {
           FS.f = (FS.f || 0) + 1;
           if (FS.f % 2 === 0) for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const cr = c.getBoundingClientRect();
             if (cr.bottom < -80 || cr.top > innerHeight + 80 || cr.width < 1) continue;
-            const sc = cr.width / (c.offsetWidth || cr.width); const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height;
-            const w = Math.max(1, Math.ceil(W / Q)), h = Math.max(1, Math.ceil(H / Q));
-            if (G.cv.width !== w || G.cv.height !== h) { G.cv.width = w; G.cv.height = h; G.cv.style.width = W + 'px'; G.cv.style.height = H + 'px'; G.img = G.ctx.createImageData(w, h); }
-            const B = []; const kids = c.children;
+            const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height; const sc = cr.width / W;
+            const RZ = Math.min(2, window.devicePixelRatio || 1) * sc;
+            const w = Math.max(1, Math.ceil(W * RZ)), h = Math.max(1, Math.ceil(H * RZ));
+            if (G.cv.width !== w || G.cv.height !== h) { G.cv.width = w; G.cv.height = h; G.cv.style.width = W + 'px'; G.cv.style.height = H + 'px';
+              G.img = G.ctx.createImageData(w, h); G.F = new Float32Array(w * h); G.R = new Float32Array(w * h); G.Gc = new Float32Array(w * h); G.B = new Float32Array(w * h); G.box = null; }
+            const F = G.F, RR = G.R, GG = G.Gc, BB = G.B, D = G.img.data;
+            const ob = G.box; if (ob) { for (let y = ob[1]; y < ob[3]; y++) { const o = y * w; F.fill(0, o + ob[0], o + ob[2]); RR.fill(0, o + ob[0], o + ob[2]); GG.fill(0, o + ob[0], o + ob[2]); BB.fill(0, o + ob[0], o + ob[2]); for (let x = ob[0]; x < ob[2]; x++) D[(o + x) * 4 + 3] = 0; } }
+            let x0 = w, y0 = h, x1 = 0, y1 = 0; const kids = c.children;
             for (let k = 0; k < kids.length; k++) { const e = kids[k]; if (e === G.cv) continue; const r = e.getBoundingClientRect(); if (r.width < 1) continue;
               if (!e._bgc || FS.f % 12 === 0) { const m = /(\d+), (\d+), (\d+)/.exec(getComputedStyle(e).backgroundColor); e._bgc = m ? [+m[1], +m[2], +m[3]] : null; }
-              if (!e._bgc) continue;
-              const rr = (r.width + r.height) / 4 / sc / Q;
-              B.push([(r.left + r.width / 2 - cr.left) / sc / Q, (r.top + r.height / 2 - cr.top) / sc / Q, rr * rr, e._bgc]); }
-            const D = G.img.data; let i = 0;
-            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++, i += 4) {
-              let F = 0, R = 0, Gc = 0, Bc = 0;
-              for (let n = 0; n < B.length; n++) { const b = B[n]; const dx = x + 0.5 - b[0], dy = y + 0.5 - b[1]; let v = b[2] / (dx * dx + dy * dy + 0.01); v = v * v; F += v; R += v * b[3][0]; Gc += v * b[3][1]; Bc += v * b[3][2]; }
-              const a = F < 0.9 ? 0 : F > 1.1 ? 1 : (F - 0.9) / 0.2;
-              if (a > 0) { D[i] = R / F; D[i + 1] = Gc / F; D[i + 2] = Bc / F; D[i + 3] = a * 255; } else D[i + 3] = 0; }
-            G.ctx.putImageData(G.img, 0, 0); } } }
+              const col = e._bgc; if (!col) continue;
+              const X = (r.left + r.width / 2 - cr.left) / sc * RZ, Y = (r.top + r.height / 2 - cr.top) / sc * RZ, rr = (r.width + r.height) / 4 / sc * RZ, r2 = rr * rr, ext = rr * 2.2;
+              const ax = Math.max(0, Math.floor(X - ext)), bx = Math.min(w, Math.ceil(X + ext)), ay = Math.max(0, Math.floor(Y - ext)), by = Math.min(h, Math.ceil(Y + ext));
+              if (ax >= bx || ay >= by) continue;
+              if (ax < x0) x0 = ax; if (bx > x1) x1 = bx; if (ay < y0) y0 = ay; if (by > y1) y1 = by;
+              for (let y = ay; y < by; y++) { const dy = y + 0.5 - Y, dy2 = dy * dy, o = y * w;
+                for (let x = ax; x < bx; x++) { const dx = x + 0.5 - X; let v = r2 / (dx * dx + dy2 + 0.01); v = v * v; const i = o + x; F[i] += v; RR[i] += v * col[0]; GG[i] += v * col[1]; BB[i] += v * col[2]; } } }
+            if (x1 > x0 && y1 > y0) { for (let y = y0; y < y1; y++) { const o = y * w; for (let x = x0; x < x1; x++) { const i = o + x, f = F[i]; if (f < 0.85) continue; const a = f > 1.15 ? 255 : (f - 0.85) / 0.3 * 255; const p = i * 4; D[p] = RR[i] / f; D[p + 1] = GG[i] / f; D[p + 2] = BB[i] / f; D[p + 3] = a; } } }
+            const nb = x1 > x0 ? [x0, y0, x1, y1] : null; const ux0 = Math.min(nb ? nb[0] : w, ob ? ob[0] : w), uy0 = Math.min(nb ? nb[1] : h, ob ? ob[1] : h), ux1 = Math.max(nb ? nb[2] : 0, ob ? ob[2] : 0), uy1 = Math.max(nb ? nb[3] : 0, ob ? ob[3] : 0);
+            if (ux1 > ux0 && uy1 > uy0) G.ctx.putImageData(G.img, 0, 0, ux0, uy0, ux1 - ux0, uy1 - uy0);
+            G.box = nb; } } }
       { const GT = this._gtk || (this._gtk = { t: 0, hs: [] }); const nowT = performance.now();
         if (nowT - GT.t > 1000) { GT.t = nowT; GT.hs = Array.prototype.map.call(document.querySelectorAll('.gooT'), (h) => {
           const rg = document.createRange(); const bl = Array.prototype.slice.call(h.querySelectorAll('.gtb'));
