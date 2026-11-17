@@ -138,6 +138,7 @@ nav a{box-sizing:border-box}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
+.dw-sf .ampcells .acell{visibility:hidden}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
 .plane{position:absolute;left:-35%;top:8%;width:170%;transform-origin:50% 50%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px;animation:planeMove 2.8s linear both}
 @keyframes planeMove{from{transform:rotateX(48deg) rotateZ(-24deg) translateY(14%)}to{transform:rotateX(48deg) rotateZ(-24deg) translateY(-14%)}}
@@ -524,7 +525,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   <div class="glowlogo" onMouseMove="{{logoMove1}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0;">
   <h1 style="margin: 0; display: flex; align-items: flex-end; justify-content: space-between; padding: 14px 16px 0; font-weight: 400; line-height: .8; white-space: nowrap; overflow: hidden;"><span class="sr-only">DETALE&amp;WORKS</span>
     <span aria-hidden="true" id="h1-d" class="bb h1part" style="font-size: clamp(44px, 10.4vw, 196px); letter-spacing: .01em; display: inline-flex; overflow: hidden; flex-shrink: 0;"><span aria-hidden="true" class="ch" style="animation-delay: 2.4s;">D</span><span aria-hidden="true" class="ch" style="animation-delay: 2.45s;">E</span><span aria-hidden="true" class="ch" style="animation-delay: 2.5s;">T</span><span aria-hidden="true" class="ch" style="animation-delay: 2.55s;">A</span><span aria-hidden="true" class="ch" style="animation-delay: 2.6s;">L</span><span aria-hidden="true" class="ch" style="animation-delay: 2.65s;">E</span></span>
-    <span id="h1-a" aria-hidden="true" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(50px, 12vw, 226px); color: inherit; display: inline-block; overflow: hidden; line-height: .8; flex-shrink: 0;"><span aria-hidden="true" class="ch" style="animation-delay: 2.75s;">&amp;</span></span>
+    <span id="h1-a" aria-hidden="true" style="font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 500; font-size: clamp(50px, 12vw, 226px); color: inherit; display: inline-block; overflow: hidden; line-height: .8; flex-shrink: 0;"><span aria-hidden="true" class="ch" style="animation-delay: 2.75s;">&amp;</span></span>
     <span aria-hidden="true" id="h1-w" class="bb h1part" style="font-size: clamp(44px, 10.4vw, 196px); letter-spacing: .01em; display: inline-flex; overflow: hidden; flex-shrink: 0;"><span aria-hidden="true" class="ch" style="animation-delay: 2.85s;">W</span><span aria-hidden="true" class="ch" style="animation-delay: 2.9s;">O</span><span aria-hidden="true" class="ch" style="animation-delay: 2.95s;">R</span><span aria-hidden="true" class="ch" style="animation-delay: 3s;">K</span><span aria-hidden="true" class="ch" style="animation-delay: 3.05s;">S</span></span>
   </h1>
   
@@ -840,7 +841,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
     <p class="wave bb" aria-label="LET'S TALK FOOD" style="position: relative; font-size: clamp(40px, 13.5vw, 230px); line-height: .82; margin: 80px 0 28px; white-space: nowrap;"><span>L</span><span>E</span><span>T</span><span>’</span><span>S</span><span aria-hidden="true" style="width: .28em;"></span><span>T</span><span>A</span><span>L</span><span>K</span><span aria-hidden="true" style="width: .28em;"></span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: inherit;">food.</span></p>
 
     <div class="glowlogo" onMouseMove="{{logoMove2}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; margin: 40px -4px -0.16em; display: flex; justify-content: center; overflow: hidden;">
-      <p class="bigmark" aria-label="DETALE&amp;WORKS" style="color: {{markBase}};">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: italic;">&amp;</span>WORKS</p>
+      <p class="bigmark" aria-label="DETALE&amp;WORKS" style="color: {{markBase}};">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 500;">&amp;</span>WORKS</p>
     </div>
     <div style="position: relative; background: #161514; color: #F0EDE6; margin: 0 -16px; padding: 22px 16px 64px; display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: center;">
       <span class="bb" style="font-size: clamp(30px, 3.6vw, 52px); line-height: 1;">TEL:03-6674-9763　MAIL:<span style="color: inherit;">info@detale.jp</span></span>
@@ -1243,9 +1244,15 @@ class Component extends DCLogic {
     if (SF) document.documentElement.classList.add('dw-sf');
     const INK = cs.color, PAL = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#C9B48A', '#8A6B4E', '#E3D8C4', '#161514'];
     cont.querySelectorAll('.acell').forEach((e) => e.remove());
+    const SFG = document.documentElement.classList.contains('dw-sf'); let sg = null, gg = null;
+    cont.querySelectorAll('.asvg').forEach((e) => e.remove());
+    if (SFG) { const NS = 'http://www.w3.org/2000/svg'; sg = document.createElementNS(NS, 'svg'); sg.setAttribute('class', 'asvg'); sg.setAttribute('width', cr.width); sg.setAttribute('height', cr.height);
+      sg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible;pointer-events:none';
+      sg.innerHTML = '<defs><filter id="dwGooS" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter></defs><g filter="url(#dwGooS)" fill="' + INK + '"></g>';
+      cont.appendChild(sg); gg = sg.querySelector('g'); }
     const mk = (x, y, r, c, hx, hy, tr) => { const e = document.createElement('span'); e.className = 'acell'; const base = Math.max(r, tr) * 1.3 + 1;
       e.style.cssText = 'left:0;top:0;width:' + (base * 2).toFixed(1) + 'px;height:' + (base * 2).toFixed(1) + 'px;background:' + c + ';transition:background-color .6s ease;transform:translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (r / base).toFixed(3) + ')';
-      cont.appendChild(e); return { el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: tr, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, born: 0 }; };
+      cont.appendChild(e); let ci = null; if (gg) { ci = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); ci.setAttribute('r', '0'); gg.appendChild(ci); } return { ci: ci, el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: tr, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, born: 0 }; };
     const t0 = performance.now(); let last = t0, sw = 0, sx = 0, sy = 0;
     const balls = seeds.map((q) => { const o = mk(q.x, q.y, 0, INK, q.x, q.y, q.r * 0.86); o.born = t0 + Math.random() * 200; o.tr0 = o.tr; o.tr = 0; sw += q.r * q.r; sx += q.x * q.r * q.r; sy += q.y * q.r * q.r; return o; });
     const gx = sx / sw, gy = sy / sw, UV = Math.min(cr.width, cr.height), DG = Math.hypot(cr.width, cr.height);
@@ -1259,7 +1266,7 @@ class Component extends DCLogic {
       o.vx = p.vx + ca * p.tr * 7; o.vy = p.vy + sn * p.tr * 7; o.c = col; p.tr *= 0.86; p.vx -= ca * p.tr * 1.5; p.vy -= sn * p.tr * 1.5;
       balls.push(o); requestAnimationFrame(() => { if (!o.zoom) o.el.style.backgroundColor = col; }); };
     const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
-      if (cont._blk && now - cont._blk > 280) { for (const q of balls) q.el.style.display = 'none'; return; }
+      if (cont._blk && now - cont._blk > 280) { for (const q of balls) q.el.style.display = 'none'; if (sg) sg.style.display = 'none'; return; }
       if (phase === 0 && t > 0.5) phase = 1;
       const SW = t > 1.05 ? Math.pow(Math.min(1, (t - 1.05) / 0.95), 2.2) : 0;
       if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 2.0) phase = 2; }
@@ -1294,6 +1301,9 @@ class Component extends DCLogic {
         q.vr += (q.tr * (phase < 2 ? 1 + 0.42 * SW : 1) - q.r) * 150 * dt; q.vr *= 1 - 8 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
         const sc = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05) / q.base;
         q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')'; }
+      if (gg) { for (const q of balls) { if (!q.ci) continue; if (q.hid) { q.ci.setAttribute('r', '0'); continue; } const rr = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05);
+          q.ci.setAttribute('cx', q.x.toFixed(1)); q.ci.setAttribute('cy', q.y.toFixed(1)); q.ci.setAttribute('r', Math.max(0, rr).toFixed(1)); }
+        if (phase === 3 && t > 2.6 && gg.getAttribute('filter')) gg.removeAttribute('filter'); }
       if (t < 3.6) requestAnimationFrame(step); };
     requestAnimationFrame(step);
   }
@@ -1302,12 +1312,15 @@ class Component extends DCLogic {
   }
   cubeCull() {
     const st = this._stage; if (!st) return;
-    { const bx0 = st.querySelector('.ph4-cube'); if (bx0 && !bx0.firstElementChild) bx0.innerHTML = this.cwHTML(); }
+    { const bx0 = st.querySelector('.ph4-cube'); if (bx0 && !bx0.firstElementChild) { bx0.innerHTML = this.cwHTML();
+      if (typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 2) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); } } }
     const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
     const cs = getComputedStyle(box), P = parseFloat(cs.perspective) || 800, S = parseFloat(cs.getPropertyValue('--S')) || 200, lim = P - S * 1.05;
     const cubes = [...cw.querySelectorAll('.cw-c')].map((e) => { const m = new DOMMatrix(getComputedStyle(e).transform); return { e: e, x: m.m41, y: m.m42, z: m.m43, off: false, b: 0, o: 1 }; });
     const mob = typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches, FOC = S * 2.3;
+    let fc = 0; const every = mob ? 3 : 2;
     const step = () => { if (!cw.isConnected) return;
+      if (fc++ % every) { requestAnimationFrame(step); return; }
       const M = new DOMMatrix(getComputedStyle(cw).transform);
       for (const c of cubes) { const z = M.m13 * c.x + M.m23 * c.y + M.m33 * c.z + M.m43, off = z > lim;
         if (off !== c.off) { c.off = off; c.e.style.display = off ? 'none' : ''; }
@@ -1329,15 +1342,16 @@ class Component extends DCLogic {
     const ws = [...st.querySelectorAll('.ph4 .cw-w')]; if (!ws.length) return;
     const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=+*', R = () => CH[Math.floor(Math.random() * CH.length)];
     ws.forEach((w) => { if (!w.dataset.o) w.dataset.o = w.textContent; w._n = 0; });
+    const mobW = typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches;
     clearInterval(this._mxI);
     this._mxI = setInterval(() => {
       if (!ws[0].isConnected) { clearInterval(this._mxI); return; }
       for (const w of ws) { const o = w.dataset.o;
         if (w._n > 0) { w._n--; if (w._n === 0) { w.textContent = o; w.style.opacity = ''; w.style.textShadow = ''; }
-          else { let t = ''; for (let i = 0; i < o.length; i++) t += Math.random() < 0.55 ? R() : o[i]; w.textContent = t; w.style.opacity = (0.35 + Math.random() * 0.65).toFixed(2); w.style.textShadow = Math.random() < 0.4 ? '0 0 6px rgba(190,225,255,.9)' : ''; } }
+          else { let t = ''; for (let i = 0; i < o.length; i++) t += Math.random() < 0.55 ? R() : o[i]; w.textContent = t; w.style.opacity = (0.35 + Math.random() * 0.65).toFixed(2); w.style.textShadow = !mobW && Math.random() < 0.4 ? '0 0 6px rgba(190,225,255,.9)' : ''; } }
         else if (Math.random() < 0.07) w._n = 3 + Math.floor(Math.random() * 7);
         else if (Math.random() < 0.04) { w.style.opacity = '0.15'; w._n = 1; } }
-    }, 70);
+    }, mobW ? 140 : 70);
   }
   nextScene(n) {
     if (!this._sfk) { this._sfk = 1; try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {} }
