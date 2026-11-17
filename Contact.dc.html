@@ -160,6 +160,9 @@ h1.gooT{overflow:visible!important}
 .gooJ .gtb:nth-of-type(2n){width:.1em!important;height:.1em!important}
 .gooJ .gtb:nth-of-type(3n){width:.16em!important;height:.16em!important}
 .gooJ .gtb:nth-of-type(n+6){display:none!important}
+/* 日本語見出しは同じ層で描く */
+.gooJ.goo-svgon{color:transparent!important}
+.gooJ.goo-svgon *:not(svg):not(text){color:transparent!important}
 </style>
 </helmet>
 <div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
@@ -361,11 +364,11 @@ class Component extends DCLogic {
           const sig = Math.round(hr.width) + 'x' + Math.round(hr.height) + ':' + (o.lt || 0);
           if (!o.svg) { o.svg = document.createElementNS(NS, 'svg'); o.svg.setAttribute('class', 'goosvg'); o.svg.setAttribute('aria-hidden', 'true');
             const fid = 'gsf' + q + Math.random().toString(36).slice(2, 6);
-            o.svg.innerHTML = '<defs><filter id="' + fid + '" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (fs * (jp ? 0.022 : 0.07)).toFixed(1) + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + (jp ? '40 -20' : '22 -9') + '"/></filter></defs><g filter="url(#' + fid + ')"><g class="gt"></g><g class="gc"></g></g>';
-            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); }
+            o.svg.innerHTML = '<defs><filter id="' + fid + '" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (fs * (jp ? 0.022 : 0.07)).toFixed(1) + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + (jp ? '40 -20' : '22 -9') + '"/></filter></defs><g filter="url(#' + fid + ')"><g class="gt"></g><g class="gc"></g></g><g class="gtop"></g>';
+            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); o.gtop = o.svg.querySelector('.gtop'); o.col = cs.color; if (jp) h.classList.add('goo-svgon'); }
           o.svg.setAttribute('width', Math.ceil(hr.width)); o.svg.setAttribute('height', Math.ceil(hr.height));
-          o.svg.style.color = cs.color; o.gt.setAttribute('fill', cs.color); o.gc.setAttribute('fill', cs.color);
-          if (o.sig !== sig) { o.sig = sig; o.gt.innerHTML = '';
+          o.svg.style.color = o.col; o.gt.setAttribute('fill', o.col); o.gc.setAttribute('fill', o.col); o.gtop.setAttribute('fill', o.col);
+          if (o.sig !== sig) { o.sig = sig; o.gt.innerHTML = ''; o.gtop.innerHTML = '';
             const tw = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); let n; const rg = document.createRange();
             const cv = this._mcv || (this._mcv = document.createElement('canvas').getContext('2d'));
             while ((n = tw.nextNode())) { const pe = n.parentElement; if (!n.nodeValue.trim() || pe.closest('.sr-only') || pe.closest('svg')) continue;
@@ -375,7 +378,7 @@ class Component extends DCLogic {
               for (let c = 0; c < v.length; c++) { if (!v[c].trim()) continue; rg.setStart(n, c); rg.setEnd(n, c + 1); const r = rg.getBoundingClientRect(); if (r.width < 1) continue;
                 const t = document.createElementNS(NS, 'text'); t.textContent = v[c];
                 t.setAttribute('x', (r.left - hr.left).toFixed(1)); t.setAttribute('y', (r.top - hr.top + (r.height - asc - dsc) / 2 + asc).toFixed(1));
-                t.setAttribute('style', 'font:' + font + ';letter-spacing:0'); o.gt.appendChild(t); } } }
+                t.setAttribute('style', 'font:' + font + ';letter-spacing:0'); o.gt.appendChild(t); if (jp) o.gtop.appendChild(t.cloneNode(true)); } } }
           let circ = ''; const bl = o.bl;
           for (let i = 0; i < bl.length; i++) { const el = bl[i]; const m = /(-?[\d.]+)px (-?[\d.]+)px/.exec(el.style.translate || ''); if (!m) continue; if (!el.offsetWidth) continue; const r = el.offsetWidth / 2;
             circ += '<circle cx="' + (+m[1] + r).toFixed(1) + '" cy="' + (+m[2] + r).toFixed(1) + '" r="' + r.toFixed(1) + '"/>'; }
