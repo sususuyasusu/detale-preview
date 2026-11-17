@@ -349,6 +349,12 @@ body{font-feature-settings:'palt' 1;}
 .gooT:not(.gooJ) .gtb{width:.3em!important;height:.3em!important}
 .gooT:not(.gooJ) .gtb:nth-of-type(3n){width:.4em!important;height:.4em!important}
 .gooT:not(.gooJ) .gtb:nth-of-type(3n+1){width:.22em!important;height:.22em!important}
+/* にじみはSVGの中で描く */
+.gooT{filter:none!important}
+.gooT .gtb,.gooT .gcb{opacity:0!important}
+.goosvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;z-index:-1}
+/* にじみを枠で切らない */
+h1.gooT{overflow:visible!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -927,6 +933,34 @@ class Component extends DCLogic {
             const u = 0.5 + 0.5 * Math.sin(nowT * sp + ph), v = 0.5 + 0.5 * Math.sin(nowT * sp * 1.9 + ph * 2.3);
             const x = L.l + (L.r - L.l) * u - sz / 2, y = L.t + (L.b - L.t) * (0.15 + 0.7 * v) - sz / 2;
             el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px'; } } }
+      { const GS = this._gsv || (this._gsv = []); const NS = 'http://www.w3.org/2000/svg';
+        const hs = this._gtk ? this._gtk.hs : [];
+        for (let q = 0; q < hs.length; q++) { const o = hs[q], h = o.h; const hr = h.getBoundingClientRect();
+          if (hr.bottom < -50 || hr.top > innerHeight + 50 || !o.lines) continue;
+          const cs = getComputedStyle(h); const fs = parseFloat(cs.fontSize) || 40; const jp = h.classList.contains('gooJ');
+          const sig = Math.round(hr.width) + 'x' + Math.round(hr.height) + ':' + (o.lt || 0);
+          if (!o.svg) { o.svg = document.createElementNS(NS, 'svg'); o.svg.setAttribute('class', 'goosvg'); o.svg.setAttribute('aria-hidden', 'true');
+            const fid = 'gsf' + q + Math.random().toString(36).slice(2, 6);
+            o.svg.innerHTML = '<defs><filter id="' + fid + '" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (fs * (jp ? 0.045 : 0.07)).toFixed(1) + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + (jp ? '30 -14' : '22 -9') + '"/></filter></defs><g filter="url(#' + fid + ')"><g class="gt"></g><g class="gc"></g></g>';
+            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); }
+          o.svg.setAttribute('width', Math.ceil(hr.width)); o.svg.setAttribute('height', Math.ceil(hr.height));
+          o.svg.style.color = cs.color; o.gt.setAttribute('fill', cs.color); o.gc.setAttribute('fill', cs.color);
+          if (o.sig !== sig) { o.sig = sig; o.gt.innerHTML = '';
+            const tw = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); let n; const rg = document.createRange();
+            const cv = this._mcv || (this._mcv = document.createElement('canvas').getContext('2d'));
+            while ((n = tw.nextNode())) { const pe = n.parentElement; if (!n.nodeValue.trim() || pe.closest('.sr-only') || pe.closest('svg')) continue;
+              const pcs = getComputedStyle(pe); const font = pcs.fontStyle + ' ' + pcs.fontWeight + ' ' + pcs.fontSize + ' ' + pcs.fontFamily; cv.font = font;
+              const mm = cv.measureText('Hg'); const asc = mm.fontBoundingBoxAscent || parseFloat(pcs.fontSize) * 0.8, dsc = mm.fontBoundingBoxDescent || parseFloat(pcs.fontSize) * 0.2;
+              const v = n.nodeValue;
+              for (let c = 0; c < v.length; c++) { if (!v[c].trim()) continue; rg.setStart(n, c); rg.setEnd(n, c + 1); const r = rg.getBoundingClientRect(); if (r.width < 1) continue;
+                const t = document.createElementNS(NS, 'text'); t.textContent = v[c];
+                t.setAttribute('x', (r.left - hr.left).toFixed(1)); t.setAttribute('y', (r.top - hr.top + (r.height - asc - dsc) / 2 + asc).toFixed(1));
+                t.setAttribute('style', 'font:' + font + ';letter-spacing:0'); o.gt.appendChild(t); } } }
+          let circ = ''; const bl = o.bl;
+          for (let i = 0; i < bl.length; i++) { const el = bl[i]; const m = /(-?[\d.]+)px (-?[\d.]+)px/.exec(el.style.translate || ''); if (!m) continue; const r = (el.offsetWidth || 20) / 2;
+            circ += '<circle cx="' + (+m[1] + r).toFixed(1) + '" cy="' + (+m[2] + r).toFixed(1) + '" r="' + r.toFixed(1) + '"/>'; }
+          const g = h.querySelector('.gcb'); if (g && g._on && this._ct) { const r = (g.offsetWidth || 50) / 2; circ += '<circle cx="' + (this._ct.x - hr.left).toFixed(1) + '" cy="' + (this._ct.y - hr.top).toFixed(1) + '" r="' + r.toFixed(1) + '"/>'; }
+          o.gc.innerHTML = circ; } }
       { this._dkF = (this._dkF || 0) + 1;
         if (this._ct && this._dkF % 5 === 0) {
           let n = document.elementFromPoint(this._ct.x, this._ct.y), dark = false;
