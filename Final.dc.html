@@ -350,8 +350,8 @@ body{font-feature-settings:'palt' 1;}
 .ph4.cf .cw{animation:cwIn 7.4s cubic-bezier(.3,0,.25,1) 0s both;--inZ:1150px}
 @keyframes cwIn{from{transform:translateZ(250px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(1250px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 .ph4.cf .cw-w.hi{animation-delay:calc(var(--hd) - 5.2s)}
-@media (max-width:700px){.ph4.cf .cw{animation-name:cwInM}}
-@keyframes cwInM{from{transform:translateZ(150px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(600px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
+@media (max-width:700px){.ph4.cf .cw{animation-name:cwInM}.cw-f[style*="rotateY(180deg)"],.cw-f[style*="rotateY(-90deg)"],.cw-f[style*="rotateX(-90deg)"]{display:none}.cw-f::after{inset:0;background:radial-gradient(circle calc(var(--S) * .13) at 0 0,rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at 100% 0,rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at 0 100%,rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at 100% 100%,rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%)}}
+@keyframes cwInM{from{transform:translateZ(120px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(480px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 @keyframes cwCorner{0%{opacity:.25}60%{opacity:.7}100%{opacity:1}}
 @media (max-width:700px){.cw-f[style*="rotateY(180deg)"]::after,.cw-f[style*="rotateY(-90deg)"]::after,.cw-f[style*="rotateX(-90deg)"]::after{display:none}}
 @media (prefers-reduced-motion: reduce){.cw-f::after{animation:none;opacity:.6}}
@@ -361,7 +361,7 @@ body{font-feature-settings:'palt' 1;}
 .cw-w.hi{animation:cwHi 2.2s ease var(--hd) both}
 @keyframes cwHi{0%{color:rgba(240,237,230,.26);text-shadow:none}35%{color:#F0EDE6;text-shadow:0 0 18px rgba(240,237,230,.55)}100%{color:#F0EDE6;text-shadow:0 0 10px rgba(240,237,230,.3)}}
 .ph4-dark,.ph4-cap2{animation-name:ph4Fade}
-@media (max-width:700px){.ph4-cube{--S:250px;perspective:800px}.cw{--camZ:-60px}.cw-x{display:none}.cw-s rect.g{stroke-width:7}.cw-f[style*="rotateY(180deg)"] .cw-s,.cw-f[style*="rotateY(-90deg)"] .cw-s,.cw-f[style*="rotateX(-90deg)"] .cw-s{display:none}.cw-s rect{stroke-width:2}}
+@media (max-width:700px){.ph4-cube{--S:200px;perspective:800px}.cw{--camZ:-60px}.cw-x{display:none}.cw-s rect.g{stroke-width:7}.cw-f[style*="rotateY(180deg)"] .cw-s,.cw-f[style*="rotateY(-90deg)"] .cw-s,.cw-f[style*="rotateX(-90deg)"] .cw-s{display:none}.cw-s rect{stroke-width:2}}
 @media (prefers-reduced-motion: reduce){.ph4-cube{display:none}.cw-s rect{animation:none}}
 /* 鏡文字を出さない */
 .cw-f{transform-style:preserve-3d}
