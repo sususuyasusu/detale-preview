@@ -1286,10 +1286,11 @@ class Component extends DCLogic {
         if (off !== c.off) { c.off = off; c.e.style.display = off ? 'none' : ''; }
         if (off) continue;
         const d = P - z; let b = 0, o = 1;
-        const F2 = mob ? FOC * 0.72 : FOC; if (d < F2) b = Math.min(mob ? 5 : 7, (F2 - d) / S * 5);
-        else if (mob) o = Math.max(0.3, 1 - (d - FOC) / (S * 7));
-        else b = Math.min(5, (d - FOC) / S * 1.1);
-        b = Math.round(b * 2) / 2; if (b < 1) b = 0; o = Math.round(o * 10) / 10;
+        if (d < FOC) b = Math.min(mob ? 5 : 7, (FOC - d) / S * 5);
+        else { b = Math.min(mob ? 4 : 5, (d - FOC) / S * (mob ? 1.3 : 1.1)); if (mob) o = Math.max(0.35, 1 - (d - FOC) / (S * 8)); }
+        c.nb = Math.round(b * 2) / 2; if (c.nb < 1) c.nb = 0; c.no = Math.round(o * 10) / 10; }
+      if (mob) { const vs = cubes.filter((c) => !c.off && c.nb > 0).sort((a, b) => b.nb - a.nb); for (let i = 10; i < vs.length; i++) vs[i].nb = 0; }
+      for (const c of cubes) { if (c.off) continue; const b = c.nb, o = c.no;
         if (b !== c.b) { c.b = b; if (b) { c.e.style.setProperty('--bl', b + 'px'); c.e.setAttribute('data-b', ''); } else c.e.removeAttribute('data-b'); }
         if (o !== c.o) { c.o = o; if (o < 1) { c.e.style.setProperty('--op', o); c.e.setAttribute('data-f', ''); } else c.e.removeAttribute('data-f'); } }
       requestAnimationFrame(step); };
