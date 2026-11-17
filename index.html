@@ -490,7 +490,6 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
       <span id="stw-d" class="bb" style="font-size: clamp(28px, 8.6vw, 132px); line-height: 1;">DETALE</span>
       <span id="stw-w" class="bb" style="font-size: clamp(28px, 8.6vw, 132px); line-height: 1;">WORKS</span>
     </p>
-    <button type="button" class="tiltbtn" onClick="{{askTilt}}">傾けて動かす</button>
     <nav aria-label="ステージのメニュー" style="position: absolute; right: 18px; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: flex-end;">
       <a class="snav bb" href="#about">ABOUT</a>
       <a class="snav bb" href="#works">WORKS</a>
@@ -909,6 +908,8 @@ class Component extends DCLogic {
         D.requestPermission().then((r) => { if (r === 'granted') document.documentElement.classList.add('tilt-asked'); }).catch(() => {});
       } else { document.documentElement.classList.add('tilt-asked'); }
     };
+    this._tiltOnce = () => { window.removeEventListener('touchend', this._tiltOnce); window.removeEventListener('click', this._tiltOnce); if (!(this._tilt && this._tilt.on)) this.askTilt(); };
+    window.addEventListener('touchend', this._tiltOnce, { passive: true }); window.addEventListener('click', this._tiltOnce);
     this._onWheel = (e) => {
       if (e.ctrlKey || this.calm() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
       let n = e.target;
@@ -1099,7 +1100,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     document.removeEventListener('click', this._onCaseClick, true);
     document.removeEventListener('pointerdown', this._onCaseClick, true);
-    window.removeEventListener('mousemove', this._onMove); window.removeEventListener('deviceorientation', this._onTilt); window.removeEventListener('wheel', this._onWheel); cancelAnimationFrame(this._craf);
+    window.removeEventListener('mousemove', this._onMove); window.removeEventListener('deviceorientation', this._onTilt); window.removeEventListener('touchend', this._tiltOnce); window.removeEventListener('click', this._tiltOnce); window.removeEventListener('wheel', this._onWheel); cancelAnimationFrame(this._craf);
     clearInterval(this._clock);
     clearInterval(this._load);
     clearTimeout(this._scene);
