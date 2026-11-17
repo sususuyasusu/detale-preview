@@ -138,7 +138,8 @@ nav a{box-sizing:border-box}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
-.dw-sf .sc0goo{filter:none!important}
+.sc0w{position:absolute;left:0;top:0;width:100%;height:100%;filter:url(#dwGoo)}
+.dw-sf .sc0w{width:50%;height:50%;transform:scale(2);transform-origin:0 0;filter:url(#dwGooH);--k:.5}
 .dw-sf .cw-x{display:none}
 .dw-sf .cw-f[style*="rotateY(180deg)"],.dw-sf .cw-f[style*="rotateY(-90deg)"],.dw-sf .cw-f[style*="rotateX(-90deg)"]{display:none}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
@@ -348,16 +349,22 @@ body{font-feature-settings:'palt' 1;}
 .cw-c{position:absolute;left:calc(var(--S) / -2);top:calc(var(--S) / -2);width:var(--S);height:var(--S);transform-style:preserve-3d}
 .cw-f{position:absolute;inset:0;border:1px solid rgba(240,237,230,.14);display:flex;align-items:center;justify-content:center;backface-visibility:visible}
 .cw-s{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.cw-s rect{fill:none;stroke:#BFE0FF;stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:0 7 3 190;animation:cwSig calc(var(--d) * 2.4) linear var(--o) infinite}
-.cw-s rect.g{stroke:rgba(90,165,255,.2);stroke-width:8;stroke-dasharray:0 0 10 190}
+.cw-s rect{fill:none;stroke:#BFE0FF;stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:0 7 3 90;animation:cwSig calc(var(--d) * 0.7) linear var(--o) infinite}
+.cw-c:nth-child(odd) .cw-s rect{animation-direction:reverse}
+.cw-w.zap:not(.hi){animation:cwZap calc(var(--zd) * 0.35) linear var(--zo) infinite}
+@keyframes cwZapL{0%,100%{color:rgba(240,237,230,.3)}4%{color:#FFFFFF}16%{color:rgba(240,237,230,.55)}}
+.dw-sf .cw-w.zap:not(.hi){animation-name:cwZapL}
+@media (max-width:700px){.cw-w.zap:not(.hi){animation-name:cwZapL}}
+@keyframes cwZap{0%,100%{color:rgba(240,237,230,.3);text-shadow:none}4%{color:#FFFFFF;text-shadow:0 0 10px rgba(190,225,255,.95),0 0 22px rgba(120,180,255,.6)}16%{color:rgba(240,237,230,.55);text-shadow:0 0 6px rgba(190,225,255,.3)}}
+.cw-s rect.g{stroke:rgba(90,165,255,.2);stroke-width:8;stroke-dasharray:0 0 10 90}
 .cw-f::after{content:'';position:absolute;inset:calc(var(--S) * -.14);background:radial-gradient(circle calc(var(--S) * .13) at calc(var(--S) * .14) calc(var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(100% - var(--S) * .14) calc(var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(var(--S) * .14) calc(100% - var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(100% - var(--S) * .14) calc(100% - var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%);pointer-events:none;opacity:.35;animation:cwCorner 2.6s ease-in-out infinite alternate}
 .cw-f:nth-child(2)::after{animation-delay:-.7s}.cw-f:nth-child(3)::after{animation-delay:-1.4s}.cw-f:nth-child(4)::after{animation-delay:-2.1s}.cw-f:nth-child(5)::after{animation-delay:-1s}.cw-f:nth-child(6)::after{animation-delay:-1.8s}
 .cw-c:nth-child(3n)>.cw-f::after{animation-duration:3.3s}.cw-c:nth-child(3n+1)>.cw-f::after{animation-duration:2.1s}
-.ph4.cf .cw{animation:cwIn 11.1s cubic-bezier(.3,0,.25,1) 0s both;--inZ:1150px}
-@keyframes cwIn{from{transform:translateZ(-150px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(850px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
+.ph4.cf .cw{animation:cwIn 11.1s linear 0s both;--inZ:1150px}
+@keyframes cwIn{0%{transform:translateZ(-1500px) rotateX(58deg) rotateY(-4deg) rotateZ(-36deg);animation-timing-function:cubic-bezier(.55,0,.2,1)}35%{transform:translateZ(620px) rotateX(24deg) rotateY(-22deg) rotateZ(-14deg);animation-timing-function:cubic-bezier(.25,.1,.25,1)}100%{transform:translateZ(850px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 .ph4.cf .cw-w.hi{animation-delay:calc(var(--hd) * 1.5 - 7.8s)}
 @media (max-width:700px){.ph4.cf .cw{animation-name:cwInM}.cw-f[style*="rotateY(180deg)"],.cw-f[style*="rotateY(-90deg)"],.cw-f[style*="rotateX(-90deg)"]{display:none}.cw-f::after{display:none}.cw-f[style^="transform: translateZ"]::after{display:block}}
-@keyframes cwInM{from{transform:translateZ(-80px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(280px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
+@keyframes cwInM{0%{transform:translateZ(-700px) rotateX(58deg) rotateY(-4deg) rotateZ(-36deg);animation-timing-function:cubic-bezier(.55,0,.2,1)}35%{transform:translateZ(200px) rotateX(24deg) rotateY(-22deg) rotateZ(-14deg);animation-timing-function:cubic-bezier(.25,.1,.25,1)}100%{transform:translateZ(280px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 .cw-c[data-b]>.cw-f{filter:blur(var(--bl))}
 .cw-c[data-f]>.cw-f{opacity:var(--op)}
 @keyframes cwCorner{0%{opacity:.25}60%{opacity:.7}100%{opacity:1}}
@@ -442,15 +449,15 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   <main id="main">
   <div id="pinrun"><div id="pinbox" style="position: sticky; top: 0;">
   <section ref="{{stageRef}}" id="top" class="stage" aria-label="ディテールアンドワークス" style="position: relative; height: 100vh; min-height: 620px; overflow: hidden; background: var(--bg);">
-    <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwGoo"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"></feColorMatrix></filter></svg>
+    <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwGoo"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"></feColorMatrix></filter><filter id="dwGooH"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"></feColorMatrix></filter></svg>
 
     <!-- 場面0：ソースのしずくが弾ける -->
     <sc-if value="{{sc0}}" hint-placeholder-val="{{ false }}">
-      <div class="scene sc0goo" aria-hidden="true" style="filter: url(#dwGoo);">
+      <div class="scene" aria-hidden="true"><div class="sc0w">
         <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
-          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
+          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: calc({{b.size}} * var(--k, 1)); height: calc({{b.size}} * var(--k, 1)); background: {{b.color}}; animation-delay: {{b.delay}}; --dx: calc({{b.dx}} * var(--k, 1)); --dy: calc({{b.dy}} * var(--k, 1));"></span>
         </sc-for>
-      </div>
+      </div></div>
     </sc-if>
 
     <!-- 場面1：巨大な＆がとろりと現れる -->
@@ -1307,6 +1314,7 @@ class Component extends DCLogic {
   cubeCull() {
     const st = this._stage; if (!st) return;
     { const bx0 = st.querySelector('.ph4-cube'); if (bx0 && !bx0.firstElementChild) { bx0.innerHTML = this.cwHTML();
+      bx0.querySelectorAll('.cw-f').forEach((f) => { const r = f.querySelector('.cw-s rect:not(.g)'), w = f.querySelector('.cw-w'); if (!r || !w) return; w.style.setProperty('--zd', r.style.getPropertyValue('--d')); w.style.setProperty('--zo', r.style.getPropertyValue('--o')); w.classList.add('zap'); });
       if (document.documentElement.classList.contains('dw-sf')) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 4) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); }
       else if (typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 2) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); } } }
     const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
