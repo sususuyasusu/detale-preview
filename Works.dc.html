@@ -134,7 +134,7 @@ a[href^="mailto:"]:hover,a[href^="tel:"]:hover{background-size:100% 4px}
 @media (prefers-reduced-motion: reduce){.case-hit{animation:none}}
 
 /* 和紙の地（細かな紙の繊維） */
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .36  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.32;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .36  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
 body{font-feature-settings:'palt' 1;}
 /* スマホ幅の崩れ直し */
 @media (max-width: 700px){
@@ -186,10 +186,11 @@ h1.gooT{overflow:visible!important}
 .gooJ.goo-svgon *:not(svg):not(text){color:transparent!important}
 /* 色の玉もSVGで溶かす（Safari） */
 .gsv-on{filter:none!important}
-.gsv-on > :not(svg.gfsvg){opacity:0!important}
-.gfsvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.gsv-on > :not(.gfsvg){opacity:0!important}
+.gfsvg{position:absolute;left:0;top:0;pointer-events:none;image-rendering:auto}
 /* 画面上端まで地続き */
 header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
+/* 軽量化 */
 </style>
 </helmet>
 <div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
@@ -349,20 +350,6 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
     </div>
   </section>
 
-  <!-- ===== ロゴの3Dフィールド（カーソルで傾く） ===== -->
-  <section class="lfield" aria-label="DETALE&amp;WORKS" onMouseMove="{{fieldMove}}" onMouseLeave="{{fieldLeave}}">
-    <div class="lplane" aria-hidden="true" style="transform: translate(-50%,-50%) rotateX(var(--frx, 46deg)) rotateY(var(--fry, 0deg)) rotateZ(-19deg);">
-      <sc-for list="{{lrows}}" as="row" hint-placeholder-count="0">
-        <div class="lrow {{row.dir}}" style="--dur: {{row.dur}}; font-size: {{row.size}}; margin-left: {{row.shift}};">
-          <sc-for list="{{row.words}}" as="w" hint-placeholder-count="0">
-            <span class="lw {{w.cls}}" style="opacity: {{w.op}};">{{w.t}}</span>
-          </sc-for>
-        </div>
-      </sc-for>
-    </div>
-    <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(15,14,13,0) 30%, #0F0E0D 92%); pointer-events: none;"></div>
-    <p class="bb" style="position: absolute; left: 16px; bottom: 16px; margin: 0; font-size: 14px; color: #B8B2A6;">MOVE YOUR CURSOR — DETALE &amp; WORKS</p>
-  </section>
   <div class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; padding: 40px 0 0; display: flex; justify-content: center; overflow: hidden; margin-bottom: -0.16em;">
     <p class="bigmark" aria-label="DETALE&amp;WORKS" style="color: #DCD8CF;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: italic;">&amp;</span>WORKS</p>
   </div>
@@ -421,26 +408,32 @@ class Component extends DCLogic {
     const tick = () => {
       const els = this._cb || [];
       { const FS = this._gfs || (this._gfs = { t: 0, list: [], sf: /iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent)) || /[?&]gsv=1/.test(location.search) });
-        if (FS.sf) { const NS = 'http://www.w3.org/2000/svg'; const nowF = performance.now();
+        if (FS.sf) { const nowF = performance.now(); const Q = 2;
           if (nowF - FS.t > 700) { FS.t = nowF;
             document.querySelectorAll('.goo-field, .scene, .scene > div').forEach((c) => { if (c._gf) return; const f = getComputedStyle(c).filter || '';
-              const m = /url\(["']?#(dwGooA|dwGoo)["']?\)/.exec(f); if (!m) return;
-              const sd = m[1] === 'dwGooA' ? 20 : 12, mx = m[1] === 'dwGooA' ? '24 -10' : '22 -9';
-              const sv = document.createElementNS(NS, 'svg'); sv.setAttribute('class', 'gfsvg'); sv.setAttribute('aria-hidden', 'true');
-              const id = 'gf' + Math.random().toString(36).slice(2, 8);
-              sv.innerHTML = '<defs><filter id="' + id + '" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + sd + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + mx + '"/></filter></defs><g filter="url(#' + id + ')"></g>';
-              c.appendChild(sv); c.classList.add('gsv-on'); c._gf = { sv: sv, g: sv.querySelector('g') }; FS.list.push(c); });
+              if (!/url\(["']?#(dwGooA|dwGoo)["']?\)/.test(f)) return;
+              const cv = document.createElement('canvas'); cv.className = 'gfsvg'; cv.setAttribute('aria-hidden', 'true');
+              c.appendChild(cv); c.classList.add('gsv-on'); c._gf = { cv: cv, ctx: cv.getContext('2d') }; FS.list.push(c); });
             FS.list = FS.list.filter((c) => c.isConnected); }
-          for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const cr = c.getBoundingClientRect();
+          FS.f = (FS.f || 0) + 1;
+          if (FS.f % 2 === 0) for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const cr = c.getBoundingClientRect();
             if (cr.bottom < -80 || cr.top > innerHeight + 80 || cr.width < 1) continue;
             const sc = cr.width / (c.offsetWidth || cr.width); const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height;
-            G.sv.setAttribute('width', Math.ceil(W)); G.sv.setAttribute('height', Math.ceil(H));
-            let out = ''; const kids = c.children;
-            for (let k = 0; k < kids.length; k++) { const e = kids[k]; if (e === G.sv) continue; const r = e.getBoundingClientRect(); if (r.width < 1) continue;
-              const bg = getComputedStyle(e).backgroundColor; if (!bg || bg === 'rgba(0, 0, 0, 0)') continue;
-              const cx = (r.left + r.width / 2 - cr.left) / sc, cy = (r.top + r.height / 2 - cr.top) / sc;
-              out += '<ellipse cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" rx="' + (r.width / 2 / sc).toFixed(1) + '" ry="' + (r.height / 2 / sc).toFixed(1) + '" fill="' + bg + '"/>'; }
-            G.g.innerHTML = out; } } }
+            const w = Math.max(1, Math.ceil(W / Q)), h = Math.max(1, Math.ceil(H / Q));
+            if (G.cv.width !== w || G.cv.height !== h) { G.cv.width = w; G.cv.height = h; G.cv.style.width = W + 'px'; G.cv.style.height = H + 'px'; G.img = G.ctx.createImageData(w, h); }
+            const B = []; const kids = c.children;
+            for (let k = 0; k < kids.length; k++) { const e = kids[k]; if (e === G.cv) continue; const r = e.getBoundingClientRect(); if (r.width < 1) continue;
+              if (!e._bgc || FS.f % 12 === 0) { const m = /(\d+), (\d+), (\d+)/.exec(getComputedStyle(e).backgroundColor); e._bgc = m ? [+m[1], +m[2], +m[3]] : null; }
+              if (!e._bgc) continue;
+              const rr = (r.width + r.height) / 4 / sc / Q;
+              B.push([(r.left + r.width / 2 - cr.left) / sc / Q, (r.top + r.height / 2 - cr.top) / sc / Q, rr * rr, e._bgc]); }
+            const D = G.img.data; let i = 0;
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++, i += 4) {
+              let F = 0, R = 0, Gc = 0, Bc = 0;
+              for (let n = 0; n < B.length; n++) { const b = B[n]; const dx = x + 0.5 - b[0], dy = y + 0.5 - b[1]; let v = b[2] / (dx * dx + dy * dy + 0.01); v = v * v; F += v; R += v * b[3][0]; Gc += v * b[3][1]; Bc += v * b[3][2]; }
+              const a = F < 0.9 ? 0 : F > 1.1 ? 1 : (F - 0.9) / 0.2;
+              if (a > 0) { D[i] = R / F; D[i + 1] = Gc / F; D[i + 2] = Bc / F; D[i + 3] = a * 255; } else D[i + 3] = 0; }
+            G.ctx.putImageData(G.img, 0, 0); } } }
       { const GT = this._gtk || (this._gtk = { t: 0, hs: [] }); const nowT = performance.now();
         if (nowT - GT.t > 1000) { GT.t = nowT; GT.hs = Array.prototype.map.call(document.querySelectorAll('.gooT'), (h) => {
           const rg = document.createRange(); const bl = Array.prototype.slice.call(h.querySelectorAll('.gtb'));
@@ -463,7 +456,7 @@ class Component extends DCLogic {
             el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px'; } } }
       { const GS = this._gsv || (this._gsv = []); const NS = 'http://www.w3.org/2000/svg';
         const hs = this._gtk ? this._gtk.hs : [];
-        for (let q = 0; q < hs.length; q++) { const o = hs[q], h = o.h; const hr = h.getBoundingClientRect();
+        this._gsF = (this._gsF || 0) + 1; if (this._gsF % 2 === 0) for (let q = 0; q < hs.length; q++) { const o = hs[q], h = o.h; const hr = h.getBoundingClientRect();
           if (hr.bottom < -50 || hr.top > innerHeight + 50 || !o.lines) continue;
           const cs = getComputedStyle(h); const fs = parseFloat(cs.fontSize) || 40; const jp = h.classList.contains('gooJ');
           const sig = Math.round(hr.width) + 'x' + Math.round(hr.height) + ':' + (o.lt || 0);
