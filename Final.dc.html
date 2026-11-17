@@ -11,7 +11,7 @@
 <meta property="og:description" content="フード専門の制作会社ディテールアンドワークス。メニュー、料理撮影、ポスター、ロゴ、ウェブまで。外食・食品企業の販促物を東京・北青山から。">
 <meta property="og:image" content="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#B0986A">
+<meta name="theme-color" content="#F0EDE6">
 <title>トップ — ディテールアンドワークス</title>
 <script src="./vendor/react.js"></script>
 <script src="./vendor/react-dom.js"></script>
@@ -373,6 +373,9 @@ h1.gooT{overflow:visible!important}
 .tiltbtn{top:calc(56px + env(safe-area-inset-top))!important}
 nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset-top)!important}
 /* 軽量化 */
+/* 画面上端のつなぎ */
+#top::before{content:"";position:absolute;left:0;right:0;top:0;height:64px;z-index:4;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 0%,var(--bg) 18%,transparent 100%);transition:opacity .4s}
+#top:has(.ph4)::before{background:linear-gradient(to bottom,#161514 0%,#161514 18%,transparent 100%)}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
