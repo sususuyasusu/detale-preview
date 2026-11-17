@@ -343,6 +343,12 @@ body{font-feature-settings:'palt' 1;}
 @media (hover: none) and (pointer: coarse){.tiltbtn{display:block}}
 .tilt-on .tiltbtn,.tilt-asked .tiltbtn{display:none!important}
 @media (prefers-reduced-motion: reduce){.tiltbtn{display:none!important}}
+/* 玉は文字の範囲を動く */
+.gooT .gtb{left:0!important;right:auto!important;top:0!important;animation-name:inkMorph!important;animation-direction:normal!important;will-change:translate}
+/* 玉は文字の大きさ基準 */
+.gooT:not(.gooJ) .gtb{width:.3em!important;height:.3em!important}
+.gooT:not(.gooJ) .gtb:nth-of-type(3n){width:.4em!important;height:.4em!important}
+.gooT:not(.gooJ) .gtb:nth-of-type(3n+1){width:.22em!important;height:.22em!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -529,10 +535,10 @@ body{font-feature-settings:'palt' 1;}
         <span aria-hidden="true" style="display: block; width: 2px; height: 56px; background: var(--line); overflow: hidden; position: relative;"><span style="position: absolute; inset: 0; background: #B0986A; animation: scrollCue 1.8s ease-in-out infinite;"></span></span>
         <span class="bb" style="font-size: 15px; color: var(--sub);">SCROLL — 細部へ</span>
       </div>
-      <h2 style="margin: 0; font-size: clamp(44px, 7.4vw, 112px); line-height: 1.08; font-weight: 600; letter-spacing: -0.03em;">
+      <h2 class="gooT gooJ" style="margin: 0; font-size: clamp(44px, 7.4vw, 112px); line-height: 1.08; font-weight: 600; letter-spacing: -0.03em;">
         <span style="display: block; overflow: hidden;"><span class="ch" style="animation-delay: 3.2s;">お</span><span class="ch" style="animation-delay: 3.25s;">い</span><span class="ch" style="animation-delay: 3.3s;">し</span><span class="ch" style="animation-delay: 3.35s;">さ</span><span class="ch" style="animation-delay: 3.4s;">は</span><span class="ch" style="animation-delay: 3.45s;">、</span></span>
         <span style="display: block; overflow: hidden;"><span class="ch" style="animation-delay: 3.5s;">細</span><span class="ch" style="animation-delay: 3.55s;">部</span><span class="ch" style="animation-delay: 3.6s;">に</span><span class="ch" style="animation-delay: 3.65s;">宿</span><span class="ch" style="animation-delay: 3.7s;">る</span><span class="ch" style="animation-delay: 3.75s;">。</span></span>
-      </h2>
+      <span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.19em; height: 0.19em; --d: 9s; --c: 9s; --dl: -7.1s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.16em; height: 0.16em; --d: 9s; --c: 9s; --dl: -7.4s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.13em; height: 0.13em; --d: 9s; --c: 9s; --dl: -1.5s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.18em; height: 0.18em; --d: 9s; --c: 9s; --dl: -4.5s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.20em; height: 0.20em; --d: 9s; --c: 9s; --dl: -6.8s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.20em; height: 0.20em; --d: 9s; --c: 9s; --dl: -7.9s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.22em; height: 0.22em; --d: 9s; --c: 9s; --dl: -4.0s;"></span><span class="gtb jd" aria-hidden="true" style="left: 0; top: 0; width: 0.12em; height: 0.12em; --d: 9s; --c: 9s; --dl: -1.4s;"></span><span class="gcb" aria-hidden="true"></span></h2>
       <p style="margin: 0; font-size: clamp(22px, 2.6vw, 38px); animation: fadeIn 1.2s both 3.9s;"><span class="bb">DETAIL MAKES IT </span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: inherit;">delicious.</span></p>
     </div>
   </section>
@@ -901,6 +907,26 @@ class Component extends DCLogic {
     const K = [1, 0.42, 0.26, 0.16];
     const tick = () => {
       const els = this._cb || [];
+      { const GT = this._gtk || (this._gtk = { t: 0, hs: [] }); const nowT = performance.now();
+        if (nowT - GT.t > 1000) { GT.t = nowT; GT.hs = Array.prototype.map.call(document.querySelectorAll('.gooT'), (h) => {
+          const rg = document.createRange(); const bl = Array.prototype.slice.call(h.querySelectorAll('.gtb'));
+          return { h: h, bl: bl, rg: rg }; }); }
+        for (let q = 0; q < GT.hs.length; q++) { const o = GT.hs[q], h = o.h; const hr = h.getBoundingClientRect();
+          if (hr.bottom < -50 || hr.top > innerHeight + 50 || !o.bl.length) continue;
+          if (!o.lines || nowT - (o.lt || 0) > 1000) { o.lt = nowT; o.lines = [];
+            const tw = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); let n;
+            while ((n = tw.nextNode())) { if (!n.nodeValue.trim()) continue; const pe = n.parentElement; if (pe.closest('.sr-only')) continue;
+              o.rg.selectNodeContents(n); const rs = o.rg.getClientRects();
+              for (let k = 0; k < rs.length; k++) { const r = rs[k]; if (r.width < 2) continue;
+                const ln = o.lines.find((L) => Math.abs(L.t - r.top) < r.height * 0.5);
+                if (ln) { ln.l = Math.min(ln.l, r.left); ln.r = Math.max(ln.r, r.right); ln.b = Math.max(ln.b, r.bottom); } else o.lines.push({ l: r.left, r: r.right, t: r.top, b: r.bottom }); } }
+            o.lines.forEach((L) => { L.l -= hr.left; L.r -= hr.left; L.t -= hr.top; L.b -= hr.top; }); }
+          if (!o.lines.length) continue;
+          for (let i = 0; i < o.bl.length; i++) { const el = o.bl[i]; const L = o.lines[i % o.lines.length];
+            const sz = el.offsetWidth || 20, sp = 0.00013 + (i % 5) * 0.000035, ph = i * 1.7;
+            const u = 0.5 + 0.5 * Math.sin(nowT * sp + ph), v = 0.5 + 0.5 * Math.sin(nowT * sp * 1.9 + ph * 2.3);
+            const x = L.l + (L.r - L.l) * u - sz / 2, y = L.t + (L.b - L.t) * (0.15 + 0.7 * v) - sz / 2;
+            el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px'; } } }
       { this._dkF = (this._dkF || 0) + 1;
         if (this._ct && this._dkF % 5 === 0) {
           let n = document.elementFromPoint(this._ct.x, this._ct.y), dark = false;
