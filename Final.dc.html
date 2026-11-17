@@ -864,13 +864,15 @@ class Component extends DCLogic {
       if (!T.on) { T.on = true; document.documentElement.classList.add('tilt-on'); }
     };
     window.addEventListener('deviceorientation', this._onTilt);
+    this._tiltStop = () => { window.removeEventListener('touchend', this._tiltOnce); window.removeEventListener('click', this._tiltOnce); };
     this.askTilt = () => {
       const D = window.DeviceOrientationEvent;
       if (D && typeof D.requestPermission === 'function') {
-        D.requestPermission().then((r) => { if (r === 'granted') document.documentElement.classList.add('tilt-asked'); }).catch(() => {});
-      } else { document.documentElement.classList.add('tilt-asked'); }
+        if (this._tiltBusy) return; this._tiltBusy = true;
+        D.requestPermission().then((r) => { this._tiltBusy = false; if (r === 'granted') document.documentElement.classList.add('tilt-asked'); this._tiltStop(); }).catch(() => { this._tiltBusy = false; });
+      } else { document.documentElement.classList.add('tilt-asked'); this._tiltStop(); }
     };
-    this._tiltOnce = () => { window.removeEventListener('touchend', this._tiltOnce); window.removeEventListener('click', this._tiltOnce); if (!(this._tilt && this._tilt.on)) this.askTilt(); };
+    this._tiltOnce = () => { if (this._tilt && this._tilt.on) { this._tiltStop(); return; } this.askTilt(); };
     window.addEventListener('touchend', this._tiltOnce, { passive: true }); window.addEventListener('click', this._tiltOnce);
     this._onWheel = (e) => {
       if (e.ctrlKey || this.calm() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
