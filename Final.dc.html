@@ -975,10 +975,11 @@ class Component extends DCLogic {
           if (hr.bottom < -50 || hr.top > innerHeight + 50 || !o.lines) continue;
           const cs = getComputedStyle(h); const fs = parseFloat(cs.fontSize) || 40; const jp = h.classList.contains('gooJ');
           const sig = Math.round(hr.width) + 'x' + Math.round(hr.height) + ':' + (o.lt || 0);
+          if (!o.svg && h._go) Object.assign(o, h._go);
           if (!o.svg) { o.svg = document.createElementNS(NS, 'svg'); o.svg.setAttribute('class', 'goosvg'); o.svg.setAttribute('aria-hidden', 'true');
             const fid = 'gsf' + q + Math.random().toString(36).slice(2, 6);
             o.svg.innerHTML = '<defs><filter id="' + fid + '" x="-20%" y="-40%" width="140%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="' + (fs * (jp ? 0.022 : 0.07)).toFixed(1) + '"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ' + (jp ? '40 -20' : '22 -9') + '"/></filter></defs><g filter="url(#' + fid + ')"><g class="gt"></g><g class="gc"></g></g><g class="gtop"></g>';
-            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); o.gtop = o.svg.querySelector('.gtop'); o.col = cs.color; if (jp) h.classList.add('goo-svgon'); const f0 = o.svg.querySelector('filter'); const f1 = f0.cloneNode(true); f1.id = f0.id + 'b'; f0.parentNode.appendChild(f1); o.fid = [f0.id, f1.id]; o.fg = o.svg.querySelector('g[filter]'); }
+            h.appendChild(o.svg); o.gt = o.svg.querySelector('.gt'); o.gc = o.svg.querySelector('.gc'); o.gtop = o.svg.querySelector('.gtop'); o.col = cs.color; if (jp) h.classList.add('goo-svgon'); const f0 = o.svg.querySelector('filter'); const f1 = f0.cloneNode(true); f1.id = f0.id + 'b'; f0.parentNode.appendChild(f1); o.fid = [f0.id, f1.id]; o.fg = o.svg.querySelector('g[filter]'); h._go = { svg: o.svg, gt: o.gt, gc: o.gc, gtop: o.gtop, col: o.col, fid: o.fid, fg: o.fg }; }
           o.svg.setAttribute('width', Math.ceil(hr.width)); o.svg.setAttribute('height', Math.ceil(hr.height));
           o.svg.style.color = o.col; o.gt.setAttribute('fill', o.col); o.gc.setAttribute('fill', o.col); o.gtop.setAttribute('fill', o.col);
           if (o.sig !== sig) { o.sig = sig; o.gt.innerHTML = ''; o.gtop.innerHTML = '';
