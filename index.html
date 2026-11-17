@@ -128,7 +128,10 @@ nav a{box-sizing:border-box}
 @keyframes sceneIn{from{opacity:0}to{opacity:1}}
 .blob{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);animation:blobPop 2.6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes blobPop{0%{transform:translate(-50%,-50%) scale(0)}22%{transform:translate(calc(-50% + var(--dx) * .45),calc(-50% + var(--dy) * .45)) scale(1.18)}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.85)}}
-.bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 2.6s cubic-bezier(.2,.8,.2,1) both}
+.bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 1.25s cubic-bezier(.2,.8,.2,1) both;transition:opacity .25s}
+.bigamp.gone{opacity:0}
+.ampbl{display:inline-block;width:0;height:0}
+.acell{position:absolute;border-radius:50%;will-change:transform}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
 .plane{position:absolute;left:-35%;top:8%;width:170%;transform-origin:50% 50%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px;animation:planeMove 2.8s linear both}
 @keyframes planeMove{from{transform:rotateX(48deg) rotateZ(-24deg) translateY(14%)}to{transform:rotateX(48deg) rotateZ(-24deg) translateY(-14%)}}
@@ -420,12 +423,8 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
     <!-- 場面1：巨大な＆がとろりと現れる -->
     <sc-if value="{{sc1}}" hint-placeholder-val="{{ false }}">
       <div class="scene" aria-hidden="true">
-        <span class="bigamp">&amp;</span>
-        <div style="position: absolute; inset: 0; filter: url(#dwGoo);">
-          <sc-for list="{{drips}}" as="b" hint-placeholder-count="0">
-            <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
-          </sc-for>
-        </div>
+        <span class="bigamp">&amp;<i class="ampbl"></i></span>
+        <div class="ampcells" style="position: absolute; inset: 0; filter: url(#dwGoo);"></div>
       </div>
     </sc-if>
 
@@ -1081,6 +1080,7 @@ class Component extends DCLogic {
     clearTimeout(this._scene);
     this.stopPhys();
     clearTimeout(this._introT);
+    (this._acT || []).forEach(clearTimeout);
     if (this._raf2) cancelAnimationFrame(this._raf2);
     if (this._raf) cancelAnimationFrame(this._raf);
   }
@@ -1173,11 +1173,71 @@ class Component extends DCLogic {
     }
     return this._curRefs;
   }
+  ampCells() {
+    // ＆の字形を小さな下書き面に描き、字の太さ（内側から縁までの距離）を測って、字の中に玉を敷き詰める
+    const st = this._stage; if (!st) return;
+    const cont = st.querySelector('.ampcells'), amp = st.querySelector('.bigamp'), bl = amp && amp.querySelector('.ampbl');
+    if (!cont || !amp || !bl || !amp.firstChild) return;
+    const cr = cont.getBoundingClientRect(), rg = document.createRange(); rg.selectNodeContents(amp.firstChild);
+    const tr = rg.getBoundingClientRect(), br = bl.getBoundingClientRect(), cs = getComputedStyle(amp), fs = parseFloat(cs.fontSize) || 500;
+    const S = 0.25, pad = fs * 0.45, ox = tr.left - cr.left - pad, oy = tr.top - cr.top - pad;
+    const W = Math.max(8, Math.ceil((tr.width + pad * 2) * S)), H = Math.max(8, Math.ceil((tr.height + pad * 2) * S));
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+    x.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + (fs * S) + 'px ' + cs.fontFamily; x.textBaseline = 'alphabetic'; x.fillStyle = '#000';
+    x.fillText('&', (tr.left - cr.left - ox) * S, (br.top - cr.top - oy) * S);
+    const px = x.getImageData(0, 0, W, H).data, N = W * H, D = new Float32Array(N);
+    for (let i = 0; i < N; i++) D[i] = px[i * 4 + 3] > 120 ? 1e9 : 0;
+    for (let yy = 0; yy < H; yy++) for (let xx = 0; xx < W; xx++) { const i = yy * W + xx; if (!D[i]) continue; let v = D[i];
+      if (xx > 0) v = Math.min(v, D[i - 1] + 1); else v = Math.min(v, 1);
+      if (yy > 0) { v = Math.min(v, D[i - W] + 1); if (xx > 0) v = Math.min(v, D[i - W - 1] + 1.414); if (xx < W - 1) v = Math.min(v, D[i - W + 1] + 1.414); } else v = Math.min(v, 1);
+      D[i] = v; }
+    for (let yy = H - 1; yy >= 0; yy--) for (let xx = W - 1; xx >= 0; xx--) { const i = yy * W + xx; if (!D[i]) continue; let v = D[i];
+      if (xx < W - 1) v = Math.min(v, D[i + 1] + 1); else v = Math.min(v, 1);
+      if (yy < H - 1) { v = Math.min(v, D[i + W] + 1); if (xx < W - 1) v = Math.min(v, D[i + W + 1] + 1.414); if (xx > 0) v = Math.min(v, D[i + W - 1] + 1.414); } else v = Math.min(v, 1);
+      D[i] = v; }
+    const U = D.slice(), minR = Math.max(1.2, fs * S * 0.007), seeds = [];
+    for (let n = 0; n < 64; n++) { let bi = -1, bv = 0; for (let i = 0; i < N; i++) if (U[i] > bv) { bv = U[i]; bi = i; }
+      if (bi < 0 || bv < minR) break; const cx = bi % W, cy = (bi - cx) / W, rr = bv * 1.15;
+      seeds.push({ x: ox + (cx + 0.5) / S, y: oy + (cy + 0.5) / S, r: bv / S * 1.06 });
+      for (let yy = Math.max(0, Math.floor(cy - rr)); yy < Math.min(H, Math.ceil(cy + rr)); yy++) for (let xx = Math.max(0, Math.floor(cx - rr)); xx < Math.min(W, Math.ceil(cx + rr)); xx++)
+        if ((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) < rr * rr) U[yy * W + xx] = 0; }
+    if (!seeds.length) return;
+    const INK = cs.color, PAL = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#C9B48A', '#8A6B4E', '#E3D8C4', '#161514'];
+    const mk = (b) => { const e = document.createElement('span'); e.className = 'acell';
+      e.style.cssText = 'left:' + b.x.toFixed(1) + 'px;top:' + b.y.toFixed(1) + 'px;width:' + (b.r * 2).toFixed(1) + 'px;height:' + (b.r * 2).toFixed(1) + 'px;background:' + b.c + ';transform:translate(-50%,-50%)';
+      cont.appendChild(e); b.el = e; return b; };
+    cont.querySelectorAll('.acell').forEach((e) => e.remove());
+    let balls = seeds.map((b) => mk({ x: b.x, y: b.y, r: b.r, c: INK }));
+    amp.classList.add('gone');
+    const T = this._acT || (this._acT = []), CAP = 128, PC = [0.35, 0.7, 0.95];
+    const divide = (g) => { const out = []; let room = CAP - balls.length;
+      balls.sort(() => Math.random() - 0.5).forEach((b) => {
+        if (room <= 0 || b.r < 4) { out.push(b); return; } room--;
+        const a = Math.random() * Math.PI * 2, rc = b.r * 0.76, off = b.r * 1.08, d0 = Math.random() * 260;
+        [1, -1].forEach((sg) => { const c = { x: b.x + Math.cos(a) * off * sg, y: b.y + Math.sin(a) * off * sg, r: rc, c: Math.random() < PC[g] ? PAL[Math.floor(Math.random() * PAL.length)] : b.c };
+          const keep = c.c; c.c = b.c; mk(c); c.c = keep;
+          c.el.style.transform = 'translate(-50%,-50%) translate(' + (b.x - c.x).toFixed(1) + 'px,' + (b.y - c.y).toFixed(1) + 'px) scale(' + (b.r / rc).toFixed(3) + ')';
+          void c.el.offsetWidth;
+          T.push(setTimeout(() => { c.el.style.transition = 'transform .6s cubic-bezier(.34,1.75,.5,1), background-color .55s ease';
+            c.el.style.transform = 'translate(-50%,-50%)'; c.el.style.backgroundColor = keep; }, d0));
+          out.push(c); });
+        b.el.remove(); });
+      balls = out; };
+    T.push(setTimeout(() => divide(0), 380));
+    T.push(setTimeout(() => divide(1), 880));
+    T.push(setTimeout(() => divide(2), 1380));
+    T.push(setTimeout(() => { const mx = cr.width / 2, my = cr.height / 2;
+      balls.forEach((b) => { const dx = (b.x - mx) * 0.5 + (Math.random() - 0.5) * 80, dy = cr.height * (0.35 + Math.random() * 0.4), dl = Math.random() * 300;
+        T.push(setTimeout(() => { b.el.style.transition = 'transform 1s cubic-bezier(.55,0,.8,.2)';
+          b.el.style.transform = 'translate(-50%,-50%) translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(0)'; }, dl)); }); }, 2000));
+  }
   nextScene(n) {
     if (this.calm()) { this.setState({ scene: 4 }); return; }
-    const DUR = [2700, 2700, 6000, 12000, 2700, 14000];
+    const DUR = [2700, 4600, 6000, 12000, 2700, 14000];
     const sc = n % 6;
+    (this._acT || []).forEach(clearTimeout); this._acT = [];
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
+    if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), 1250));
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
   }
   calm() {
