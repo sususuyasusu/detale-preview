@@ -1272,6 +1272,18 @@ class Component extends DCLogic {
       if (t < 3.6) requestAnimationFrame(step); };
     requestAnimationFrame(step);
   }
+  cubeCull() {
+    const st = this._stage; if (!st) return;
+    const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
+    const cs = getComputedStyle(box), P = parseFloat(cs.perspective) || 800, S = parseFloat(cs.getPropertyValue('--S')) || 200, lim = P - S * 1.05;
+    const cubes = [...cw.querySelectorAll('.cw-c')].map((e) => { const m = new DOMMatrix(getComputedStyle(e).transform); return { e: e, x: m.m41, y: m.m42, z: m.m43, off: false }; });
+    const step = () => { if (!cw.isConnected) return;
+      const M = new DOMMatrix(getComputedStyle(cw).transform);
+      for (const c of cubes) { const z = M.m13 * c.x + M.m23 * c.y + M.m33 * c.z + M.m43, off = z > lim;
+        if (off !== c.off) { c.off = off; c.e.style.display = off ? 'none' : ''; } }
+      requestAnimationFrame(step); };
+    step();
+  }
   matrixWords() {
     // 立方体の言葉を、映画マトリックスのように文字が入れ替わりながらチカチカさせる
     const st = this._stage; if (!st) return;
@@ -1296,7 +1308,7 @@ class Component extends DCLogic {
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), 1250));
     clearInterval(this._mxI);
-    if (sc === 3) { this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 7600)); }
+    if (sc === 3) { this._acT.push(setTimeout(() => this.cubeCull(), 20)); this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 7600)); }
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
   }
   calm() {
