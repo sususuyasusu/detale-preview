@@ -128,7 +128,7 @@ nav a{box-sizing:border-box}
 @keyframes sceneIn{from{opacity:0}to{opacity:1}}
 .blob{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);animation:blobPop 2.6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes blobPop{0%{transform:translate(-50%,-50%) scale(0)}22%{transform:translate(calc(-50% + var(--dx) * .45),calc(-50% + var(--dy) * .45)) scale(1.18)}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.85)}}
-.bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 1.25s cubic-bezier(.2,.8,.2,1) both;transition:opacity .25s}
+.bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:normal;font-weight:500;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 1.25s cubic-bezier(.2,.8,.2,1) both;transition:opacity .25s}
 .scene:has(> .fromblk){animation:none}
 .fromblk{position:absolute;inset:0;background:#161514;z-index:9;pointer-events:none;animation:fbOut .9s ease .15s both}
 @media (prefers-reduced-motion: reduce){.fromblk{display:none}}
@@ -136,6 +136,7 @@ nav a{box-sizing:border-box}
 .bigamp.gone{opacity:0;transition:opacity .28s ease}
 .ampbl{display:inline-block;width:0;height:0}
 .acell{position:absolute;border-radius:50%;will-change:transform}
+.dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
 .plane{position:absolute;left:-35%;top:8%;width:170%;transform-origin:50% 50%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px;animation:planeMove 2.8s linear both}
@@ -1071,18 +1072,39 @@ class Component extends DCLogic {
       const urls = [];
       (this._gen.cards2 || []).forEach((c) => urls.push(c.img));
       (this._gen.phys || []).forEach((p) => { const m = /url\(([^)]+)\)/.exec(p.img || ''); if (m) urls.push(m[1]); });
-      urls.forEach((u, i) => setTimeout(() => { const im = new Image(); im.decoding = 'async'; im.src = u; this._pre.push(im); }, 200 + i * 15));
-    } catch (e) {}
+      this._preUrls = urls;
+    } catch (e) { this._preUrls = []; }
     let seen = false;
     try { seen = !!sessionStorage.getItem('dwIntroSeen'); sessionStorage.setItem('dwIntroSeen', '1'); } catch (e) {}
-    if (seen || this.calm()) this.setState({ introDone: true });
-    this._introT = setTimeout(() => this.setState({ introDone: true }), 3600);
-    this.nextScene(0);
+    const showIntro = (this.props.intro ?? true) && !seen && !this.calm();
+    if (!showIntro) this.setState({ introDone: true });
+    this._ready = false;
+    const t0 = performance.now(), jobs = [];
+    try { if (document.fonts && document.fonts.load) { jobs.push(document.fonts.load("500 100px 'Cormorant Garamond'", '&')); jobs.push(document.fonts.load("400 100px 'Cormorant Garamond'", 'A')); } } catch (e) {}
+    (this._preUrls || []).forEach((u) => { const im = new Image(); im.decoding = 'async'; im.src = u; this._pre.push(im); jobs.push(im.decode ? im.decode().catch(() => {}) : new Promise((r) => { im.onload = im.onerror = r; })); });
+    const done = () => { if (this._ready) return; this._ready = true; this._readyAt = performance.now(); };
+    Promise.all(jobs.map((j) => Promise.resolve(j).catch(() => {}))).then(done);
+    setTimeout(done, showIntro ? 8000 : 1500);
+    if (!showIntro) { const go = () => { if (this._ready) this.nextScene(0); else this._goT = setTimeout(go, 50); }; go(); }
+    else {
+      // 幕は 2.38秒で開き始める。準備がまだなら2.2秒で幕を止め、整ったら再開。場面は幕が開き始める瞬間に始める
+      let held = 0, holdAt = 0;
+      this._holdT = setTimeout(() => { if (!this._ready) { holdAt = performance.now(); document.documentElement.classList.add('dw-hold'); } }, 2200);
+      const go = () => {
+        if (holdAt && !this._ready) { this._goT = setTimeout(go, 50); return; }
+        if (holdAt) { held = performance.now() - holdAt; holdAt = 0; document.documentElement.classList.remove('dw-hold'); }
+        const el = performance.now() - t0 - held;
+        if (el < 2380) { this._goT = setTimeout(go, Math.max(16, 2380 - el)); return; }
+        this.nextScene(0);
+        this._introT = setTimeout(() => this.setState({ introDone: true }), 1250);
+      };
+      this._goT = setTimeout(go, 50);
+    }
     this._clock = setInterval(() => { if (this._time) this._time.textContent = this.tokyo(); }, 1000);
     let p = 0;
     this._load = setInterval(() => {
-      p = Math.min(100, p + 4);
-      this.setState({ pct: p });
+      p = Math.min(this._ready ? 100 : 92, p + 4);
+      if (p !== this._pctShown) { this._pctShown = p; this.setState({ pct: p }); }
       if (p >= 100) clearInterval(this._load);
     }, 80);
   }
@@ -1094,7 +1116,7 @@ class Component extends DCLogic {
     clearInterval(this._load);
     clearTimeout(this._scene);
     this.stopPhys();
-    clearTimeout(this._introT);
+    clearTimeout(this._introT); clearTimeout(this._goT); clearTimeout(this._holdT); document.documentElement.classList.remove('dw-hold');
     (this._acT || []).forEach(clearTimeout); clearInterval(this._mxI);
     if (this._raf2) cancelAnimationFrame(this._raf2);
     if (this._raf) cancelAnimationFrame(this._raf);
@@ -1246,8 +1268,12 @@ class Component extends DCLogic {
         balls.forEach((q) => { if (q.zoom) return; const dx = q.x - gx, dy = q.y - gy, dd = Math.sqrt(dx * dx + dy * dy) || 1, an = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.5, sp = UV * (3.8 + Math.random() * 3.2) * (0.75 + Math.min(1, dd / (UV * 0.4)) * 0.6);
         q.vx = Math.cos(an) * sp; q.vy = Math.sin(an) * sp; q.tr0 = q.tr; }); }
       const n = balls.length;
-      if (phase < 3) for (let i = 0; i < n; i++) { const p = balls[i]; for (let j = i + 1; j < n; j++) { const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.8, d2 = dx * dx + dy * dy;
-        if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 30 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } }
+      if (phase < 3) { let mr = 1; for (let i = 0; i < n; i++) if (balls[i].r > mr) mr = balls[i].r; const G = mr * 1.6 + 1, grid = new Map();
+        for (let i = 0; i < n; i++) { const q = balls[i], k = Math.floor(q.x / G) * 4096 + Math.floor(q.y / G); let a = grid.get(k); if (!a) grid.set(k, a = []); a.push(i); }
+        for (let i = 0; i < n; i++) { const p = balls[i], cx = Math.floor(p.x / G), cy = Math.floor(p.y / G);
+          for (let ox = -1; ox <= 1; ox++) for (let oy = -1; oy <= 1; oy++) { const a = grid.get((cx + ox) * 4096 + cy + oy); if (!a) continue;
+            for (const j of a) { if (j <= i) continue; const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.8, d2 = dx * dx + dy * dy;
+              if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 30 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } } } }
       for (let i = 0; i < n; i++) { const q = balls[i];
         if (q.zoom) { const k = Math.min(1, Math.max(0, (t - 2.62) / 0.6)), e = Math.pow(k, 1.8), RR = Math.hypot(cr.width, cr.height) * 0.8;
           q.x = q.zx + (cr.width / 2 - q.zx) * e; q.y = q.zy + (cr.height / 2 - q.zy) * e; q.r = q.zr + (RR - q.zr) * e;
