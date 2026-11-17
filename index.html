@@ -138,6 +138,9 @@ nav a{box-sizing:border-box}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
+.dw-sf .sc0goo{filter:none!important}
+.dw-sf .cw-x{display:none}
+.dw-sf .cw-f[style*="rotateY(180deg)"],.dw-sf .cw-f[style*="rotateY(-90deg)"],.dw-sf .cw-f[style*="rotateX(-90deg)"]{display:none}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
 .plane{position:absolute;left:-35%;top:8%;width:170%;transform-origin:50% 50%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px;animation:planeMove 2.8s linear both}
 @keyframes planeMove{from{transform:rotateX(48deg) rotateZ(-24deg) translateY(14%)}to{transform:rotateX(48deg) rotateZ(-24deg) translateY(-14%)}}
@@ -335,7 +338,7 @@ body{font-feature-settings:'palt' 1;}
 @media (prefers-reduced-motion: reduce){.ph4 *{animation:none!important}.ph4-l i{transform:none}.ph4-band,.ph4-dark,.ph4-cap2{display:none}.ph4-cap{opacity:1}}
 /* 場面04 第3幕：線の立方体と言葉の3D空間 */
 .scene.ph4.cf{animation:none}
-.ph4.cf .ph4-cube{opacity:1;animation:cfCube 7.9s linear both}
+.ph4.cf .ph4-cube{opacity:1;animation:cfCube 11.85s linear both}
 @keyframes cfCube{0%{opacity:1;visibility:visible}92%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 .ph4.cf:not(.go)>:not(.ph4-cube),.ph4.cf:not(.go)>:not(.ph4-cube) *{animation-play-state:paused}
 .ph4-cube{position:absolute;inset:0;z-index:6;background:#121110;perspective:1000px;opacity:0;animation:ph4Fade .7s ease 5.6s forwards;overflow:hidden;--S:440px;--h:calc(var(--S) / 2)}
@@ -350,9 +353,9 @@ body{font-feature-settings:'palt' 1;}
 .cw-f::after{content:'';position:absolute;inset:calc(var(--S) * -.14);background:radial-gradient(circle calc(var(--S) * .13) at calc(var(--S) * .14) calc(var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(100% - var(--S) * .14) calc(var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(var(--S) * .14) calc(100% - var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%),radial-gradient(circle calc(var(--S) * .13) at calc(100% - var(--S) * .14) calc(100% - var(--S) * .14),rgba(255,250,236,.95) 0,rgba(255,222,160,.55) 14%,rgba(255,200,120,.18) 42%,rgba(255,200,120,0) 100%);pointer-events:none;opacity:.35;animation:cwCorner 2.6s ease-in-out infinite alternate}
 .cw-f:nth-child(2)::after{animation-delay:-.7s}.cw-f:nth-child(3)::after{animation-delay:-1.4s}.cw-f:nth-child(4)::after{animation-delay:-2.1s}.cw-f:nth-child(5)::after{animation-delay:-1s}.cw-f:nth-child(6)::after{animation-delay:-1.8s}
 .cw-c:nth-child(3n)>.cw-f::after{animation-duration:3.3s}.cw-c:nth-child(3n+1)>.cw-f::after{animation-duration:2.1s}
-.ph4.cf .cw{animation:cwIn 7.4s cubic-bezier(.3,0,.25,1) 0s both;--inZ:1150px}
+.ph4.cf .cw{animation:cwIn 11.1s cubic-bezier(.3,0,.25,1) 0s both;--inZ:1150px}
 @keyframes cwIn{from{transform:translateZ(-150px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(850px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
-.ph4.cf .cw-w.hi{animation-delay:calc(var(--hd) - 5.2s)}
+.ph4.cf .cw-w.hi{animation-delay:calc(var(--hd) * 1.5 - 7.8s)}
 @media (max-width:700px){.ph4.cf .cw{animation-name:cwInM}.cw-f[style*="rotateY(180deg)"],.cw-f[style*="rotateY(-90deg)"],.cw-f[style*="rotateX(-90deg)"]{display:none}.cw-f::after{display:none}.cw-f[style^="transform: translateZ"]::after{display:block}}
 @keyframes cwInM{from{transform:translateZ(-80px) rotateX(46deg) rotateY(-8deg) rotateZ(-30deg)}to{transform:translateZ(280px) rotateX(14deg) rotateY(-30deg) rotateZ(-8deg)}}
 .cw-c[data-b]>.cw-f{filter:blur(var(--bl))}
@@ -443,7 +446,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 
     <!-- 場面0：ソースのしずくが弾ける -->
     <sc-if value="{{sc0}}" hint-placeholder-val="{{ false }}">
-      <div class="scene" aria-hidden="true" style="filter: url(#dwGoo);">
+      <div class="scene sc0goo" aria-hidden="true" style="filter: url(#dwGoo);">
         <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
           <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
         </sc-for>
@@ -1064,6 +1067,7 @@ class Component extends DCLogic {
       this._craf = requestAnimationFrame(tick);
     };
     if (!this.calm()) this._craf = requestAnimationFrame(tick);
+    try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {}
     this.setState({ now: Date.now(), pct: 0, dinner: false, x: -100, y: -100, moved: false, scene: 0, lop: 0, lid: 0, lx: 0, ly: 0, lfx: 0.5 });
     this._gen = this.makeScenes();
     // 作品の面・重力の丸の写真を、場面が来る前に先読みしておく（初回に白い枠が並ばないように）
@@ -1303,7 +1307,8 @@ class Component extends DCLogic {
   cubeCull() {
     const st = this._stage; if (!st) return;
     { const bx0 = st.querySelector('.ph4-cube'); if (bx0 && !bx0.firstElementChild) { bx0.innerHTML = this.cwHTML();
-      if (typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 2) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); } } }
+      if (document.documentElement.classList.contains('dw-sf')) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 4) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); }
+      else if (typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) { bx0.querySelectorAll('.cw-s').forEach((e, i) => { if (i % 2) e.remove(); else e.querySelectorAll('.g').forEach((g) => g.remove()); }); } } }
     const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
     const cs = getComputedStyle(box), P = parseFloat(cs.perspective) || 800, S = parseFloat(cs.getPropertyValue('--S')) || 200, lim = P - S * 1.05;
     const cubes = [...cw.querySelectorAll('.cw-c')].map((e) => { const m = new DOMMatrix(getComputedStyle(e).transform); return { e: e, x: m.m41, y: m.m42, z: m.m43, off: false, b: 0, o: 1 }; });
@@ -1332,7 +1337,7 @@ class Component extends DCLogic {
     const ws = [...st.querySelectorAll('.ph4 .cw-w')]; if (!ws.length) return;
     const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=+*', R = () => CH[Math.floor(Math.random() * CH.length)];
     ws.forEach((w) => { if (!w.dataset.o) w.dataset.o = w.textContent; w._n = 0; });
-    const mobW = typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches;
+    const mobW = (typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches) || document.documentElement.classList.contains('dw-sf');
     clearInterval(this._mxI);
     this._mxI = setInterval(() => {
       if (!ws[0].isConnected) { clearInterval(this._mxI); return; }
@@ -1346,13 +1351,13 @@ class Component extends DCLogic {
   nextScene(n) {
     if (!this._sfk) { this._sfk = 1; try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {} }
     if (this.calm()) { this.setState({ scene: 0 }); return; }
-    const DUR = [2700, 4600, 6000, 13200, 2700, 14000];
+    const DUR = [2700, 4600, 6000, 17150, 2700, 14000];
     const sc = [0, 1, 3, 2, 5][n % 5];
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), 1250));
     clearInterval(this._mxI);
-    if (sc === 3) { this._acT.push(setTimeout(() => this.cubeCull(), 20)); this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 7600)); }
+    if (sc === 3) { this._acT.push(setTimeout(() => this.cubeCull(), 20)); this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 11400)); }
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
   }
   calm() {
