@@ -1250,7 +1250,7 @@ class Component extends DCLogic {
       if (phase < 3) for (let i = 0; i < n; i++) { const p = balls[i]; for (let j = i + 1; j < n; j++) { const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.8, d2 = dx * dx + dy * dy;
         if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 30 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } }
       for (let i = 0; i < n; i++) { const q = balls[i];
-        if (q.zoom) { const k = Math.min(1, Math.max(0, (t - 2.08) / 1.12)), e = k * k * k, RR = Math.hypot(cr.width, cr.height) * 0.8;
+        if (q.zoom) { const k = Math.min(1, Math.max(0, (t - 2.0) / 0.8)), e = Math.pow(k, 1.4), RR = Math.hypot(cr.width, cr.height) * 0.8;
           q.x = q.zx + (cr.width / 2 - q.zx) * e; q.y = q.zy + (cr.height / 2 - q.zy) * e; q.r = q.zr + (RR - q.zr) * e;
           if (q.r * 2 > q.base * 1.9) { q.base = q.r * 1.2; q.el.style.width = q.el.style.height = (q.base * 2).toFixed(0) + 'px'; }
           q.el.style.zIndex = '5'; q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (q.r / q.base).toFixed(3) + ')'; continue; }
