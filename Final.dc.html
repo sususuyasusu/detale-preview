@@ -129,7 +129,7 @@ nav a{box-sizing:border-box}
 .blob{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);animation:blobPop 2.6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes blobPop{0%{transform:translate(-50%,-50%) scale(0)}22%{transform:translate(calc(-50% + var(--dx) * .45),calc(-50% + var(--dy) * .45)) scale(1.18)}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.85)}}
 .bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:italic;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 1.25s cubic-bezier(.2,.8,.2,1) both;transition:opacity .25s}
-.bigamp.gone{opacity:0}
+.bigamp.gone{opacity:0;transition:opacity .28s ease}
 .ampbl{display:inline-block;width:0;height:0}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
@@ -901,10 +901,10 @@ class Component extends DCLogic {
               c.appendChild(cv); c.classList.add('gsv-on'); c._gf = { cv: cv, ctx: cv.getContext('2d') }; FS.list.push(c); });
             FS.list = FS.list.filter((c) => c.isConnected); }
           FS.f = (FS.f || 0) + 1;
-          if (FS.f % 2 === 0) for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const cr = c.getBoundingClientRect();
+          for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const fast = c.classList.contains('ampcells'); if (FS.f % 2 !== 0 && !fast) continue; const cr = c.getBoundingClientRect();
             if (cr.bottom < -80 || cr.top > innerHeight + 80 || cr.width < 1) continue;
             const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height; const sc = cr.width / W;
-            const RZ = Math.min(3, window.devicePixelRatio || 1) * sc;
+            const RZ = Math.min(fast ? 2 : 3, window.devicePixelRatio || 1) * sc;
             const w = Math.max(1, Math.ceil(W * RZ)), h = Math.max(1, Math.ceil(H * RZ));
             if (G.cv.width !== w || G.cv.height !== h) { G.cv.width = w; G.cv.height = h; G.cv.style.width = W + 'px'; G.cv.style.height = H + 'px';
               G.img = G.ctx.createImageData(w, h); G.F = new Float32Array(w * h); G.R = new Float32Array(w * h); G.W = new Float32Array(w * h); G.Gc = new Float32Array(w * h); G.B = new Float32Array(w * h); G.box = null; }
@@ -1195,8 +1195,8 @@ class Component extends DCLogic {
       if (xx < W - 1) v = Math.min(v, D[i + 1] + 1); else v = Math.min(v, 1);
       if (yy < H - 1) { v = Math.min(v, D[i + W] + 1); if (xx < W - 1) v = Math.min(v, D[i + W + 1] + 1.414); if (xx > 0) v = Math.min(v, D[i + W - 1] + 1.414); } else v = Math.min(v, 1);
       D[i] = v; }
-    const U = D.slice(), minR = Math.max(1.2, fs * S * 0.007), seeds = [];
-    for (let n = 0; n < 64; n++) { let bi = -1, bv = 0; for (let i = 0; i < N; i++) if (U[i] > bv) { bv = U[i]; bi = i; }
+    const U = D.slice(), minR = Math.max(0.8, fs * S * 0.004), seeds = [];
+    for (let n = 0; n < 110; n++) { let bi = -1, bv = 0; for (let i = 0; i < N; i++) if (U[i] > bv) { bv = U[i]; bi = i; }
       if (bi < 0 || bv < minR) break; const cx = bi % W, cy = (bi - cx) / W, rr = bv * 1.15;
       seeds.push({ x: ox + (cx + 0.5) / S, y: oy + (cy + 0.5) / S, r: bv / S * 1.06 });
       for (let yy = Math.max(0, Math.floor(cy - rr)); yy < Math.min(H, Math.ceil(cy + rr)); yy++) for (let xx = Math.max(0, Math.floor(cx - rr)); xx < Math.min(W, Math.ceil(cx + rr)); xx++)
@@ -1204,39 +1204,41 @@ class Component extends DCLogic {
     if (!seeds.length) return;
     const INK = cs.color, PAL = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#C9B48A', '#8A6B4E', '#E3D8C4', '#161514'];
     cont.querySelectorAll('.acell').forEach((e) => e.remove());
-    const mk = (x, y, r, c, hx, hy) => { const e = document.createElement('span'); e.className = 'acell'; const base = r * 1.3;
-      e.style.cssText = 'left:0;top:0;width:' + (base * 2).toFixed(1) + 'px;height:' + (base * 2).toFixed(1) + 'px;background:' + c + ';transition:background-color .8s ease;transform:translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (r / base).toFixed(3) + ')';
-      cont.appendChild(e); return { el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: r, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, sa: 0 }; };
-    let balls = seeds.map((q) => mk(q.x, q.y, q.r, INK, q.x, q.y));
-    amp.classList.add('gone');
-    const T = this._acT || (this._acT = []), CAP = 128, PC = [0.35, 0.7, 0.95];
-    let rel = 0, t0 = performance.now(), last = t0; const mx = cr.width / 2, GR = cr.height * 1.5;
-    const split = (q, g) => { const an = Math.random() * 6.283, ca = Math.cos(an), sn = Math.sin(an), rc = q.tr * 0.76, off = q.tr * 0.85, sp = q.tr * 7;
-      const nc = () => Math.random() < PC[g] ? PAL[Math.floor(Math.random() * PAL.length)] : q.c;
-      const o = mk(q.x, q.y, q.r, q.c, q.hx - ca * off, q.hy - sn * off); o.vx = q.vx - ca * sp; o.vy = q.vy - sn * sp; o.tr = rc; o.c = nc(); o.ph = q.ph + 3;
-      q.hx += ca * off; q.hy += sn * off; q.vx += ca * sp; q.vy += sn * sp; q.tr = rc; q.c = nc();
-      balls.push(o); requestAnimationFrame(() => { o.el.style.backgroundColor = o.c; q.el.style.backgroundColor = q.c; }); };
-    const divide = (g) => { const now = performance.now(); let room = CAP - balls.length;
-      balls.slice().sort(() => Math.random() - 0.5).forEach((q) => { if (room <= 0 || q.tr < 4 || q.sa) return; room--; q.sa = now + Math.random() * 320; q.sg = g; }); };
-    const step = () => { if (!cont.isConnected) return; const now = performance.now(); let dt = (now - last) / 1000; last = now; if (dt > 0.04) dt = 0.04;
-      const n0 = balls.length; for (let i = 0; i < n0; i++) { const q = balls[i]; if (q.sa && now >= q.sa) { q.sa = 0; split(q, q.sg); } }
+    const mk = (x, y, r, c, hx, hy, tr) => { const e = document.createElement('span'); e.className = 'acell'; const base = Math.max(r, tr) * 1.3 + 1;
+      e.style.cssText = 'left:0;top:0;width:' + (base * 2).toFixed(1) + 'px;height:' + (base * 2).toFixed(1) + 'px;background:' + c + ';transition:background-color .6s ease;transform:translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (r / base).toFixed(3) + ')';
+      cont.appendChild(e); return { el: e, x: x, y: y, vx: 0, vy: 0, r: r, vr: 0, tr: tr, base: base, hx: hx, hy: hy, ph: Math.random() * 6.283, c: c, born: 0 }; };
+    const t0 = performance.now(); let last = t0, sw = 0, sx = 0, sy = 0;
+    const balls = seeds.map((q) => { const o = mk(q.x, q.y, 0, INK, q.x, q.y, q.r * 0.86); o.born = t0 + Math.random() * 200; o.tr0 = o.tr; o.tr = 0; sw += q.r * q.r; sx += q.x * q.r * q.r; sy += q.y * q.r * q.r; return o; });
+    const gx = sx / sw, gy = sy / sw, UV = Math.min(cr.width, cr.height);
+    (this._acT || (this._acT = [])).push(setTimeout(() => amp.classList.add('gone'), 430));
+    const CAP = 190; let phase = 0, acc = 0;
+    const bud = (now, k) => { let tot = 0; for (const q of balls) if (q.tr > 3) tot += q.tr; let pick = Math.random() * tot, p = null;
+      for (const q of balls) { if (q.tr <= 3) continue; pick -= q.tr; if (pick <= 0) { p = q; break; } } if (!p) return;
+      const an = Math.random() * 6.283, ca = Math.cos(an), sn = Math.sin(an), cr2 = p.tr * (0.5 + Math.random() * 0.2), d = p.r * 0.55;
+      const col = Math.random() < 0.45 + k * 0.55 ? PAL[Math.floor(Math.random() * PAL.length)] : p.c;
+      const o = mk(p.x + ca * d, p.y + sn * d, 0, p.c, p.hx + ca * (p.tr + cr2) * 1.0, p.hy + sn * (p.tr + cr2) * 1.0, cr2);
+      o.vx = p.vx + ca * p.tr * 7; o.vy = p.vy + sn * p.tr * 7; o.c = col; p.tr *= 0.86; p.vx -= ca * p.tr * 1.5; p.vy -= sn * p.tr * 1.5;
+      balls.push(o); requestAnimationFrame(() => { o.el.style.backgroundColor = col; }); };
+    const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
+      if (phase === 0 && t > 0.5) phase = 1;
+      if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (45 + 200 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 1.85) phase = 2; }
+      if (phase === 2 && t > 2.0) { phase = 3; balls.forEach((q) => { const dx = q.x - gx, dy = q.y - gy, dd = Math.sqrt(dx * dx + dy * dy) || 1, an = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.5, sp = UV * (1.3 + Math.random() * 1.6) * (0.6 + Math.min(1, dd / (UV * 0.4)) * 0.6);
+        q.vx = Math.cos(an) * sp; q.vy = Math.sin(an) * sp; q.tr0 = q.tr; }); }
       const n = balls.length;
-      for (let i = 0; i < n; i++) { const p = balls[i]; for (let j = i + 1; j < n; j++) { const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.78, d2 = dx * dx + dy * dy;
-        if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 26 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } }
+      if (phase < 3) for (let i = 0; i < n; i++) { const p = balls[i]; for (let j = i + 1; j < n; j++) { const o = balls[j]; const dx = o.x - p.x, dy = o.y - p.y, md = (p.r + o.r) * 0.8, d2 = dx * dx + dy * dy;
+        if (d2 < md * md && d2 > 0.01) { const d = Math.sqrt(d2), f = (md - d) * 30 * dt / d; p.vx -= dx * f; p.vy -= dy * f; o.vx += dx * f; o.vy += dy * f; } } }
       for (let i = 0; i < n; i++) { const q = balls[i];
-        if (!rel) { const fx = q.hx + Math.sin(now * 0.0013 + q.ph) * q.tr * 0.12, fy = q.hy + Math.cos(now * 0.0011 + q.ph) * q.tr * 0.12;
-          q.vx += (fx - q.x) * 34 * dt; q.vy += (fy - q.y) * 34 * dt; q.vx *= 1 - 4.2 * dt; q.vy *= 1 - 4.2 * dt; }
-        else { q.vy += GR * dt; q.vx *= 1 - 0.8 * dt; q.tr = Math.max(0, q.tr - q.tr0 * dt / 1.3); }
+        if (q.born && now >= q.born) { q.tr = q.tr0; q.born = 0; }
+        if (phase < 2) { const fx = q.hx + Math.sin(now * 0.0021 + q.ph) * q.tr * 0.14, fy = q.hy + Math.cos(now * 0.0018 + q.ph) * q.tr * 0.14;
+          q.vx += (fx - q.x) * 26 * dt; q.vy += (fy - q.y) * 26 * dt; q.vx *= 1 - 3.6 * dt; q.vy *= 1 - 3.6 * dt; }
+        else if (phase === 2) { q.vx += (gx - q.x) * 9 * dt; q.vy += (gy - q.y) * 9 * dt; q.vx *= 1 - 6 * dt; q.vy *= 1 - 6 * dt; }
+        else { q.vx *= 1 - 1.4 * dt; q.vy *= 1 - 1.4 * dt; q.tr = Math.max(0, q.tr - q.tr0 * dt / 1.1); }
         q.x += q.vx * dt; q.y += q.vy * dt;
-        q.vr += (q.tr - q.r) * 160 * dt; q.vr *= 1 - 9 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
-        const sc = q.r * (1 + Math.sin(now * 0.005 + q.ph) * 0.045) / q.base;
+        q.vr += (q.tr - q.r) * 150 * dt; q.vr *= 1 - 8 * dt; q.r += q.vr * dt; if (q.r < 0) q.r = 0;
+        const sc = q.r * (1 + Math.sin(now * 0.006 + q.ph) * 0.05) / q.base;
         q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')'; }
-      if (now - t0 < 3600) requestAnimationFrame(step); };
+      if (t < 3.4) requestAnimationFrame(step); };
     requestAnimationFrame(step);
-    T.push(setTimeout(() => divide(0), 320));
-    T.push(setTimeout(() => divide(1), 860));
-    T.push(setTimeout(() => divide(2), 1400));
-    T.push(setTimeout(() => { rel = 1; balls.forEach((q) => { q.tr0 = q.tr; q.sa = 0; q.vx += (q.x - mx) * 0.9 + (Math.random() - 0.5) * 120; q.vy -= 120 + Math.random() * 260; }); }, 2150));
   }
   nextScene(n) {
     if (this.calm()) { this.setState({ scene: 4 }); return; }
