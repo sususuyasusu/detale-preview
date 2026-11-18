@@ -480,6 +480,53 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .bigamp{font-weight:500}
 #h1-a{font-weight:500!important;font-size:clamp(44px,10.4vw,196px)!important;line-height:.8!important}
 .sw-mark .sw-amp{font-weight:600;font-size:1em;letter-spacing:-.02em;line-height:.8}
+/* ===== SW: スマホの組み方を整える（余白を詰め、間延びする所・窮屈な所を直す） ===== */
+@media (max-width: 860px){
+  #lead.sw-lead{min-height:0!important;height:auto!important;align-content:start;padding:0!important}
+  .sw-lead-r{min-height:0;padding:40px 16px 26px;gap:22px}
+  .sw-kicker{position:static;font-size:13px;line-height:1.7;order:-1}
+  .sw-lead-foot .sw-cue,.sw-phero .sw-lead-foot .sw-cue{display:none}
+  .sw-blocks{height:auto}
+  .sw-blk-row{position:relative;top:0;height:auto;flex-wrap:wrap;justify-content:flex-start;gap:8px;padding:24px 16px}
+  .sw-blk{height:auto;width:calc(50% - 4px);aspect-ratio:4/3;transform:none!important}
+  .sw-blk:first-child{width:100%;aspect-ratio:16/9}
+  .sw-state{padding-top:22px}
+  .sw-state .sw-big{font-size:clamp(24px,6.6vw,30px);line-height:1.35;margin-top:28px}
+  .sw-notes{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:40px;font-size:11px;line-height:1.5}
+  .sw-notes b{font-size:clamp(24px,7vw,30px)}
+  .sw-dark-in{padding:22px 16px 64px}
+  .sw-dark .sw-huge{margin:14vh 0 32px}
+  .sw-cols{margin-top:36px;gap:32px 10px}
+  .sw-cols .sw-low{margin-top:7vh}
+  .sw-exp-l{padding-bottom:8px}
+  .sw-packs,.sw-index,.sw-flow{padding-bottom:64px}
+  .sw-packs .sw-row,.sw-index .sw-row{margin-bottom:28px}
+  .sw-pk{padding:20px 0 18px}
+  .sw-why-r{padding-bottom:64px}
+  .sw-why-r .sw-big{margin:28px 0 32px;font-size:clamp(24px,6.6vw,30px)}
+  .sw-tbl table,.sw-tbl tbody,.sw-tbl tr{display:block;min-width:0}
+  .sw-tbl thead{display:none}
+  .sw-tbl tr{border-top:1px solid var(--sw-line);padding:14px 0 10px}
+  .sw-tbl tr:last-child{border-bottom:1px solid var(--sw-line)}
+  .sw-tbl td{display:grid;grid-template-columns:6.5em 1fr;gap:10px;border:0;padding:5px 0;font-size:13px}
+  .sw-tbl td::before{content:attr(data-l);color:#6E6A62}
+  .sw-tbl td:first-child{display:block;font-size:16px;font-weight:600;padding-bottom:8px}
+  .sw-tbl td:first-child::before{content:none}
+  .sw-tbl .sw-us{padding:7px 8px}
+  .sw-tbl .sw-us::before{color:#B8B2A6}
+  .sw-flow .sw-huge{margin:36px 0 28px}
+  .sw-steps h3{margin-top:18px;font-size:17px}
+  .sw-steps p{font-size:13px}
+  .sw-terms{margin-top:36px}
+  .sw-co-tx{gap:28px;padding-bottom:28px}
+  .sw-foot-top{margin:40px 0 56px;gap:28px}
+  .sw-phero-r{min-height:0;padding:72px 16px 22px}
+  .sw-phero .sw-huge{font-size:clamp(64px,21vw,96px)}
+  .curhide section.gsec{padding-top:48px!important;padding-bottom:56px!important}
+  .sw-mas{column-count:2!important;column-width:auto!important;column-gap:8px!important}
+  .sw-mas .card{margin-bottom:8px}
+  .sw-mas .card > span.bb{font-size:11px!important;padding:2px 5px!important;left:6px!important;top:6px!important}
+}
 
 </style>
 </helmet>
