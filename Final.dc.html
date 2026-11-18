@@ -139,13 +139,13 @@ nav a{box-sizing:border-box}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
 .dw-sf .ampcells{filter:none!important}
 /* 2026-11-18 信号: 1立方体1本・0.5秒走って強く発光→消える */
-.ph4-cube .cw-s rect{stroke:#CFE8FF;stroke-dasharray:0 0 6 94;animation:cwSig2 1.2s linear var(--o) infinite}
-.ph4-cube .cw-s rect.g{stroke:rgba(110,180,255,.3);stroke-width:6;stroke-dasharray:0 4 2 94;animation:cwSigG 1.2s linear var(--o) infinite}
-@keyframes cwSig2{0%{stroke-dashoffset:0;stroke-width:2;stroke:#CFE8FF;opacity:1}42%{stroke-dashoffset:-85;stroke-width:2;stroke:#CFE8FF;opacity:1}45%{stroke-dashoffset:-85;stroke-width:8;stroke:#FFFFFF;opacity:1}56%,100%{stroke-dashoffset:-85;stroke-width:3;opacity:0}}
-@keyframes cwSigG{0%{stroke-dashoffset:0;stroke-width:6;stroke:rgba(110,180,255,.3);opacity:1}42%{stroke-dashoffset:-85;stroke-width:6;stroke:rgba(110,180,255,.3);opacity:1}45%{stroke-dashoffset:-85;stroke-width:12;stroke:rgba(170,215,255,.3);opacity:1}58%{stroke-dashoffset:-85;stroke-width:16;stroke:rgba(140,200,255,.1);opacity:0}100%{stroke-dashoffset:-85;opacity:0}}
-.ph4-cube .cw-w.zap:not(.hi){animation:cwZap2 1.2s linear var(--zo) infinite}
-@keyframes cwZap2{0%,41%{color:rgba(240,237,230,.3);text-shadow:none}45%{color:#FFFFFF;text-shadow:0 0 10px rgba(190,225,255,.95),0 0 24px rgba(120,180,255,.6)}62%{color:rgba(240,237,230,.5);text-shadow:0 0 4px rgba(190,225,255,.2)}100%{color:rgba(240,237,230,.3);text-shadow:none}}
-@keyframes cwZapL2{0%,41%{color:rgba(240,237,230,.3)}45%{color:#FFFFFF}62%{color:rgba(240,237,230,.5)}100%{color:rgba(240,237,230,.3)}}
+.ph4-cube .cw-s rect{stroke:#CFE8FF;stroke-dasharray:0 0 6 94;animation:cwSig2 5s linear var(--o) infinite}
+.ph4-cube .cw-s rect.g{stroke:rgba(110,180,255,.3);stroke-width:6;stroke-dasharray:0 4 2 94;animation:cwSigG 5s linear var(--o) infinite}
+@keyframes cwSig2{0%{stroke-dashoffset:0;stroke-width:2;stroke:#CFE8FF;opacity:1}30%{stroke-dashoffset:-485;stroke-width:2;stroke:#CFE8FF;opacity:1}31.8%{stroke-dashoffset:-485;stroke-width:8;stroke:#FFFFFF;opacity:1}36.6%,100%{stroke-dashoffset:-485;stroke-width:3;opacity:0}}
+@keyframes cwSigG{0%{stroke-dashoffset:0;stroke-width:6;stroke:rgba(110,180,255,.3);opacity:1}30%{stroke-dashoffset:-485;stroke-width:6;stroke:rgba(110,180,255,.3);opacity:1}31.8%{stroke-dashoffset:-485;stroke-width:12;stroke:rgba(170,215,255,.3);opacity:1}37.8%,100%{stroke-dashoffset:-485;stroke-width:16;opacity:0}}
+.ph4-cube .cw-w.zap:not(.hi){animation:cwZap2 5s linear var(--zo) infinite}
+@keyframes cwZap2{0%,29.4%{color:rgba(240,237,230,.3);text-shadow:none}31.8%{color:#FFFFFF;text-shadow:0 0 10px rgba(190,225,255,.95),0 0 24px rgba(120,180,255,.6)}42%{color:rgba(240,237,230,.5);text-shadow:0 0 4px rgba(190,225,255,.2)}60%,100%{color:rgba(240,237,230,.3);text-shadow:none}}
+@keyframes cwZapL2{0%,29.4%{color:rgba(240,237,230,.3)}31.8%{color:#FFFFFF}42%{color:rgba(240,237,230,.5)}60%,100%{color:rgba(240,237,230,.3)}}
 .dw-sf .ph4-cube .cw-w.zap:not(.hi){animation-name:cwZapL2}
 @media (max-width:700px){.ph4-cube .cw-w.zap:not(.hi){animation-name:cwZapL2}}
 /* 角の光は画面上の丸い光（cornerGlow）で描くので、面に貼る光はやめる */
@@ -1360,8 +1360,8 @@ class Component extends DCLogic {
         if (dd > FOC) a *= Math.max(0.3, 1 - (dd - FOC) / (S * 14)); else if (dd < S) a *= dd / S;
         x.globalAlpha = a; x.drawImage(sp, sx - r, sy - r, r * 2, r * 2); }
       const el = (now - t0) / 1000;
-      for (const q of FL) { const ph = (((el - q.o) / 1.2) % 1 + 1) % 1; if (ph < 0.42 || ph > 0.62) continue;
-        const e = ph < 0.45 ? (ph - 0.42) / 0.03 : Math.max(0, 1 - (ph - 0.45) / 0.17);
+      for (const q of FL) { const ph = (((el - q.o) / 5) % 1 + 1) % 1; if (ph < 0.3 || ph > 0.372) continue;
+        const e = ph < 0.318 ? (ph - 0.3) / 0.018 : Math.max(0, 1 - (ph - 0.318) / 0.054);
         const Z = A.m13 * q.x + A.m23 * q.y + A.m33 * q.z + A.m43, dd = P - Z; if (dd < S * 0.35) continue;
         const f = P / dd, sx = cx + (A.m11 * q.x + A.m21 * q.y + A.m31 * q.z + A.m41) * f, sy = cy + (A.m12 * q.x + A.m22 * q.y + A.m32 * q.z + A.m42) * f, r = Math.min(rmax * 1.3, S * (0.16 + 0.12 * (1 - e)) * f);
         if (sx < -r || sx > W + r || sy < -r || sy > H + r) continue; x.globalAlpha = Math.min(1, e * 1.1); x.drawImage(fs, sx - r, sy - r, r * 2, r * 2); }
@@ -1374,7 +1374,7 @@ class Component extends DCLogic {
       bx0.querySelectorAll('.cw-s').forEach((e) => e.remove());
       bx0.querySelectorAll('.cw-c').forEach((c, ci) => { const fs = [...c.children].filter((f) => f.classList.contains('cw-f'));
         const vis = fs.filter((f) => !/rotateY\(180deg\)|rotateY\(-90deg\)|rotateX\(-90deg\)/.test(f.getAttribute('style') || '')), pool = vis.length ? vis : fs; if (!pool.length) return;
-        const ww = pool.filter((f) => f.querySelector('.cw-w')), arr = ww.length ? ww : pool, f = arr[Math.floor(Math.random() * arr.length)], o = '-' + (Math.random() * 1.2).toFixed(2) + 's';
+        const ww = pool.filter((f) => f.querySelector('.cw-w')), arr = ww.length ? ww : pool, f = arr[Math.floor(Math.random() * arr.length)], o = '-' + (Math.random() * 5).toFixed(2) + 's';
         f.insertAdjacentHTML('afterbegin', '<svg class="cw-s" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="--o: ' + o + (ci % 2 ? '; transform: scaleX(-1)' : '') + '"><rect class="g" x="0" y="0" width="100" height="100" pathLength="100"></rect><rect x="0" y="0" width="100" height="100" pathLength="100"></rect></svg>');
         const w = f.querySelector('.cw-w'); if (w) { w.style.setProperty('--zo', o); w.classList.add('zap'); } }); } }
     const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
