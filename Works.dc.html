@@ -235,9 +235,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-meta dd a:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* 散らばった作例 → 一列 */
-.sw-blocks{height:118vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden;overflow:clip}
+.sw-blocks{height:220vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden;overflow:clip}
 .sw-blk-row{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:flex;align-items:center;justify-content:center;gap:1.2vw;padding:0 16px}
-.sw-blk{display:block;height:min(34vh,26vw);aspect-ratio:calc(var(--w) * 1.5);flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
+.sw-blk{display:block;height:min(42vh,calc((95.2vw - 32px) / 5.85));aspect-ratio:calc(var(--w) * 1.5);flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
 .sw-blk img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* 大きな文章 */
@@ -946,7 +946,7 @@ class Component extends DCLogic {
         q('[data-sp]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return; const d = r.top + r.height / 2 - vh / 2; el.style.transform = 'translate3d(0,' + (d * -parseFloat(el.getAttribute('data-sp'))).toFixed(1) + 'px,0)'; });
         // 散らばった作例が一列にそろう
         q('.sw-blocks').forEach((sec) => { const r = sec.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return;
-          const p = ease(clamp((vh * 0.9 - r.top) / (r.height * 0.75), 0, 1));
+          const p = ease(clamp((vh * 0.6 - r.top) / (vh * 0.6 + (r.height - vh) * 0.85), 0, 1));
           q('.sw-blk', sec).forEach((b) => { const k = 1 - p, dx = +b.getAttribute('data-dx'), dy = +b.getAttribute('data-dy'), rt = +b.getAttribute('data-r');
             b.style.transform = 'translate3d(' + (dx * k).toFixed(2) + 'vw,' + (dy * k).toFixed(2) + 'vh,0) rotate(' + (rt * k).toFixed(2) + 'deg)'; }); });
       }
