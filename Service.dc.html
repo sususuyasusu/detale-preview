@@ -229,7 +229,8 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 
 /* 黒い面 */
 .sw-dark{--p:0;position:relative;padding:0;margin:0}
-.sw-dark-in{background:var(--sw-ink);color:var(--sw-bg);padding:26px 16px 120px;clip-path:inset(0 calc((1 - var(--p)) * 9%) round 0);transform:translateZ(0)}
+.sw-dark-in{background:var(--sw-ink);color:var(--sw-bg);padding:26px 16px 120px;clip-path:inset(0 49.7% 0 49.7%);transition:clip-path 1.1s cubic-bezier(.16,1,.3,1);transform:translateZ(0)}
+.sw-dark.open .sw-dark-in{clip-path:inset(0 0 0 0)}
 .sw-dark .sw-huge{margin:48vh 0 80px}
 .sw-w{display:block;color:inherit}
 .sw-ph{display:block;overflow:hidden;background:#24221f}
@@ -531,6 +532,16 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   .sw-mas .card{margin-bottom:8px}
   .sw-mas .card > span.bb{font-size:11px!important;padding:2px 5px!important;left:6px!important;top:6px!important}
 }
+
+/* 日本語の見出しを太く（本人指示 2026-11-19「見出しの日本語はもっと太く」）: 500 → 700（Zen Kaku Gothic New Bold）
+   英語だけの見出しは変えない。日本語を含む見出しにだけ、動きの仕組み（method.js）が目印 sw-jab を付ける */
+.sw-jab,.curhide .case h3.sw-jab{font-weight:700!important}
+
+/* 下層ページのカーソルの丸: 下の色を反転して見せる（本人指摘 2026-11-19「サービスで選ぶのボタンが消えたりする」）
+   黒い丸が黒い選択済みの枠に重なると、白いアイコンと文字を覆って消えたように見えていた。
+   生成り色＋差の合成 → 明るい所では黒い丸、黒い所では白い丸に見え、下の線や文字は反転して読める */
+.gcur{mix-blend-mode:difference}
+.gcur .cb,.gcur.ondark .cb{background:#F0EDE6!important}
 
 /* お問い合わせ: 現行サイトのサービス用アイコン */
 .curhide .svc,.curhide .tab{display:inline-flex;align-items:center;gap:10px}
@@ -881,6 +892,11 @@ class Component extends DCLogic {
   swInit() {
     if (this._swOn) return; this._swOn = true;
     const q = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+    // 日本語の見出しを太く: 日本語を含む見出しにだけ目印を付ける（英語だけの見出しは今の太さのまま）
+    const markJa = () => { q('h1,h2,h3,h4,legend span,.sw-pk-name,.sw-ix-name').forEach((el) => {
+      const on = /[\u3040-\u30ff\u4e00-\u9fff]/.test(el.textContent) && parseFloat(getComputedStyle(el).fontSize) >= 18;
+      if (on !== el.classList.contains('sw-jab')) el.classList.toggle('sw-jab', on); }); };
+    try { markJa(); let jaT = 0; new MutationObserver(() => { if (!jaT) jaT = requestAnimationFrame(() => { jaT = 0; markJa(); }); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
@@ -909,7 +925,7 @@ class Component extends DCLogic {
     let raf = 0, lastI = -1;
     const frame = () => { raf = 0; const vh = innerHeight;
       // 黒い面が左右から広がる
-      q('.sw-dark').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return; el.style.setProperty('--p', reduce ? 1 : clamp((vh - r.top) / (vh * 0.8), 0, 1).toFixed(3)); });
+      q('.sw-dark').forEach((el) => { const r = el.getBoundingClientRect(); if (reduce || r.top < vh * 0.85) el.classList.add('open'); else if (r.top > vh) el.classList.remove('open'); });
       if (!reduce) {
         // 作例が少しずつ違う速さで動く
         q('[data-sp]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return; const d = r.top + r.height / 2 - vh / 2; el.style.transform = 'translate3d(0,' + (d * -parseFloat(el.getAttribute('data-sp'))).toFixed(1) + 'px,0)'; });

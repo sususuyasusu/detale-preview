@@ -750,6 +750,10 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   .sw-mas .card{margin-bottom:8px}
   .sw-mas .card > span.bb{font-size:11px!important;padding:2px 5px!important;left:6px!important;top:6px!important}
 }
+
+/* 日本語の見出しを太く（本人指示 2026-11-19「見出しの日本語はもっと太く」）: 500 → 700（Zen Kaku Gothic New Bold）
+   英語だけの見出しは変えない。日本語を含む見出しにだけ、動きの仕組み（method.js）が目印 sw-jab を付ける */
+.sw-jab,.curhide .case h3.sw-jab{font-weight:700!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1381,6 +1385,11 @@ class Component extends DCLogic {
   swInit() {
     if (this._swOn) return; this._swOn = true;
     const q = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+    // 日本語の見出しを太く: 日本語を含む見出しにだけ目印を付ける（英語だけの見出しは今の太さのまま）
+    const markJa = () => { q('h1,h2,h3,h4,legend span,.sw-pk-name,.sw-ix-name').forEach((el) => {
+      const on = /[\u3040-\u30ff\u4e00-\u9fff]/.test(el.textContent) && parseFloat(getComputedStyle(el).fontSize) >= 18;
+      if (on !== el.classList.contains('sw-jab')) el.classList.toggle('sw-jab', on); }); };
+    try { markJa(); let jaT = 0; new MutationObserver(() => { if (!jaT) jaT = requestAnimationFrame(() => { jaT = 0; markJa(); }); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
