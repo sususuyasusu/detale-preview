@@ -689,6 +689,12 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 #h1-d,#h1-w{font-weight:500;letter-spacing:-.04em!important}
 /* ===== SW: Helvetica用の微調整（字幅が広いぶん社名を小さく） ===== */
 .sw-mark{font-size:12.5vw}
+/* ===== SW: ＆もゴシック（Helvetica）に。swiss/AMPGOTHIC の印があるときだけ入る。消せば8の字の＆に戻る ===== */
+:root{--sw-amp:'Helvetica Neue',Helvetica,Arial,sans-serif}
+.bigamp,#h1-a,.sw-mark .sw-amp,.tile,.curhide svg text{font-family:var(--sw-amp)!important;font-style:normal!important}
+.bigamp{font-weight:500}
+#h1-a{font-weight:500!important;font-size:clamp(44px,10.4vw,196px)!important;line-height:.8!important}
+.sw-mark .sw-amp{font-weight:600;font-size:1em;letter-spacing:-.02em;line-height:.8}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
