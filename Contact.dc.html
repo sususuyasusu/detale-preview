@@ -1047,6 +1047,8 @@ class Component extends DCLogic {
         bg: scene === x[0] ? '#B0986A' : 'transparent', fg: '#161514',
         pick: () => {
           const next = Object.assign({}, picked);
+          if (scene && SCENE_SET[scene]) SCENE_SET[scene].forEach((n) => { delete next[n]; });
+          if (scene === x[0]) { this.setState({ scene: '', picked: next }); return; }
           SCENE_SET[x[0]].forEach((n) => { next[n] = true; });
           this.setState({ scene: x[0], picked: next });
         }
