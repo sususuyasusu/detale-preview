@@ -151,6 +151,12 @@ nav a{box-sizing:border-box}
 /* 角の光は画面上の丸い光（cornerGlow）で描くので、面に貼る光はやめる */
 .cw-f::after{display:none!important}
 
+.ph4-cube .cw-w.zapnow{animation:cwZapOne .8s ease-out both!important}
+@keyframes cwZapOne{0%{color:#FFFFFF;text-shadow:0 0 10px rgba(190,225,255,.95),0 0 24px rgba(120,180,255,.6)}100%{color:rgba(240,237,230,.3);text-shadow:none}}
+@keyframes cwZapOneL{0%{color:#FFFFFF}100%{color:rgba(240,237,230,.3)}}
+.dw-sf .ph4-cube .cw-w.zapnow{animation-name:cwZapOneL!important}
+@media (max-width:700px){.ph4-cube .cw-w.zapnow{animation-name:cwZapOneL!important}}
+
 
 .dw-sf .cw-x{display:none}
 .dw-sf .cw-f[style*="rotateY(180deg)"],.dw-sf .cw-f[style*="rotateY(-90deg)"],.dw-sf .cw-f[style*="rotateX(-90deg)"]{display:none}
@@ -611,11 +617,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
     <div aria-hidden="true" style="position: absolute; left: -12%; bottom: -30%; width: 60%; height: 90%; border-radius: 50%; background: radial-gradient(closest-side, #B0986A, rgba(176,152,106,0)); filter: blur(80px); opacity: .45; animation: glow1 16s ease-in-out infinite;"></div>
     <div aria-hidden="true" style="position: absolute; left: 22%; top: -30%; width: 40%; height: 70%; border-radius: 50%; background: radial-gradient(closest-side, #8A6B4E, rgba(194,98,45,0)); filter: blur(90px); opacity: .35; animation: glow2 20s ease-in-out infinite;"></div>
     <div style="position: absolute; right: 0; top: 0; width: 56%; height: 100%; overflow: hidden;">
-      <img width="1066" height="1600" src="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg" alt="黒い器にのせた和牛の料理撮影" style="width: 100%; height: 100%; object-fit: cover; filter: url(#dwHaze) brightness(.85); animation: kb 18s ease-in-out infinite alternate;">
-      <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwHaze" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.045" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="9s" values="0.008 0.045;0.011 0.06;0.008 0.045" repeatCount="indefinite"></animate></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter></svg>
-      <span class="steam" aria-hidden="true" style="left: 46%; animation-delay: 0s;"></span>
-      <span class="steam" aria-hidden="true" style="left: 56%; animation-delay: 1.8s;"></span>
-      <span class="steam" aria-hidden="true" style="left: 64%; animation-delay: 3.6s;"></span>
+      <img width="1066" height="1600" src="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg" alt="黒い器にのせた和牛の料理撮影" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(.85); animation: kb 18s ease-in-out infinite alternate;">
     </div>
     <div style="position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;">
       <span class="bb" style="font-size: 16px; color: inherit;">01 / ABOUT — フード専門制作会社</span>
@@ -1341,11 +1343,11 @@ class Component extends DCLogic {
       for (const a of [-1, 1]) for (const b of [-1, 1]) for (const d of [-1, 1]) { const X = c.x + a * h, Y = c.y + b * h, Z = c.z + d * h, k = Math.round(X / (h * 0.5)) + ',' + Math.round(Y / (h * 0.5)) + ',' + Math.round(Z / (h * 0.5));
         if (!pts.has(k)) pts.set(k, { x: X, y: Y, z: Z, ph: Math.random() * 6.283, sp: 0.7 + Math.random() * 1.1 }); } }
     const L = [...pts.values()], FOC = S * 2.3, M = (t) => (t && t !== 'none' ? new DOMMatrix(t) : new DOMMatrix());
-    const t0 = performance.now(), FL = [];
-    for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue; const sv = c.e.querySelector('.cw-s'); if (!sv) continue; const fc = sv.parentElement;
-      const st2 = sv.getAttribute('style') || '', flip = st2.indexOf('scaleX(-1)') >= 0, o = parseFloat((/--o:\s*(-?[\d.]+)s/.exec(st2) || [0, 0])[1]) || 0;
-      const fm = new DOMMatrix((fc.getAttribute('style') || '').replace(/^\s*transform:\s*/, '').replace(/;\s*$/, '').replace(/var\(--h\)/g, h + 'px'));
-      const lp = fm.transformPoint(new DOMPoint(flip ? h : -h, S * 0.36 - h, 0)); FL.push({ x: c.x + lp.x, y: c.y + lp.y, z: c.z + lp.z, o: o }); }
+    const SG = [], SPD = 26, RUN = 1.5, FLT = 0.32, CYC = 5, TR = 0.9;
+    let sgi = 0;
+    for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue; if (sgi++ % 2) continue;
+      SG.push({ c: c, ws: [...c.e.querySelectorAll('.cw-w')], off: Math.random() * CYC, cy: -1, k: [1, 1, 1], ax: 0, p: 0, pk: null, hx: 0, hy: 0, hz: 0, zapped: false }); }
+    const t0 = performance.now(); let lastNow = t0;
     const fs = document.createElement('canvas'); fs.width = fs.height = 128; const fg = fs.getContext('2d'); const fr = fg.createRadialGradient(64, 64, 0, 64, 64, 64);
     fr.addColorStop(0, 'rgba(245,250,255,1)'); fr.addColorStop(0.1, 'rgba(200,230,255,.9)'); fr.addColorStop(0.32, 'rgba(110,180,255,.35)'); fr.addColorStop(1, 'rgba(80,150,255,0)'); fg.fillStyle = fr; fg.fillRect(0, 0, 128, 128);
     let gfc = 0;
@@ -1359,12 +1361,25 @@ class Component extends DCLogic {
         let a = 0.55 + 0.35 * Math.sin(now * 0.0021 * p.sp + p.ph);
         if (dd > FOC) a *= Math.max(0.3, 1 - (dd - FOC) / (S * 14)); else if (dd < S) a *= dd / S;
         x.globalAlpha = a; x.drawImage(sp, sx - r, sy - r, r * 2, r * 2); }
-      const el = (now - t0) / 1000;
-      for (const q of FL) { const ph = (((el - q.o) / 5) % 1 + 1) % 1; if (ph < 0.3 || ph > 0.372) continue;
-        const e = ph < 0.318 ? (ph - 0.3) / 0.018 : Math.max(0, 1 - (ph - 0.318) / 0.054);
-        const Z = A.m13 * q.x + A.m23 * q.y + A.m33 * q.z + A.m43, dd = P - Z; if (dd < S * 0.35) continue;
-        const f = P / dd, sx = cx + (A.m11 * q.x + A.m21 * q.y + A.m31 * q.z + A.m41) * f, sy = cy + (A.m12 * q.x + A.m22 * q.y + A.m32 * q.z + A.m42) * f, r = Math.min(rmax * 1.3, S * (0.16 + 0.12 * (1 - e)) * f);
-        if (sx < -r || sx > W + r || sy < -r || sy > H + r) continue; x.globalAlpha = Math.min(1, e * 1.1); x.drawImage(fs, sx - r, sy - r, r * 2, r * 2); }
+      const el = (now - t0) / 1000, dt = Math.min(0.1, (now - lastNow) / 1000); lastNow = now;
+      const PJ = (X0, Y0, Z0) => { const Z = A.m13 * X0 + A.m23 * Y0 + A.m33 * Z0 + A.m43, dd = P - Z; if (dd < S * 0.35) return null; const f = P / dd;
+        return { x: cx + (A.m11 * X0 + A.m21 * Y0 + A.m31 * Z0 + A.m41) * f, y: cy + (A.m12 * X0 + A.m22 * Y0 + A.m32 * Z0 + A.m42) * f, f: f }; };
+      for (const q of SG) { const tt = el + q.off, cyc = Math.floor(tt / CYC), ph = tt - cyc * CYC, c = q.c;
+        if (cyc !== q.cy) { q.cy = cyc; q.k = [Math.random() < 0.5 ? -1 : 1, Math.random() < 0.5 ? -1 : 1, Math.random() < 0.5 ? -1 : 1]; q.ax = Math.floor(Math.random() * 3); q.p = 0; q.pk = null; q.zapped = false; }
+        if (ph < RUN) { q.p += dt * SPD;
+          while (q.p >= 1) { q.p -= 1; q.pk = q.k.slice(); q.k[q.ax] = -q.k[q.ax]; const o = [0, 1, 2].filter((i) => i !== q.ax); q.ax = o[Math.random() < 0.5 ? 0 : 1]; }
+          const st = [c.x + q.k[0] * h, c.y + q.k[1] * h, c.z + q.k[2] * h], hd = st.slice(); hd[q.ax] = st[q.ax] - q.k[q.ax] * 2 * h * q.p;
+          q.hx = hd[0]; q.hy = hd[1]; q.hz = hd[2];
+          const H0 = PJ(hd[0], hd[1], hd[2]), S0 = PJ(st[0], st[1], st[2]); if (!H0 || !S0) continue;
+          let T0 = S0; if (q.p < TR && q.pk) { const pv = [c.x + q.pk[0] * h, c.y + q.pk[1] * h, c.z + q.pk[2] * h], r2 = (TR - q.p), tl = st.slice(); for (let i = 0; i < 3; i++) tl[i] = st[i] + (pv[i] - st[i]) * Math.min(1, r2); T0 = PJ(tl[0], tl[1], tl[2]) || S0; }
+          else if (q.p >= TR) { const tl = st.slice(); tl[q.ax] = st[q.ax] - q.k[q.ax] * 2 * h * (q.p - TR); T0 = PJ(tl[0], tl[1], tl[2]) || S0; }
+          x.globalAlpha = 0.95; x.strokeStyle = 'rgba(205,232,255,1)'; x.lineCap = 'round'; x.lineWidth = Math.max(1.2, Math.min(4, 1.6 * H0.f));
+          x.beginPath(); x.moveTo(T0.x, T0.y); if (T0 !== S0) x.lineTo(S0.x, S0.y); x.lineTo(H0.x, H0.y); x.stroke();
+          const rh = Math.max(3, Math.min(rmax * 1.6, S * 0.05 * H0.f)); x.globalAlpha = 0.85; x.drawImage(fs, H0.x - rh, H0.y - rh, rh * 2, rh * 2); }
+        else if (ph < RUN + FLT) { const u = (ph - RUN) / FLT, e = u < 0.15 ? u / 0.15 : Math.max(0, 1 - (u - 0.15) / 0.85);
+          if (!q.zapped) { q.zapped = true; const w = q.ws[Math.floor(Math.random() * q.ws.length)]; if (w) { w.classList.remove('zapnow'); void w.offsetWidth; w.classList.add('zapnow'); } }
+          const H0 = PJ(q.hx, q.hy, q.hz); if (!H0) continue; const r = Math.min(Math.min(W, H) * 0.12, S * (0.12 + 0.1 * (1 - e)) * H0.f);
+          x.globalAlpha = Math.min(1, e * 1.15); x.drawImage(fs, H0.x - r, H0.y - r, r * 2, r * 2); } }
       requestAnimationFrame(step); };
     requestAnimationFrame(step);
   }
@@ -1372,11 +1387,7 @@ class Component extends DCLogic {
     const st = this._stage; if (!st) return;
     { const bx0 = st.querySelector('.ph4-cube'); if (bx0 && !bx0.firstElementChild) { bx0.innerHTML = this.cwHTML();
       bx0.querySelectorAll('.cw-s').forEach((e) => e.remove());
-      bx0.querySelectorAll('.cw-c').forEach((c, ci) => { const fs = [...c.children].filter((f) => f.classList.contains('cw-f'));
-        const vis = fs.filter((f) => !/rotateY\(180deg\)|rotateY\(-90deg\)|rotateX\(-90deg\)/.test(f.getAttribute('style') || '')), pool = vis.length ? vis : fs; if (!pool.length) return;
-        const ww = pool.filter((f) => f.querySelector('.cw-w')), arr = ww.length ? ww : pool, f = arr[Math.floor(Math.random() * arr.length)], o = '-' + (Math.random() * 5).toFixed(2) + 's';
-        f.insertAdjacentHTML('afterbegin', '<svg class="cw-s" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="--o: ' + o + (ci % 2 ? '; transform: scaleX(-1)' : '') + '"><rect class="g" x="0" y="0" width="100" height="100" pathLength="100"></rect><rect x="0" y="0" width="100" height="100" pathLength="100"></rect></svg>');
-        const w = f.querySelector('.cw-w'); if (w) { w.style.setProperty('--zo', o); w.classList.add('zap'); } }); } }
+    } }
     const cw = st.querySelector('.ph4 .cw'), box = st.querySelector('.ph4-cube'); if (!cw || !box || typeof DOMMatrix !== 'function') return;
     const cs = getComputedStyle(box), P = parseFloat(cs.perspective) || 800, S = parseFloat(cs.getPropertyValue('--S')) || 200, lim = P - S * 1.05;
     const cubes = [...cw.querySelectorAll('.cw-c')].map((e) => { const m = new DOMMatrix(getComputedStyle(e).transform); return { e: e, x: m.m41, y: m.m42, z: m.m43, off: false, b: 0, o: 1 }; });
