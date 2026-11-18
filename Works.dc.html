@@ -193,14 +193,14 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 /* 軽量化 */
 /* 画面上端のつなぎ */
 /* ===== SW: 最初の場面より下（細い線・大きな文字・余白で見せる） ===== */
-:root{--sw-ink:#161514;--sw-bg:#F0EDE6;--sw-dim:#A39E95;--sw-line:rgba(22,21,20,.9);--sw-hair:rgba(22,21,20,.22);--sw-f:'Helvetica Neue',Helvetica,Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans','Zen Kaku Gothic New',sans-serif;--sw-bar:38px}
+:root{--sw-ink:#161514;--sw-bg:#F0EDE6;--sw-dim:#A39E95;--sw-line:rgba(22,21,20,.9);--sw-hair:rgba(22,21,20,.22);--sw-f:'DW Grotesk','Helvetica Neue',Helvetica,Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans','Zen Kaku Gothic New',sans-serif;--sw-bar:38px}
 .sw-bar,.sw-lead,.sw-blocks,.sw-state,.sw-dark,.sw-exp,.sw-packs,.sw-why,.sw-index,.sw-flow,.sw-co,.sw-marq,.sw-foot{font-family:var(--sw-f);color:var(--sw-ink);font-feature-settings:"palt" 1}
 .sw-bar a,.sw-lead a,.sw-state a,.sw-dark a,.sw-exp a,.sw-packs a,.sw-why a,.sw-index a,.sw-flow a,.sw-co a,.sw-foot a{color:inherit;text-decoration:none}
 .sw-label{margin:0;font-size:14px;line-height:1.3;font-weight:400;letter-spacing:0}
 .sw-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap}
 .sw-link{font-size:14px;white-space:nowrap}
 .sw-link:hover,.sw-c2 a:hover,.sw-c3:hover{text-decoration:underline;text-underline-offset:3px}
-.sw-en{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+.sw-en{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif}
 .sw-huge{margin:0;font-weight:500;font-size:clamp(46px,8.2vw,138px);line-height:.94;letter-spacing:-.045em}
 .sw-big{margin:0;font-weight:500;font-size:clamp(28px,5.1vw,84px);line-height:1.1;letter-spacing:-.04em}
 .sw-mid{margin:0;font-weight:500;font-size:clamp(24px,2.6vw,40px);line-height:1.25;letter-spacing:-.03em}
@@ -245,7 +245,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-state .sw-big{margin-top:64px;max-width:21.5em}
 .sw-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:120px;padding:18px 0 22px;border-top:1px solid var(--sw-hair);font-size:14px}
 .sw-notes p{margin:0}
-.sw-notes b{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;font-size:clamp(28px,3vw,46px);letter-spacing:-.04em;display:block;margin:10px 0 4px;line-height:1}
+.sw-notes b{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;font-size:clamp(28px,3vw,46px);letter-spacing:-.04em;display:block;margin:10px 0 4px;line-height:1}
 
 /* 黒い面 */
 .sw-dark{--p:0;position:relative;padding:0;margin:0}
@@ -274,7 +274,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-line:hover span:last-child{transform:translateX(6px)}
 .sw-exp-note{margin:auto 0 0;font-size:14px;line-height:1.7;max-width:24em}
 .sw-exp-m{padding:22px 16px;display:flex;flex-direction:column}
-.sw-count{margin:0;font-size:14px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+.sw-count{margin:0;font-size:14px;font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif}
 .sw-exp-list{margin-top:auto;margin-bottom:auto}
 .sw-exp-h{margin:0 0 12px;display:grid;grid-template-columns:8em 1fr;font-size:14px}
 .sw-exp-list ol{list-style:none;margin:0 0 0 8em;padding:0;font-size:14px;line-height:1.5}
@@ -298,7 +298,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-pk-name small{display:block;font-size:13px;font-weight:400;letter-spacing:0;color:#6E6A62;margin-top:8px;line-height:1.6}
 .sw-pk-due{font-size:14px}
 .sw-pk-price{display:flex;justify-content:flex-end;align-items:baseline;gap:4px;white-space:nowrap}
-.sw-packs .sw-price{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;font-size:clamp(44px,5.4vw,92px)!important;line-height:.9!important;letter-spacing:-.05em}
+.sw-packs .sw-price{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;font-size:clamp(44px,5.4vw,92px)!important;line-height:.9!important;letter-spacing:-.05em}
 .sw-yen{font-size:clamp(16px,1.4vw,22px);font-weight:500}
 .sw-tax{font-size:12px;color:#6E6A62}
 .sw-packs .sw-pk-dark{background:var(--sw-ink);color:var(--sw-bg);padding-left:14px;padding-right:14px;margin:0 -14px}
@@ -337,7 +337,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-steps li{padding:18px 16px 30px 0;border-right:1px solid var(--sw-hair)}
 .sw-steps li+li{padding-left:16px}
 .sw-steps li:last-child{border-right:0}
-.sw-num{display:block;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;font-size:clamp(56px,7vw,118px);line-height:.85;letter-spacing:-.06em}
+.sw-num{display:block;font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;font-size:clamp(56px,7vw,118px);line-height:.85;letter-spacing:-.06em}
 .sw-steps h3{margin:28px 0 8px;font-size:20px;font-weight:500;letter-spacing:-.02em}
 .sw-steps p{margin:0;font-size:14px;line-height:1.75}
 .sw-terms{margin:72px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 16px;font-size:14px;border-top:1px solid var(--sw-hair);padding-top:14px}
@@ -361,7 +361,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-foot-cta{display:flex;flex-direction:column;gap:18px;min-width:min(100%,340px)}
 .sw-foot-cta .sw-line{font-size:16px}
 .sw-foot-lb,.sw-foot-bt{font-size:14px;border-top:1px solid var(--sw-line);padding:10px 0}
-.sw-mark{margin:0 -.02em;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:600;font-size:13.1vw;line-height:.8;letter-spacing:-.065em;white-space:nowrap;padding:.08em 0 .04em}
+.sw-mark{margin:0 -.02em;display:flex;justify-content:space-between;align-items:flex-end;font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:600;font-size:13.1vw;line-height:.8;letter-spacing:-.065em;white-space:nowrap;padding:.08em 0 .04em}
 .sw-mark .sw-amp{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:0;font-size:1.08em;line-height:.74}
 .sw-mk{display:inline-block;transform:translateY(105%);transition:transform 1.3s cubic-bezier(.19,1,.22,1)}
 .sw-mark.in .sw-mk{transform:none}
@@ -435,7 +435,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 }
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
-.curhide .bb{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
+.curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
 .sw-bar.sw-sub{margin-top:0;animation:none}
 .sw-bar a[aria-current="page"]{text-decoration:underline;text-underline-offset:3px}
 .goo-field,.gtb,.gcb{display:none!important}
@@ -450,7 +450,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-phero .sw-lead-foot{border-top:1px solid var(--sw-hair);padding-top:10px}
 
 /* 区画の大見出し */
-.curhide .sw-sh{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500!important;font-size:clamp(52px,8vw,132px)!important;line-height:.9!important;letter-spacing:-.045em!important;filter:none!important}
+.curhide .sw-sh{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500!important;font-size:clamp(52px,8vw,132px)!important;line-height:.9!important;letter-spacing:-.045em!important;filter:none!important}
 
 /* 金色の札 → 角かっこの小さな文字 */
 .curhide .sw-tag{background:none!important;color:inherit!important;padding:0!important;font-size:14px!important;letter-spacing:0!important}
@@ -473,7 +473,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .curhide textarea.fld{border:1px solid var(--sw-ink)!important;padding:10px!important}
 
 /* 実績の取引先ごとの段 */
-.curhide .cnum{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500!important;letter-spacing:-.06em}
+.curhide .cnum{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500!important;letter-spacing:-.06em}
 .curhide .case{border-top:1px solid var(--sw-hair)}
 .curhide .case h3{font-weight:500!important;letter-spacing:-.04em}
 .curhide h2,.curhide h3{font-family:var(--sw-f)}
@@ -490,9 +490,13 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .pour svg text{fill:var(--sw-bg)}
 .curhide .fld:focus{box-shadow:none!important;border-bottom-width:2px!important}
 /* ===== SW: Helvetica用の微調整（字幅が広いぶん社名を小さく） ===== */
-.sw-mark{font-size:12.5vw}
+.sw-mark{font-size:12.1vw}
+/* ===== SW: 書体の呼び名「DW Grotesk」: Mac・iPhone は Helvetica Neue、Windows は Arial。やや太め(500)は Windows では Arial の太字にする ===== */
+@font-face{font-family:'DW Grotesk';font-weight:100 449;src:local('Helvetica Neue'),local('HelveticaNeue'),local('Arial'),local('ArialMT')}
+@font-face{font-family:'DW Grotesk';font-weight:450 549;src:local('Helvetica Neue Medium'),local('HelveticaNeue-Medium'),local('Arial Bold'),local('Arial-BoldMT')}
+@font-face{font-family:'DW Grotesk';font-weight:550 900;src:local('Helvetica Neue Bold'),local('HelveticaNeue-Bold'),local('Arial Bold'),local('Arial-BoldMT')}
 /* ===== SW: ＆もゴシック（Helvetica）に。swiss/AMPGOTHIC の印があるときだけ入る。消せば8の字の＆に戻る ===== */
-:root{--sw-amp:'Helvetica Neue',Helvetica,Arial,sans-serif}
+:root{--sw-amp:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif}
 .bigamp,#h1-a,.sw-mark .sw-amp,.tile,.curhide svg text{font-family:var(--sw-amp)!important;font-style:normal!important}
 .bigamp{font-weight:500}
 #h1-a{font-weight:500!important;font-size:clamp(44px,10.4vw,196px)!important;line-height:.8!important}
