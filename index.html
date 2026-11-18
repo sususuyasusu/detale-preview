@@ -916,7 +916,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   <!-- ===== SW: 大きな文章＋脚注 ===== -->
   <section id="about" class="sw-state" aria-label="私たちについて">
     <p class="sw-label">01 — About / フード専門制作会社</p>
-    <h2 class="sw-big sw-split">フードビジネスのための制作会社です。外食企業・食品会社のお客さまに、いちばん合ったデザインの質を提案します<sup class="sw-fn">[*]</sup>。料理がおいしく見える写真、売りたい商品へ誘導するメニュー、店の世界観まで<sup class="sw-fn">[**]</sup>。専属のクリエイターが直接やりとりするので、意図がそのまま形になります<sup class="sw-fn">[***]</sup>。</h2>
+    <h2 class="sw-big sw-split">外食と食品に特化した制作会社です。大手チェーンから個人店まで、その店に合うデザインを提案します<sup class="sw-fn">[*]</sup>。料理がおいしく見える写真、売りたい商品が売れるメニュー、店の世界観までつくります<sup class="sw-fn">[**]</sup>。専属のクリエイターが直接担当し、意図をそのまま、すばやく形にします<sup class="sw-fn">[***]</sup>。</h2>
     <div class="sw-notes">
       <p class="sw-rv"><span>[*] —</span> <b>100+</b> 取引ブランド（大手〜個人店）</p>
       <p class="sw-rv"><span>[**] —</span> <b>95%</b> ご相談のうちフードビジネス</p>
@@ -1459,7 +1459,7 @@ class Component extends DCLogic {
   makeScenes() {
     let seed = 11;
     const r = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-    const C = ['#B0986A', '#9E3B2E', '#7D8471', '#4A3A2E', '#E3D8C4', '#8A6B4E', '#161514', '#C9B48A'];
+    const C = ['#161514', '#161514', '#161514', '#161514', '#161514', '#161514', '#161514', '#161514'];
     const pick = () => C[Math.floor(r() * C.length)];
     const blobs = [];
     for (let i = 0; i < 36; i++) {
