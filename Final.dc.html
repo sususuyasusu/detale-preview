@@ -1343,9 +1343,9 @@ class Component extends DCLogic {
       for (const a of [-1, 1]) for (const b of [-1, 1]) for (const d of [-1, 1]) { const X = c.x + a * h, Y = c.y + b * h, Z = c.z + d * h, k = Math.round(X / (h * 0.5)) + ',' + Math.round(Y / (h * 0.5)) + ',' + Math.round(Z / (h * 0.5));
         if (!pts.has(k)) pts.set(k, { x: X, y: Y, z: Z, ph: Math.random() * 6.283, sp: 0.7 + Math.random() * 1.1 }); } }
     const L = [...pts.values()], FOC = S * 2.3, M = (t) => (t && t !== 'none' ? new DOMMatrix(t) : new DOMMatrix());
-    const SG = [], SPD = 12, RUN = 1.5, FLT = 0.32, CYC = 5, TR = 0.9;
+    const SG = [], SPD = 6, RUN = 1.5, FLT = 0.32, CYC = 5, TR = 0.9;
     let sgi = 0;
-    for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue; if (sgi++ % 2) continue;
+    for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue; if (sgi++ % 4) continue;
       SG.push({ c: c, ws: [...c.e.querySelectorAll('.cw-w')], off: Math.random() * CYC, cy: -1, k: [1, 1, 1], ax: 0, p: 0, pk: null, hx: 0, hy: 0, hz: 0, zapped: false }); }
     const t0 = performance.now(); let lastNow = t0;
     const fs = document.createElement('canvas'); fs.width = fs.height = 128; const fg = fs.getContext('2d'); const fr = fg.createRadialGradient(64, 64, 0, 64, 64, 64);
