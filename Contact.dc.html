@@ -482,12 +482,15 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 .sw-mark .sw-amp{font-weight:600;font-size:1em;letter-spacing:-.02em;line-height:.8}
 /* ===== SW: スマホの組み方を整える（余白を詰め、間延びする所・窮屈な所を直す） ===== */
 @media (max-width: 860px){
+  .sw-bar{padding-top:calc(9px + env(safe-area-inset-top,0px))!important}
   #lead.sw-lead{min-height:0!important;height:auto!important;align-content:start;padding:0!important}
-  .sw-lead-r{min-height:0;padding:40px 16px 26px;gap:22px}
-  .sw-kicker{position:static;font-size:13px;line-height:1.7;order:-1}
+  .sw-lead-r{min-height:calc(100vh - 56px - env(safe-area-inset-top,0px));min-height:calc(100svh - 56px - env(safe-area-inset-top,0px));box-sizing:border-box;padding:28px 16px 26px;gap:22px;justify-content:flex-end}
+  .sw-kicker{position:static;font-size:13px;line-height:1.7;order:-1;margin-bottom:auto}
+  .sw-lead .sw-huge{font-size:15.2vw;line-height:1.08}
+  .sw-lead-foot .sw-en{font-size:20px}
   .sw-lead-foot .sw-cue,.sw-phero .sw-lead-foot .sw-cue{display:none}
   .sw-blocks{height:170vh}
-  .sw-blk-row{top:56px;height:calc(100vh - 56px);flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;padding:16px}
+  .sw-blk-row{top:calc(56px + env(safe-area-inset-top,0px));height:calc(100vh - 56px - env(safe-area-inset-top,0px));flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;padding:16px}
   .sw-blk{height:auto;width:calc(50% - 4px);aspect-ratio:1/1}
   .sw-blk:first-child{width:100%;aspect-ratio:16/10}
   .sw-state{padding-top:22px}
