@@ -1613,6 +1613,15 @@ class Component extends DCLogic {
       b.style.transition = `left 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,top 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,width 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,height 1.55s cubic-bezier(.65,0,.25,1) ${dl}s`;
       b.style.left = sd.x.toFixed(1) + 'px'; b.style.top = sd.y.toFixed(1) + 'px'; b.style.width = b.style.height = (sd.r * 1.95).toFixed(1) + 'px'; });
     this._gathered = true;
+    // 集まりきる少し前から、本物の & をうっすら重ねて濃くし、同時に玉を細らせる → でこぼこが溶けるように & になる
+    const ov = document.createElement('span'); ov.className = 'bigamp ampov'; ov.setAttribute('aria-hidden', 'true'); ov.textContent = '&';
+    // 先に & を濃くしきる（玉の形の上に重なるので、はみ出た角だけがふわっと出る）→ その後で玉を細らせ、でこぼこを & の中へ引っ込める
+    // 順番を分けるのは、玉が先に細ると & の薄い部分が灰色のふちに見えるため。にじみの中には入れない（Safari系で全体が黒くつぶれる）
+    ov.style.cssText = 'animation:none;opacity:0;transition:opacity .6s cubic-bezier(.4,0,.2,1);pointer-events:none'; st.appendChild(ov);
+    (this._acT = this._acT || []).push(setTimeout(() => { ov.style.opacity = '1'; }, 1350));
+    this._acT.push(setTimeout(() => {
+      moves.forEach(([b, sd]) => { b.style.transition = 'width .75s cubic-bezier(.4,0,.2,1),height .75s cubic-bezier(.4,0,.2,1)'; b.style.width = b.style.height = (sd.r * 1.0).toFixed(1) + 'px'; });
+    }, 1950));
   }
   ampCells() {
     // ＆の字形を小さな下書き面に描き、字の太さ（内側から縁までの距離）を測って、字の中に玉を敷き詰める
@@ -1811,7 +1820,7 @@ class Component extends DCLogic {
   nextScene(n) {
     if (!this._sfk) { this._sfk = 1; try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {} }
     if (this.calm()) { this.setState({ scene: 0 }); return; }
-    const DUR = [this.calm() ? 2700 : 4300, 4600, 6000, 17150, 2700, 14000];
+    const DUR = [this.calm() ? 2700 : 5000, 4600, 6000, 17150, 2700, 14000];
     const sc = [0, 1, 3, 2, 5][n % 5];
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
@@ -1819,6 +1828,7 @@ class Component extends DCLogic {
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
     if (sc === 0) { this._gathered = false; this._acT.push(setTimeout(() => this.gatherAmp(), 2200)); }
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), this._joinAmp ? 1100 : 1250));
+    this._acT.push(setTimeout(() => { try { (this._stage ? [...this._stage.querySelectorAll('.ampov')] : []).forEach((e) => e.remove()); } catch (e) {} }, 120));
     clearInterval(this._mxI);
     if (sc === 3) { this._acT.push(setTimeout(() => this.cubeCull(), 20)); this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 11400)); }
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
