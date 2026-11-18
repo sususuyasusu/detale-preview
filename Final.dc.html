@@ -760,6 +760,9 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 /* 日本語の見出しを太く（本人指示 2026-11-19「見出しの日本語はもっと太く」）: 500 → 700（Zen Kaku Gothic New Bold）
    英語だけの見出しは変えない。日本語を含む見出しにだけ、動きの仕組み（method.js）が目印 sw-jab を付ける */
 .sw-jab,.curhide .case h3.sw-jab{font-weight:700!important}
+/* 場面1の玉が集まって & になったときは、場面2の & は回転・拡大せずその場に出る */
+.stage.ampjoin .bigamp{animation:none}
+.stage.ampjoin .scene{animation:none}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1556,6 +1559,61 @@ class Component extends DCLogic {
     }
     return this._curRefs;
   }
+  gatherAmp() {
+    // 場面1の終わり: 散った黒い玉を、場面2の「&」の字の中へ集める
+    const st = this._stage; if (!st || this.calm()) return;
+    const blobs = [...st.querySelectorAll('.blob')]; if (!blobs.length) return;
+    const box = blobs[0].parentElement, cr = box.getBoundingClientRect();
+    const amp = document.createElement('span'); amp.className = 'bigamp'; amp.setAttribute('aria-hidden', 'true');
+    amp.style.cssText = 'visibility:hidden;animation:none;transition:none'; amp.innerHTML = '&amp;<i class="ampbl"></i>'; st.appendChild(amp);
+    let seeds = [];
+    try {
+      const bl = amp.querySelector('.ampbl'), rg = document.createRange(); rg.selectNodeContents(amp.firstChild);
+      const tr = rg.getBoundingClientRect(), br = bl.getBoundingClientRect(), cs = getComputedStyle(amp), fs = parseFloat(cs.fontSize) || 500;
+      const S = 0.2, pad = fs * 0.3, ox = tr.left - cr.left - pad, oy = tr.top - cr.top - pad;
+      const W = Math.max(8, Math.ceil((tr.width + pad * 2) * S)), H = Math.max(8, Math.ceil((tr.height + pad * 2) * S));
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+      x.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + (fs * S) + 'px ' + cs.fontFamily; x.textBaseline = 'alphabetic'; x.fillStyle = '#000';
+      x.fillText('&', (tr.left - cr.left - ox) * S, (br.top - cr.top - oy) * S);
+      const px = x.getImageData(0, 0, W, H).data, N = W * H, D = new Float32Array(N);
+      for (let i = 0; i < N; i++) D[i] = px[i * 4 + 3] > 120 ? 1e9 : 0;
+      for (let yy = 0; yy < H; yy++) for (let xx = 0; xx < W; xx++) { const i = yy * W + xx; if (!D[i]) continue; let v = D[i];
+        v = xx > 0 ? Math.min(v, D[i - 1] + 1) : Math.min(v, 1);
+        if (yy > 0) { v = Math.min(v, D[i - W] + 1); if (xx > 0) v = Math.min(v, D[i - W - 1] + 1.414); if (xx < W - 1) v = Math.min(v, D[i - W + 1] + 1.414); } else v = Math.min(v, 1);
+        D[i] = v; }
+      for (let yy = H - 1; yy >= 0; yy--) for (let xx = W - 1; xx >= 0; xx--) { const i = yy * W + xx; if (!D[i]) continue; let v = D[i];
+        v = xx < W - 1 ? Math.min(v, D[i + 1] + 1) : Math.min(v, 1);
+        if (yy < H - 1) { v = Math.min(v, D[i + W] + 1); if (xx < W - 1) v = Math.min(v, D[i + W + 1] + 1.414); if (xx > 0) v = Math.min(v, D[i + W - 1] + 1.414); } else v = Math.min(v, 1);
+        D[i] = v; }
+      const minR = Math.max(0.8, fs * S * 0.012);
+      for (let n = 0; n < 90; n++) { let bi = -1, bv = 0; for (let i = 0; i < N; i++) if (D[i] > bv) { bv = D[i]; bi = i; }
+        if (bi < 0 || bv < minR) break; const cx = bi % W, cy = (bi - cx) / W, rr = bv * 0.95;
+        seeds.push({ x: ox + (cx + 0.5) / S, y: oy + (cy + 0.5) / S, r: bv / S });
+        for (let yy = Math.max(0, Math.floor(cy - rr)); yy < Math.min(H, Math.ceil(cy + rr)); yy++) for (let xx = Math.max(0, Math.floor(cx - rr)); xx < Math.min(W, Math.ceil(cx + rr)); xx++)
+          if ((xx - cx) * (xx - cx) + (yy - cy) * (yy - cy) < rr * rr) D[yy * W + xx] = 0; }
+    } catch (e) { seeds = []; }
+    amp.remove();
+    if (!seeds.length) return;
+    // 今の玉の位置・大きさで止めてから、動きを付け替える（跳ばないように）
+    const cur = blobs.map((b) => { const r = b.getBoundingClientRect(); return { b, x: r.left + r.width / 2 - cr.left, y: r.top + r.height / 2 - cr.top, d: r.width }; });
+    cur.forEach((c) => { c.b.style.animation = 'none'; c.b.style.left = c.x.toFixed(1) + 'px'; c.b.style.top = c.y.toFixed(1) + 'px';
+      c.b.style.width = c.b.style.height = c.d.toFixed(1) + 'px'; c.b.style.transform = 'translate(-50%,-50%)'; });
+    // 大きい丸から順に、いちばん近い玉を割り当てる。玉が足りなければ、近くの玉から小さな玉を生やす
+    const free = cur.slice(), moves = [];
+    seeds.forEach((sd) => {
+      let k = -1, best = 1e18; free.forEach((c, i) => { const d = (c.x - sd.x) ** 2 + (c.y - sd.y) ** 2; if (d < best) { best = d; k = i; } });
+      if (k >= 0) { moves.push([free[k].b, sd]); free.splice(k, 1); return; }
+      let near = cur[0], nb = 1e18; cur.forEach((c) => { const d = (c.x - sd.x) ** 2 + (c.y - sd.y) ** 2; if (d < nb) { nb = d; near = c; } });
+      const e = document.createElement('span'); e.className = 'blob'; e.style.cssText = 'animation:none;background:#161514;transform:translate(-50%,-50%);left:' + near.x.toFixed(1) + 'px;top:' + near.y.toFixed(1) + 'px;width:0;height:0';
+      box.appendChild(e); moves.push([e, sd]); });
+    // 余った玉は、いちばん近い丸の中心へ吸い込まれて消える
+    free.forEach((c) => { let t = seeds[0], nb = 1e18; seeds.forEach((sd) => { const d = (c.x - sd.x) ** 2 + (c.y - sd.y) ** 2; if (d < nb) { nb = d; t = sd; } }); moves.push([c.b, { x: t.x, y: t.y, r: 0 }]); });
+    void box.offsetWidth;
+    moves.forEach(([b, sd], i) => { const dl = (Math.min(i, 40) * 0.008).toFixed(3);
+      b.style.transition = `left 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,top 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,width 1.55s cubic-bezier(.65,0,.25,1) ${dl}s,height 1.55s cubic-bezier(.65,0,.25,1) ${dl}s`;
+      b.style.left = sd.x.toFixed(1) + 'px'; b.style.top = sd.y.toFixed(1) + 'px'; b.style.width = b.style.height = (sd.r * 1.95).toFixed(1) + 'px'; });
+    this._gathered = true;
+  }
   ampCells() {
     // ＆の字形を小さな下書き面に描き、字の太さ（内側から縁までの距離）を測って、字の中に玉を敷き詰める
     const st = this._stage; if (!st) return;
@@ -1753,11 +1811,14 @@ class Component extends DCLogic {
   nextScene(n) {
     if (!this._sfk) { this._sfk = 1; try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {} }
     if (this.calm()) { this.setState({ scene: 0 }); return; }
-    const DUR = [2700, 4600, 6000, 17150, 2700, 14000];
+    const DUR = [this.calm() ? 2700 : 4300, 4600, 6000, 17150, 2700, 14000];
     const sc = [0, 1, 3, 2, 5][n % 5];
     (this._acT || []).forEach(clearTimeout); this._acT = [];
+    this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
+    try { if (this._stage) this._stage.classList.toggle('ampjoin', this._joinAmp); } catch (e) {}
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
-    if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), 1250));
+    if (sc === 0) { this._gathered = false; this._acT.push(setTimeout(() => this.gatherAmp(), 2200)); }
+    if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), this._joinAmp ? 1100 : 1250));
     clearInterval(this._mxI);
     if (sc === 3) { this._acT.push(setTimeout(() => this.cubeCull(), 20)); this._acT.push(setTimeout(() => this.matrixWords(), 60)); this._acT.push(setTimeout(() => { const e = this._stage && this._stage.querySelector('.ph4.cf'); if (e) e.classList.add('go'); }, 11400)); }
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
