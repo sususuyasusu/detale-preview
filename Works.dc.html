@@ -20,7 +20,7 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Shippori+Mincho:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Shippori+Mincho:wght@400;500;600;700&amp;family=Inter+Tight:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#F0EDE6}
 a{color:inherit;text-decoration:none}
@@ -192,6 +192,304 @@ h1.gooT{overflow:visible!important}
 header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 /* 軽量化 */
 /* 画面上端のつなぎ */
+/* ===== SW: 最初の場面より下（細い線・大きな文字・余白で見せる） ===== */
+:root{--sw-ink:#161514;--sw-bg:#F0EDE6;--sw-dim:#A39E95;--sw-line:rgba(22,21,20,.9);--sw-hair:rgba(22,21,20,.22);--sw-f:'Inter Tight','Zen Kaku Gothic New',sans-serif;--sw-bar:38px}
+.sw-bar,.sw-lead,.sw-blocks,.sw-state,.sw-dark,.sw-exp,.sw-packs,.sw-why,.sw-index,.sw-flow,.sw-co,.sw-marq,.sw-foot{font-family:var(--sw-f);color:var(--sw-ink);font-feature-settings:"palt" 1}
+.sw-bar a,.sw-lead a,.sw-state a,.sw-dark a,.sw-exp a,.sw-packs a,.sw-why a,.sw-index a,.sw-flow a,.sw-co a,.sw-foot a{color:inherit;text-decoration:none}
+.sw-label{margin:0;font-size:14px;line-height:1.3;font-weight:400;letter-spacing:0}
+.sw-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap}
+.sw-link{font-size:14px;white-space:nowrap}
+.sw-link:hover,.sw-c2 a:hover,.sw-c3:hover{text-decoration:underline;text-underline-offset:3px}
+.sw-en{font-family:'Inter Tight',sans-serif}
+.sw-huge{margin:0;font-weight:500;font-size:clamp(46px,8.2vw,138px);line-height:.94;letter-spacing:-.045em}
+.sw-big{margin:0;font-weight:500;font-size:clamp(28px,5.1vw,84px);line-height:1.1;letter-spacing:-.04em}
+.sw-mid{margin:0;font-weight:500;font-size:clamp(24px,2.6vw,40px);line-height:1.25;letter-spacing:-.03em}
+.sw-huge.sw-en{letter-spacing:-.035em;line-height:.88}
+
+/* 上の帯 */
+.sw-bar{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:1fr 1.25fr .7fr 1fr;align-items:center;gap:0 16px;height:var(--sw-bar);padding:0 16px;background:var(--sw-bg);font-size:14px;border-bottom:1px solid var(--sw-line);margin-top:14px;animation:fadeIn 1s both 3.1s}
+.sw-bar .sw-c4{text-align:right}
+.sw-bar .sw-c3{justify-self:center}
+
+/* 一行ずつ下から現れる */
+.sw-ln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.sw-lni{display:block;transform:translateY(108%);transition:transform 1.1s cubic-bezier(.19,1,.22,1)}
+.sw-split.in .sw-lni{transform:none}
+.sw-rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform 1.1s cubic-bezier(.19,1,.22,1)}
+.sw-rv.in{opacity:1;transform:none}
+.sw-clip{display:block;overflow:hidden;clip-path:inset(100% 0 0 0);transition:clip-path 1.4s cubic-bezier(.77,0,.18,1)}
+.sw-clip.in{clip-path:inset(0)}
+.sw-fn{font-size:.24em;vertical-align:top;position:relative;top:.35em;margin:0 .2em;letter-spacing:0;font-weight:400}
+
+/* 導入 */
+.sw-lead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);min-height:calc(100vh - var(--sw-bar));border-bottom:1px solid var(--sw-line)}
+.sw-lead-l{border-right:1px solid var(--sw-line);padding:22px 16px;display:flex;align-items:flex-end}
+.sw-lead-r{padding:22px 16px;display:flex;flex-direction:column;justify-content:flex-end;gap:28px;position:relative}
+.sw-kicker{position:absolute;left:16px;top:22px;margin:0;font-size:14px;max-width:22em;line-height:1.6}
+.sw-lead .sw-huge{font-size:clamp(52px,9.6vw,168px);line-height:1.02;letter-spacing:-.06em}
+.sw-lead-foot{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:14px}
+.sw-lead-foot .sw-en{font-size:clamp(18px,1.8vw,26px);letter-spacing:-.02em}
+.sw-meta{margin:0;display:grid;grid-template-columns:auto 1fr;gap:14px 28px;font-size:14px;line-height:1.35}
+.sw-meta dt{font-weight:400}
+.sw-meta dd{margin:0;display:flex;flex-direction:column}
+.sw-meta dd a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* 散らばった作例 → 一列 */
+.sw-blocks{height:118vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden}
+.sw-blk-row{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:flex;align-items:center;justify-content:center;gap:1.2vw;padding:0 16px}
+.sw-blk{display:block;height:min(34vh,26vw);aspect-ratio:calc(var(--w) * 1.5);flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
+.sw-blk img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* 大きな文章 */
+.sw-state{padding:26px 16px 0;border-bottom:1px solid var(--sw-line)}
+.sw-state .sw-big{margin-top:64px;max-width:21.5em}
+.sw-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:120px;padding:18px 0 22px;border-top:1px solid var(--sw-hair);font-size:14px}
+.sw-notes p{margin:0}
+.sw-notes b{font-family:'Inter Tight',sans-serif;font-weight:500;font-size:clamp(28px,3vw,46px);letter-spacing:-.04em;display:block;margin:10px 0 4px;line-height:1}
+
+/* 黒い面 */
+.sw-dark{--p:0;position:relative;padding:0;margin:0}
+.sw-dark-in{background:var(--sw-ink);color:var(--sw-bg);padding:26px 16px 120px;clip-path:inset(0 calc((1 - var(--p)) * 9%) round 0);transform:translateZ(0)}
+.sw-dark .sw-huge{margin:48vh 0 80px}
+.sw-w{display:block;color:inherit}
+.sw-ph{display:block;overflow:hidden;background:#24221f}
+.sw-ph img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
+.sw-w:hover .sw-ph img{transform:scale(1.04)}
+.sw-wide .sw-ph img{aspect-ratio:21/9}
+.sw-white img{background:#fff}
+.sw-top img{object-position:top}
+.sw-cap{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding-top:10px}
+.sw-cap span:last-child{color:#8F8A81}
+.sw-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:120px 16px;margin-top:120px;align-items:start}
+.sw-cols .sw-low{margin-top:22vh}
+.sw-cols .sw-dn{margin-top:10vh}
+
+/* サービス（ピン留め） */
+.sw-exp{height:calc(var(--n) * 70vh + 30vh);position:relative;border-bottom:1px solid var(--sw-line)}
+.sw-exp-pin{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:grid;grid-template-columns:minmax(0,5fr) minmax(0,2.6fr) minmax(0,3.4fr);gap:0}
+.sw-exp-l{padding:22px 16px;display:flex;flex-direction:column;gap:30px}
+.sw-exp-l .sw-huge{font-size:clamp(56px,9.4vw,160px)}
+.sw-line{display:flex;justify-content:space-between;align-items:center;max-width:340px;border-top:1px solid var(--sw-line);padding-top:10px;font-size:14px}
+.sw-line span:last-child{transition:transform .4s cubic-bezier(.19,1,.22,1)}
+.sw-line:hover span:last-child{transform:translateX(6px)}
+.sw-exp-note{margin:auto 0 0;font-size:14px;line-height:1.7;max-width:24em}
+.sw-exp-m{padding:22px 16px;display:flex;flex-direction:column}
+.sw-count{margin:0;font-size:14px;font-family:'Inter Tight',sans-serif}
+.sw-exp-list{margin-top:auto;margin-bottom:auto}
+.sw-exp-h{margin:0 0 12px;display:grid;grid-template-columns:8em 1fr;font-size:14px}
+.sw-exp-list ol{list-style:none;margin:0 0 0 8em;padding:0;font-size:14px;line-height:1.5}
+.sw-exp-list li a{color:var(--sw-dim);transition:color .35s}
+.sw-exp-list li.on a{color:var(--sw-ink)}
+.sw-exp-list li span{display:none}
+.sw-exp-list li.on span{display:block;margin:6px 0 10px;color:var(--sw-ink);font-size:12px;line-height:1.6;max-width:18em}
+.sw-exp-r{position:relative;overflow:hidden;background:#d9d5cc}
+.sw-exp-r img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(100% 0 0 0);transition:clip-path 1.1s cubic-bezier(.77,0,.18,1)}
+.sw-exp-r img.on{clip-path:inset(0);z-index:1}
+.sw-exp-r img.was{clip-path:inset(0)}
+
+/* パック料金 */
+.sw-packs{padding:26px 16px 120px;border-bottom:1px solid var(--sw-line)}
+.sw-packs .sw-row{margin-bottom:56px}
+.sw-pk{display:grid;grid-template-columns:4em minmax(0,1.6fr) 7em minmax(0,1.2fr);gap:16px;align-items:end;padding:26px 0 22px;border-top:1px solid var(--sw-line);transition:background .4s}
+.sw-pk:last-of-type{border-bottom:1px solid var(--sw-line)}
+.sw-pk:hover{background:rgba(22,21,20,.04)}
+.sw-pk-no{font-size:14px;align-self:start}
+.sw-pk-name{font-size:clamp(18px,1.7vw,24px);font-weight:500;letter-spacing:-.02em;line-height:1.35}
+.sw-pk-name small{display:block;font-size:13px;font-weight:400;letter-spacing:0;color:#6E6A62;margin-top:8px;line-height:1.6}
+.sw-pk-due{font-size:14px}
+.sw-pk-price{display:flex;justify-content:flex-end;align-items:baseline;gap:4px;white-space:nowrap}
+.sw-packs .sw-price{font-family:'Inter Tight',sans-serif!important;font-weight:500;font-size:clamp(44px,5.4vw,92px)!important;line-height:.9!important;letter-spacing:-.05em}
+.sw-yen{font-size:clamp(16px,1.4vw,22px);font-weight:500}
+.sw-tax{font-size:12px;color:#6E6A62}
+.sw-packs .sw-pk-dark{background:var(--sw-ink);color:var(--sw-bg);padding-left:14px;padding-right:14px;margin:0 -14px}
+.sw-packs .sw-pk-dark:hover{background:#000}
+.sw-pk-dark small,.sw-pk-dark .sw-tax{color:#B8B2A6}
+
+/* 比較 */
+.sw-why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);border-bottom:1px solid var(--sw-line)}
+.sw-why-l{border-right:1px solid var(--sw-line);padding:26px 16px}
+.sw-why-r{padding:26px 16px 120px}
+.sw-why-r .sw-big{margin:80px 0 80px}
+.sw-tbl{overflow-x:auto}
+.sw-tbl table{width:100%;min-width:600px;border-collapse:collapse;font-size:14px;line-height:1.5}
+.sw-tbl th{font-weight:400;text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--sw-line)}
+.sw-tbl td{padding:22px 12px 22px 0;border-bottom:1px solid var(--sw-hair);vertical-align:top}
+.sw-tbl .sw-us{background:var(--sw-ink);color:var(--sw-bg);padding-left:12px}
+
+/* 取引先 */
+.sw-index{padding:26px 16px 120px;border-bottom:1px solid var(--sw-line)}
+.sw-index .sw-row{margin-bottom:56px}
+.sw-ix{display:grid;grid-template-columns:4em minmax(0,1.3fr) minmax(0,1.6fr) auto 7em;gap:16px;align-items:center;padding:18px 0;border-top:1px solid var(--sw-hair);transition:padding .5s cubic-bezier(.19,1,.22,1)}
+.sw-ix:last-child{border-bottom:1px solid var(--sw-hair)}
+.sw-ix-no{font-size:14px}
+.sw-ix-name{font-size:clamp(22px,2.6vw,40px);font-weight:500;letter-spacing:-.04em;line-height:1.1}
+.sw-ix-tags{font-size:13px;line-height:1.6;color:#6E6A62}
+.sw-ix-th{display:flex;gap:4px}
+.sw-ix-th img{width:52px;height:52px;object-fit:cover;filter:grayscale(1) contrast(1.05);opacity:.75;transition:filter .5s,opacity .5s}
+.sw-ix:hover .sw-ix-th img{filter:none;opacity:1}
+.sw-ix:hover{padding-left:10px}
+.sw-ix-n{font-size:14px;text-align:right}
+
+/* 流れ */
+.sw-flow{padding:26px 16px 120px;border-bottom:1px solid var(--sw-line)}
+.sw-flow .sw-huge{margin:100px 0 64px}
+.sw-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--sw-line)}
+.sw-steps li{padding:18px 16px 30px 0;border-right:1px solid var(--sw-hair)}
+.sw-steps li+li{padding-left:16px}
+.sw-steps li:last-child{border-right:0}
+.sw-num{display:block;font-family:'Inter Tight',sans-serif;font-weight:500;font-size:clamp(56px,7vw,118px);line-height:.85;letter-spacing:-.06em}
+.sw-steps h3{margin:28px 0 8px;font-size:20px;font-weight:500;letter-spacing:-.02em}
+.sw-steps p{margin:0;font-size:14px;line-height:1.75}
+.sw-terms{margin:72px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 16px;font-size:14px;border-top:1px solid var(--sw-hair);padding-top:14px}
+.sw-terms dd{margin:0;display:flex;flex-direction:column;gap:4px}
+.sw-terms b{font-weight:500;font-size:clamp(18px,1.7vw,26px);letter-spacing:-.03em}
+
+/* 会社 */
+.sw-co{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);border-bottom:1px solid var(--sw-line)}
+.sw-co-ph{min-height:560px;border-right:1px solid var(--sw-line)}
+.sw-co-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.sw-co-tx{padding:26px 16px 32px;display:flex;flex-direction:column;justify-content:space-between;gap:48px}
+.sw-meta-co{border-top:1px solid var(--sw-line);padding-top:16px}
+
+/* 流れる取引先名 */
+.sw-marq{overflow:hidden;border-bottom:1px solid var(--sw-line);padding:18px 0}
+.sw-marq-in{display:flex;width:max-content;gap:28px;animation:marqL 46s linear infinite;font-size:clamp(22px,2.4vw,36px);font-weight:500;letter-spacing:-.03em;white-space:nowrap}
+
+/* 足元 */
+.sw-foot{padding:26px 16px 0;overflow:hidden;position:relative}
+.sw-foot-top{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin:80px 0 120px}
+.sw-foot-cta{display:flex;flex-direction:column;gap:18px;min-width:min(100%,340px)}
+.sw-foot-cta .sw-line{font-size:16px}
+.sw-foot-lb,.sw-foot-bt{font-size:14px;border-top:1px solid var(--sw-line);padding:10px 0}
+.sw-mark{margin:0 -.02em;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Inter Tight',sans-serif;font-weight:600;font-size:13.1vw;line-height:.8;letter-spacing:-.065em;white-space:nowrap;padding:.08em 0 .04em}
+.sw-mark .sw-amp{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:0;font-size:1.08em;line-height:.74}
+.sw-mk{display:inline-block;transform:translateY(105%);transition:transform 1.3s cubic-bezier(.19,1,.22,1)}
+.sw-mark.in .sw-mk{transform:none}
+.sw-mark.in .sw-mk:nth-child(2){transition-delay:.08s}
+.sw-mark.in .sw-mk:nth-child(3){transition-delay:.16s}
+.sw-mark{overflow:hidden}
+
+/* スマホ・タブレット */
+@media (max-width: 860px){
+  .sw-bar{grid-template-columns:1fr auto;height:auto;padding:9px 16px;gap:6px 16px}
+  .sw-bar .sw-c2{grid-column:1 / -1;grid-row:2;font-size:13px;white-space:nowrap;overflow-x:auto}
+  .sw-bar .sw-c3{justify-self:end}
+  .sw-bar .sw-c4{display:none}
+  .sw-lead{grid-template-columns:1fr;min-height:0}
+  .sw-lead-l{border-right:0;border-top:1px solid var(--sw-hair);order:2;padding:18px 16px 26px}
+  .sw-lead-r{padding:22px 16px 30px;min-height:72vh}
+  .sw-blocks{height:84vh}
+  .sw-blk-row{gap:6px}
+  .sw-blk{height:22vw}
+  .sw-state .sw-big{margin-top:40px}
+  .sw-notes{grid-template-columns:1fr;margin-top:64px}
+  .sw-dark .sw-huge{margin:30vh 0 48px}
+  .sw-cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 10px;margin-top:56px}
+  .sw-cols .sw-low{margin-top:12vh}
+  .sw-cols .sw-dn{margin-top:0}
+  .sw-cap{flex-direction:column;gap:2px;font-size:12px}
+  .sw-exp{height:auto}
+  .sw-exp-pin{position:relative;top:0;height:auto;grid-template-columns:1fr}
+  .sw-exp-m{padding-top:0}
+  .sw-count{display:none}
+  .sw-exp-h{display:none}
+  .sw-exp-list ol{margin:24px 0 0;border-top:1px solid var(--sw-line)}
+  .sw-exp-list li{padding:14px 0;border-bottom:1px solid var(--sw-hair)}
+  .sw-exp-list li a{color:var(--sw-ink);font-size:20px;font-weight:500;letter-spacing:-.02em}
+  .sw-exp-list li span{display:block;margin:6px 0 0;font-size:12px;line-height:1.6;color:#6E6A62}
+  .sw-exp-r{height:62vw;margin:0 16px 40px}
+  .sw-exp-note{margin-top:0}
+  .sw-pk{grid-template-columns:3em minmax(0,1fr);gap:10px 12px}
+  .sw-pk-due{grid-column:2}
+  .sw-pk-price{grid-column:1 / -1;justify-content:flex-start}
+  .sw-why{grid-template-columns:1fr}
+  .sw-why-l{border-right:0;padding-bottom:0}
+  .sw-why-r .sw-big{margin:40px 0 48px}
+  .sw-tbl table{min-width:0;font-size:12px}
+  .sw-tbl th,.sw-tbl td{padding:12px 6px 12px 0}
+  .sw-tbl .sw-us{padding-left:6px}
+  .sw-ix{grid-template-columns:3em minmax(0,1fr) auto;gap:6px 12px}
+  .sw-ix-tags{grid-column:2 / -1}
+  .sw-ix-th{display:none}
+  .sw-ix-n{grid-column:3;grid-row:1}
+  .sw-flow .sw-huge{margin:56px 0 40px}
+  .sw-steps{grid-template-columns:1fr 1fr}
+  .sw-steps li{padding:16px 12px 26px 0;border-bottom:1px solid var(--sw-hair)}
+  .sw-steps li+li{padding-left:0}
+  .sw-steps li:nth-child(odd){border-right:1px solid var(--sw-hair)}
+  .sw-steps li:nth-child(even){padding-left:12px;border-right:0}
+  .sw-terms{grid-template-columns:1fr 1fr}
+  .sw-terms dt{grid-column:1 / -1}
+  .sw-co{grid-template-columns:1fr}
+  .sw-co-ph{min-height:62vw;border-right:0}
+  .sw-foot-top{margin:48px 0 72px}
+  .sw-foot-lb,.sw-foot-bt{flex-direction:column;gap:4px}
+}
+@media (prefers-reduced-motion: reduce){
+  .sw-lni,.sw-mk{transform:none!important;transition:none!important}
+  .sw-rv{opacity:1!important;transform:none!important;transition:none!important}
+  .sw-clip{clip-path:none!important;transition:none!important}
+  .sw-blk{transform:none!important}
+  .sw-dark-in{clip-path:none!important}
+  .sw-marq-in{animation:none!important}
+}
+/* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
+.curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
+.curhide .bb{font-family:'Inter Tight',sans-serif!important;font-weight:500;letter-spacing:-.02em}
+.sw-bar.sw-sub{margin-top:0;animation:none}
+.sw-bar a[aria-current="page"]{text-decoration:underline;text-underline-offset:3px}
+.goo-field,.gtb,.gcb{display:none!important}
+
+/* ページ見出し */
+.sw-phero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);min-height:min(80vh,780px);border-bottom:1px solid var(--sw-line);font-family:var(--sw-f);color:var(--sw-ink)}
+.sw-phero-l{border-right:1px solid var(--sw-line);padding:22px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.sw-phero-tx p{margin:0 0 12px;font-size:14px;line-height:1.85;max-width:27em}
+.sw-phero-tx p.sw-lede{font-size:clamp(18px,1.6vw,22px);font-weight:500;line-height:1.55;letter-spacing:-.02em}
+.sw-phero-r{padding:22px 16px;display:flex;flex-direction:column;justify-content:flex-end;gap:22px}
+.sw-phero .sw-huge{font-size:clamp(76px,17vw,300px);line-height:.8;letter-spacing:-.06em}
+.sw-phero .sw-lead-foot{border-top:1px solid var(--sw-hair);padding-top:10px}
+
+/* 区画の大見出し */
+.curhide .sw-sh{font-family:'Inter Tight',sans-serif!important;font-weight:500!important;font-size:clamp(52px,8vw,132px)!important;line-height:.9!important;letter-spacing:-.045em!important;filter:none!important}
+
+/* 金色の札 → 角かっこの小さな文字 */
+.curhide .sw-tag{background:none!important;color:inherit!important;padding:0!important;font-size:14px!important;letter-spacing:0!important}
+.curhide .sw-tag::before{content:"["}
+.curhide .sw-tag::after{content:"]"}
+.curhide .card > span.bb,.curhide .pimg + span.bb{background:var(--sw-bg)!important;color:var(--sw-ink)!important;padding:3px 7px!important;font-size:13px!important}
+.curhide .card > span.bb::before,.curhide .card > span.bb::after,.curhide .pimg + span.bb::before,.curhide .pimg + span.bb::after{content:none!important}
+.curhide section[aria-label="取引先一例"]{background:transparent!important;border-top:1px solid var(--sw-line);border-bottom:1px solid var(--sw-line);padding:18px 0!important}
+.curhide section[aria-label="取引先一例"] > div{font-size:clamp(22px,2.4vw,36px)!important;font-weight:500!important;letter-spacing:-.03em;gap:28px!important}
+
+/* 切り替えボタン・絞り込み・選択肢 */
+.curhide .tab,.curhide .chip,.curhide .svc{font-family:var(--sw-f)!important;border-radius:0;transition:background .3s,color .3s}
+.curhide .tab,.curhide .chip{font-size:15px!important;letter-spacing:-.01em}
+.curhide [aria-selected="true"],.curhide [aria-pressed="true"]{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
+.curhide [aria-selected="false"],.curhide [aria-pressed="false"]{background:transparent!important;color:var(--sw-ink)!important}
+.curhide .chip2{border:0!important;background:none!important;padding:0!important;font-size:13px!important;color:#6E6A62!important}
+.curhide .chip2 + .chip2::before{content:"/ ";margin-left:2px}
+.curhide .btn{border-radius:0}
+.curhide .fld{border:0!important;border-bottom:1px solid var(--sw-ink)!important;background:transparent!important;border-radius:0!important;font-family:var(--sw-f)!important;padding:10px 0!important}
+.curhide textarea.fld{border:1px solid var(--sw-ink)!important;padding:10px!important}
+
+/* 実績の取引先ごとの段 */
+.curhide .cnum{font-family:'Inter Tight',sans-serif!important;font-weight:500!important;letter-spacing:-.06em}
+.curhide .case{border-top:1px solid var(--sw-hair)}
+.curhide .case h3{font-weight:500!important;letter-spacing:-.04em}
+.curhide h2,.curhide h3{font-family:var(--sw-f)}
+
+@media (max-width: 860px){
+  .sw-phero{grid-template-columns:1fr;min-height:0}
+  .sw-phero-l{border-right:0;order:2;border-top:1px solid var(--sw-hair);padding:18px 16px 26px}
+  .sw-phero-r{min-height:56vh;padding:22px 16px 26px}
+}
+.curhide .cnum{color:var(--sw-ink)!important}
+.curhide .chip:hover,.curhide .tab:hover{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
+.pour{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
+.pour svg{stroke:var(--sw-bg)}
+.pour svg text{fill:var(--sw-bg)}
+.curhide .fld:focus{box-shadow:none!important;border-bottom-width:2px!important}
+
 </style>
 </helmet>
 <div class="curhide" style="background: #F0EDE6; color: #161514; font-family: 'Shippori Mincho', serif; overflow: clip;">
@@ -200,57 +498,32 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   <div class="gcur" aria-hidden="true"><span ref="{{cur3}}" class="cb" style="width: 12px; height: 12px; margin: -6px 0 0 -6px; animation-delay: -5.2s;"></span><span ref="{{cur2}}" class="cb" style="width: 16px; height: 16px; margin: -8px 0 0 -8px; animation-delay: -3.5s;"></span><span ref="{{cur1}}" class="cb" style="width: 21px; height: 21px; margin: -10.5px 0 0 -10.5px; animation-delay: -1.7s;"></span><span ref="{{cur0}}" class="cb" style="width: 28px; height: 28px; margin: -14px 0 0 -14px;"></span></div>
   <sc-if value="{{pourOn}}" hint-placeholder-val="{{ false }}"><div class="pour" aria-hidden="true"><div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#161514" stroke-width="3"><path d="M60 4 L114 40 L60 76 L6 40 Z"></path><text x="60" y="49" text-anchor="middle" fill="#161514" stroke="none" style="font-family: 'Cormorant Garamond', serif; font-size: 26px;">D&amp;W</text></svg><span class="bb" style="font-size: 44px;">WORKS</span></div></div></sc-if>
 
-  <header style="position: sticky; top: 0; z-index: 30; background: #F0EDE6; display: flex; flex-wrap: wrap; align-items: stretch; border-bottom: 2px solid #161514;">
-    <a href="Final.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; flex: 1 1 260px;">
-      <svg viewBox="0 0 120 80" width="54" height="36" fill="none" stroke="#161514" stroke-width="3" aria-hidden="true"><path d="M60 4 L114 40 L60 76 L6 40 Z"></path><text x="60" y="49" text-anchor="middle" fill="#161514" stroke="none" style="font-family: 'Cormorant Garamond', serif; font-size: 26px;">D&amp;W</text></svg>
-      <span class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; display: inline-block;"><span class="bb" style="font-size: 28px;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 500; color: inherit;">&amp;</span>WORKS</span><span class="bb glowover" aria-hidden="true" style="font-size: 28px;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 500; color: inherit;">&amp;</span>WORKS</span></span>
-    </a>
-    <nav aria-label="メインメニュー" style="display: flex; flex-wrap: wrap;">
-      <a class="nv" href="Final.dc.html#about" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2);"><span class="bb" style="font-size: 18px;">ABOUT</span></a>
-      <a class="nv" href="Works.dc.html" aria-current="page" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2); background: #B0986A;"><span class="bb" style="font-size: 18px;">WORKS</span></a>
-      <a class="nv" href="Service.dc.html" style="padding: 14px 18px; border-left: 1px solid rgba(22,21,20,.2);"><span class="bb" style="font-size: 18px;">SERVICE</span></a>
-      <a class="btn" href="Contact.dc.html" style="padding: 14px 22px; background: #161514; color: #F0EDE6;"><span class="bb" style="font-size: 18px; color: inherit;">CONTACT →</span></a>
-    </nav>
-  </header>
+  <nav class="sw-bar sw-sub" aria-label="サイトメニュー">
+    <a class="sw-c1" href="Final.dc.html">DETALE &amp; WORKS [Tokyo]</a>
+    <span class="sw-c2"><a href="Final.dc.html#about">About</a> / <a href="Works.dc.html" aria-current="page">Works</a> / <a href="Service.dc.html">Service</a> / <a href="Final.dc.html#workflow">Flow</a> / <a href="Final.dc.html#company">Company</a></span>
+    <a class="sw-c3" href="Contact.dc.html">[Contact]</a>
+    <span class="sw-c4">Food Design Studio ©2026</span>
+  </nav>
 
   <main id="main">
-  <section class="hero" style="min-height: 420px; padding: 72px 16px 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; background-image: linear-gradient(to right, rgba(22,21,20,.12) 1px, transparent 1px); background-size: calc(100% / 6) 100%;">
-    <sc-if value="{{hs0}}" hint-placeholder-val="{{ false }}">
-      <div class="hscene" aria-hidden="true" style="filter: url(#dwGooS);">
-        <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
-          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
-        </sc-for>
-      </div>
-    </sc-if>
-    <sc-if value="{{hs1}}" hint-placeholder-val="{{ false }}">
-      <div class="hscene" aria-hidden="true"><span class="bigamp">&amp;</span></div>
-    </sc-if>
-    <sc-if value="{{hs2}}" hint-placeholder-val="{{ false }}">
-      <div class="hscene htiles" aria-hidden="true">
-        <sc-for list="{{tiles}}" as="t" hint-placeholder-count="0">
-          <span class="tile" style="background: {{t.bg}}; color: {{t.fg}}; border-radius: {{t.radius}}; --rot: {{t.rot}}; animation-delay: {{t.delay}};">&amp;</span>
-        </sc-for>
-      </div>
-    </sc-if>
-    <svg aria-hidden="true" width="0" height="0" style="position: absolute;"><filter id="dwGooS"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"></feGaussianBlur><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"></feColorMatrix></filter></svg>
-    <div class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0;">
-      <h1 class="gooT bb" style="margin: 0; font-size: clamp(56px, 14vw, 220px); line-height: .82; display: flex; overflow: hidden;"><span class="sr-only">制作実績 WORKS</span><span aria-hidden="true" class="ch" style="animation-delay: .05s;">W</span><span aria-hidden="true" class="ch" style="animation-delay: .1s;">O</span><span aria-hidden="true" class="ch" style="animation-delay: .15s;">R</span><span aria-hidden="true" class="ch" style="animation-delay: .2s;">K</span><span aria-hidden="true" class="ch" style="animation-delay: .25s;">S</span><span class="gtb" aria-hidden="true" style="left: 0; top: 36%; width: 0.28em; height: 0.28em; --sx: 3.80em; --ex: 6.36em; --dy: -0.01em; --d: 6.7s; --c: 11.2s; --dl: -1.0s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 26%; width: 0.30em; height: 0.30em; --sx: 4.06em; --ex: 5.65em; --dy: 0.07em; --d: 9.6s; --c: 9.1s; --dl: -2.0s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 43%; width: 0.44em; height: 0.44em; --sx: 3.85em; --ex: 6.87em; --dy: -0.18em; --d: 9.6s; --c: 11.7s; --dl: -6.8s;"></span><span class="gcb" aria-hidden="true"></span></h1>
-    </div>
-    <p style="margin: 0; max-width: 440px; font-size: 15px; line-height: 1.9; animation: fadeUp .8s both .4s;">大手外食企業から個人店まで。ロイヤルホストを中心とした各ブランドの下支えや、125年以上続く食品企業の鮮度を保つ仕事も手がけています。</p>
+  <section class="sw-phero" aria-label="ページ見出し">
+    <div class="sw-phero-l"><p class="sw-label">02 — Works / 制作実績</p><div class="sw-phero-tx sw-rv"><p class="sw-lede">大手外食企業から個人店まで。</p><p>大手外食企業から個人店まで。ロイヤルホストを中心とした各ブランドの下支えや、125年以上続く食品企業の鮮度を保つ仕事も手がけています。</p></div></div>
+    <div class="sw-phero-r"><h1 class="sw-huge sw-en sw-split">Works</h1><div class="sw-lead-foot"><span>制作実績 — 取引先ごとの事例と、種類別の作例</span><a class="sw-cue" href="#sw-body">Scroll to explore <span aria-hidden="true">↓</span></a></div></div>
   </section>
+  <div id="sw-body"></div>
 
     <section id="cases" class="cases" style="padding: 20px 16px 80px;">
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 18px;">
-      <h2 class="gooT bb" style="margin: 0; font-size: clamp(64px, 9vw, 140px); line-height: .85;">CLIENT CASES<span class="gtb" aria-hidden="true" style="left: 0; top: 49%; width: 0.28em; height: 0.28em; --sx: 1.73em; --ex: 6.11em; --dy: 0.15em; --d: 9.1s; --c: 11.2s; --dl: -2.7s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 15%; width: 0.30em; height: 0.30em; --sx: 1.05em; --ex: 5.64em; --dy: -0.10em; --d: 6.8s; --c: 9.5s; --dl: -4.1s;"></span><span class="gtb" aria-hidden="true" style="left: 0; top: 33%; width: 0.35em; height: 0.35em; --sx: 2.99em; --ex: 5.49em; --dy: -0.08em; --d: 7.9s; --c: 8.5s; --dl: -5.2s;"></span><span class="gcb" aria-hidden="true"></span></h2>
+      <h2 class="sw-sh sw-split" style="margin: 0; font-size: clamp(64px, 9vw, 140px); line-height: .85;">Client Cases</h2>
       <p style="margin: 0; max-width: 460px; font-size: 15px; line-height: 1.9;">取引先ごとに、手がけた制作物をまとめました。写真は横にスクロールできます。</p>
     </div>
     <article class="case" id="case-01">
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">01</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">HEIJOEN</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">平城苑</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">関東の老舗焼肉専門店。売上上位の浅草店で、郊外店とは違うテイストとインバウンドを見据えた表現を求められ、継続してご依頼をいただいています。同じブランドの表現を守りながら、高単価・低単価・地域性に合わせた販促物を制作しました。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ グランドメニュー</span><span class="chip2">◆ ランチメニュー</span><span class="chip2">◆ ポスター</span><span class="chip2">◆ 商品撮影</span><span class="chip2">◆ インバウンド対応</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">グランドメニュー</span><span class="chip2">ランチメニュー</span><span class="chip2">ポスター</span><span class="chip2">商品撮影</span><span class="chip2">インバウンド対応</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">8 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 8 点 ／ サービス 5 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="平城苑 の制作物"><img width="707" height="1000" src="_blob/90cb0bfb0bcdf1c830f5b2e4e28413e6.jpg" alt="平城苑 の制作物 1" loading="lazy"><img width="706" height="1000" src="_blob/721343915fad6a8fba7f617043569af3.jpg" alt="平城苑 の制作物 2" loading="lazy"><img width="1000" height="684" src="_blob/4bcc831633d78628854b9337d6a903dd.jpg" alt="平城苑 の制作物 3" loading="lazy"><img width="1000" height="684" src="_blob/959ffd7d7fc1b956c15fba8f7ed7d509.jpg" alt="平城苑 の制作物 4" loading="lazy"><img width="1000" height="684" src="_blob/bfe58e5981ee9d417c40e5008480777c.jpg" alt="平城苑 の制作物 5" loading="lazy"><img width="1000" height="684" src="_blob/0400c928aca79bfc910cd7936c104416.jpg" alt="平城苑 の制作物 6" loading="lazy"><img width="1000" height="667" src="_blob/22bf6f4990f2f1f85e314654db71972a.jpg" alt="平城苑 の制作物 7" loading="lazy"><img width="1600" height="1067" src="_blob/fb25269849194d10f09c19ae7876c673.jpg" alt="平城苑 の制作物 8" loading="lazy"></div>
@@ -259,9 +532,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">02</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">SABOTEN</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">新宿さぼてん</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">とんかつ　TONKATSU</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">とんかつ　TONKATSU</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">大手で歴史あるブランドの、旧来のデザインのテコ入れとして、レストランのすべての販促物を刷新。ブランドの物語を活かしながら写真とデザインの質を一つずつ積み上げ、前年の売上を上回る成果に協力しました。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 全販促物の刷新</span><span class="chip2">◆ グランドメニュー</span><span class="chip2">◆ 季節ポスター</span><span class="chip2">◆ 店頭コルトン</span><span class="chip2">◆ お弁当・お惣菜メニュー</span><span class="chip2">◆ 商品撮影</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">全販促物の刷新</span><span class="chip2">グランドメニュー</span><span class="chip2">季節ポスター</span><span class="chip2">店頭コルトン</span><span class="chip2">お弁当・お惣菜メニュー</span><span class="chip2">商品撮影</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">11 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 11 点 ／ サービス 6 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="新宿さぼてん の制作物"><img width="707" height="1000" src="_blob/2bc1f57557baf874bded1109c3515bcd.jpg" alt="新宿さぼてん の制作物 1" loading="lazy"><img width="1000" height="1000" src="_blob/e9f637a7e60d62a35c43225559495a22.jpg" alt="新宿さぼてん の制作物 2" loading="lazy"><img width="1000" height="1000" src="_blob/05f05beb352cf6c7356d3244797d8c67.jpg" alt="新宿さぼてん の制作物 3" loading="lazy"><img width="1000" height="1000" src="_blob/33d0b3e7b03d562a28f0712422ff9842.jpg" alt="新宿さぼてん の制作物 4" loading="lazy"><img width="706" height="1000" src="_blob/274172c3869fe74cee452cc6a913d55c.jpg" alt="新宿さぼてん の制作物 5" loading="lazy"><img width="999" height="1000" src="_blob/8e7a4b648179c286f775bfb5177a592e.jpg" alt="新宿さぼてん の制作物 6" loading="lazy"><img width="1000" height="653" src="_blob/d7d3fb5641d9b3284093c8da99fd51cb.jpg" alt="新宿さぼてん の制作物 7" loading="lazy"><img width="1000" height="707" src="_blob/09f4b881bccbfd9d29b21c19efba760d.jpg" alt="新宿さぼてん の制作物 8" loading="lazy"><img width="1000" height="1000" src="_blob/33cb6ad00e84368132281021040254c9.jpg" alt="新宿さぼてん の制作物 9" loading="lazy"><img width="1000" height="667" src="_blob/e0c3de8010835582b64aa92dab9f4265.jpg" alt="新宿さぼてん の制作物 10" loading="lazy"><img width="1000" height="667" src="_blob/d883edb1115d832424db4f1b0d06595f.jpg" alt="新宿さぼてん の制作物 11" loading="lazy"></div>
@@ -270,9 +543,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">03</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">TOKYO YAKINIKU</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">ITTOUYA</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">焼肉　YAKINIKU</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">黒を基調にした世界観で、ブランドポスター、メニュー、料理撮影までを一貫して制作。</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ ブランドポスター</span><span class="chip2">◆ メニュー</span><span class="chip2">◆ 料理撮影</span><span class="chip2">◆ 世界観づくり</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">ブランドポスター</span><span class="chip2">メニュー</span><span class="chip2">料理撮影</span><span class="chip2">世界観づくり</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">10 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 10 点 ／ サービス 4 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="ITTOUYA の制作物"><img width="392" height="826" src="_blob/6563568cc363b185fff5891e505354c0.jpg" alt="ITTOUYA の制作物 1" loading="lazy"><img width="381" height="826" src="_blob/81b241f2c176fecd461a86839ae75e12.jpg" alt="ITTOUYA の制作物 2" loading="lazy"><img width="393" height="826" src="_blob/10c7d0a6afc24afa190b9381a0739a0d.jpg" alt="ITTOUYA の制作物 3" loading="lazy"><img width="707" height="1000" src="_blob/93570b01a3d39932ed52ead229d56b66.jpg" alt="ITTOUYA の制作物 4" loading="lazy"><img width="706" height="1000" src="_blob/5839d744bfe4e9efd0720a91722e95a1.jpg" alt="ITTOUYA の制作物 5" loading="lazy"><img width="558" height="1000" src="_blob/de461ae90acbc019c0ebf36606add571.jpg" alt="ITTOUYA の制作物 6" loading="lazy"><img width="558" height="1000" src="_blob/e8ff7cd931c4af0e55f8a0383c8bd21e.jpg" alt="ITTOUYA の制作物 7" loading="lazy"><img width="558" height="1000" src="_blob/cec7b8abb143222f92ee3b15d54d8629.jpg" alt="ITTOUYA の制作物 8" loading="lazy"><img width="558" height="1000" src="_blob/89a50e2c78a215b48bcdb7c359f8416e.jpg" alt="ITTOUYA の制作物 9" loading="lazy"><img width="1066" height="1600" src="_blob/8b738f26f6b75c46ead20eadcb7ad841.jpg" alt="ITTOUYA の制作物 10" loading="lazy"></div>
@@ -281,9 +554,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">04</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">ROYAL HOLDINGS</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">ロイヤルホールディングス</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">外食企業　RESTAURANT GROUP</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">外食企業　RESTAURANT GROUP</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">多くの外食ブランドを持つロイヤルホールディングスの、既存ブランド・新ブランドを含めた多くのデザインと撮影をお手伝いしています。<span style="font-size: 11px; color: #5E5A54;">（会社案内より）</span></p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 新ブランドのロゴ・パッケージ</span><span class="chip2">◆ ウェブデザイン</span><span class="chip2">◆ 商品撮影</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">新ブランドのロゴ・パッケージ</span><span class="chip2">ウェブデザイン</span><span class="chip2">商品撮影</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">6 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 6 点 ／ サービス 3 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="ロイヤルホールディングス の制作物"><img width="1000" height="620" src="_blob/334bcdbe2896c1884bb17a24e4f371e6.jpg" alt="ロイヤルホールディングス の制作物 1" loading="lazy"><img width="1000" height="610" src="_blob/52174f3aa7e72e8f29b917a6f7dd2d39.jpg" alt="ロイヤルホールディングス の制作物 2" loading="lazy"><img width="1000" height="620" src="_blob/8b7b28326846ed27fccd1a0d617769f0.jpg" alt="ロイヤルホールディングス の制作物 3" loading="lazy"><img width="1000" height="620" src="_blob/7f2425717b4415d8de133974939dab44.jpg" alt="ロイヤルホールディングス の制作物 4" loading="lazy"><img width="843" height="597" src="_blob/0d9da2aaad54a25b4468fc020d80826c.jpg" alt="ロイヤルホールディングス の制作物 5" loading="lazy"><img width="667" height="1000" src="_blob/e7ef2c6b2f8dbe1076b2f0a044f54ceb.jpg" alt="ロイヤルホールディングス の制作物 6" loading="lazy"></div>
@@ -292,9 +565,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">05</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">MARY'S</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">メリーチョコレート</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">洋菓子　SWEETS</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">洋菓子　SWEETS</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">商品撮影から、店頭のメニュー・POP、ブランドサイトまで。</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 商品撮影</span><span class="chip2">◆ メニュー・POP</span><span class="chip2">◆ ウェブデザイン</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">商品撮影</span><span class="chip2">メニュー・POP</span><span class="chip2">ウェブデザイン</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">5 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 5 点 ／ サービス 3 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="メリーチョコレート の制作物"><img width="1600" height="1067" src="_blob/d17421c18edf4cf18bdd59392a947e05.jpg" alt="メリーチョコレート の制作物 1" loading="lazy"><img width="1000" height="682" src="_blob/0d771027ed087da1383bd618319e0c7d.jpg" alt="メリーチョコレート の制作物 2" loading="lazy"><img width="635" height="899" src="_blob/51361dcef8a6f2e3c2bb48c5c0fc5fcc.jpg" alt="メリーチョコレート の制作物 3" loading="lazy"><img width="706" height="1000" src="_blob/608a3d27b2dd64ca91f37968a6521954.jpg" alt="メリーチョコレート の制作物 4" loading="lazy"><img width="1600" height="1594" src="_blob/3285580cb0f4dc2200e17c9131e99749.jpg" alt="メリーチョコレート の制作物 5" loading="lazy"></div>
@@ -303,9 +576,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">06</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">ASAKUSA IMAHAN</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">浅草今半</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">すき焼　SUKIYAKI</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">すき焼　SUKIYAKI</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">お弁当のリーフレットと料理撮影。</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ お弁当リーフレット</span><span class="chip2">◆ 料理撮影</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">お弁当リーフレット</span><span class="chip2">料理撮影</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">4 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 4 点 ／ サービス 2 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="浅草今半 の制作物"><img width="1000" height="706" src="_blob/7f065067617d28ac5c917bb4bd7c092f.jpg" alt="浅草今半 の制作物 1" loading="lazy"><img width="1000" height="707" src="_blob/a8e6ec507c63805a5dcb6f6fed8fd2a6.jpg" alt="浅草今半 の制作物 2" loading="lazy"><img width="1600" height="1067" src="_blob/cdf3675cb590754f6a00a180f216ac6d.jpg" alt="浅草今半 の制作物 3" loading="lazy"><img width="1000" height="667" src="_blob/17215f8c9b46cadcc892fe6d01c2cebd.jpg" alt="浅草今半 の制作物 4" loading="lazy"></div>
@@ -314,9 +587,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <div class="case-l">
         <div style="display: flex; align-items: flex-end; gap: 14px;"><span class="cnum">07</span><span class="bb" style="font-size: 16px; color: #5E5A54; padding-bottom: 6px;">SHERATON GRANDE</span></div>
         <h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 46px); font-weight: 600; line-height: 1.15;">シェラトン・グランデ</h3>
-        <span class="bb" style="align-self: flex-start; background: #B0986A; color: #161514; padding: 3px 10px; font-size: 15px;">ホテル　HOTEL</span>
+        <span class="bb sw-tag" style="align-self: flex-start; padding: 3px 10px; font-size: 15px;">ホテル　HOTEL</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.9;">レストランのコース料理とデザートの撮影。</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">◆ 料理撮影</span><span class="chip2">◆ スタイリング</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip2">料理撮影</span><span class="chip2">スタイリング</span></div>
         <p class="bb" style="margin: 4px 0 0; font-size: 22px;">5 WORKS <span style="font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 500;">掲載 5 点 ／ サービス 2 種</span></p>
       </div>
       <div class="case-r" tabindex="0" aria-label="シェラトン・グランデ の制作物"><img width="1000" height="667" src="_blob/6975a8ecefe5b31304dc812cf1cd722d.jpg" alt="シェラトン・グランデ の制作物 1" loading="lazy"><img width="1067" height="1600" src="_blob/c7a3966cb8cf3b6c54c1eaf379312d2c.jpg" alt="シェラトン・グランデ の制作物 2" loading="lazy"><img width="1067" height="1600" src="_blob/f24dc1aa25e80c82edd295a8274636d1.jpg" alt="シェラトン・グランデ の制作物 3" loading="lazy"><img width="667" height="1000" src="_blob/15681c2ec5125be7fb1b23128cf48b96.jpg" alt="シェラトン・グランデ の制作物 4" loading="lazy"><img width="1067" height="1600" src="_blob/e432699e705909e9936961d535c26d95.jpg" alt="シェラトン・グランデ の制作物 5" loading="lazy"></div>
@@ -324,10 +597,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   </section>
 
   <section class="gsec" style="padding: 0 16px 100px;">
-    <div class="goo-field" aria-hidden="true" style="right: -40px; top: -30px; width: 460px; height: 420px;"><span class="gb" style="left: 183px; top: 86px; width: 68px; height: 68px; --x1: 51px; --y1: -24px; --x2: 8px; --y2: 4px; --d: 13.3s; --c: 14.5s; --dl: -0.5s;"></span><span class="gb" style="left: 278px; top: 94px; width: 117px; height: 117px; --x1: 6px; --y1: 43px; --x2: -32px; --y2: 60px; --d: 9.9s; --c: 16.5s; --dl: -8.3s;"></span><span class="gb" style="left: 294px; top: 226px; width: 127px; height: 127px; --x1: 38px; --y1: -14px; --x2: 45px; --y2: 64px; --d: 10.0s; --c: 15.0s; --dl: -7.6s;"></span><span class="gb" style="left: 35px; top: 126px; width: 135px; height: 135px; --x1: 66px; --y1: -47px; --x2: -5px; --y2: 26px; --d: 13.8s; --c: 14.1s; --dl: -9.0s;"></span><span class="gb" style="left: 203px; top: 68px; width: 105px; height: 105px; --x1: -48px; --y1: 23px; --x2: -37px; --y2: -52px; --d: 13.1s; --c: 15.1s; --dl: -5.2s;"></span><span class="gb" style="left: 225px; top: 136px; width: 121px; height: 121px; --x1: -10px; --y1: 50px; --x2: 73px; --y2: 67px; --d: 12.1s; --c: 15.0s; --dl: -10.4s;"></span><span class="gb" style="left: 106px; top: 200px; width: 137px; height: 137px; --x1: -28px; --y1: -18px; --x2: 63px; --y2: 68px; --d: 13.4s; --c: 14.3s; --dl: -11.7s;"></span></div>
-    <div role="toolbar" aria-label="種類で絞り込む" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; border-top: 2px solid #161514; padding: 16px 0 28px;">
+    <div role="toolbar" aria-label="種類で絞り込む" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; border-top: 1px solid #161514; padding: 16px 0 28px;">
       <sc-for list="{{chips}}" as="c" hint-placeholder-count="7">
-        <button type="button" class="chip bb" aria-pressed="{{c.sel}}" onClick="{{c.pick}}" style="min-height: 44px; padding: 6px 16px; border: 2px solid #161514; background: {{c.bg}}; color: {{c.fg}}; font-size: 19px; cursor: pointer;">{{c.label}} <span style="font-size: 14px; opacity: .7;">{{c.count}}</span></button>
+        <button type="button" class="chip bb" aria-pressed="{{c.sel}}" onClick="{{c.pick}}" style="min-height: 44px; padding: 6px 16px; border: 1px solid #161514; background: {{c.bg}}; color: {{c.fg}}; font-size: 19px; cursor: pointer;">{{c.label}} <span style="font-size: 14px; opacity: .7;">{{c.count}}</span></button>
       </sc-for>
       <span style="flex: 1 1 20px;"></span>
       <span class="bb" style="font-size: 18px; color: #5E5A54;">{{shown}} WORKS</span>
@@ -337,28 +609,33 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
       <sc-for list="{{items}}" as="w" hint-placeholder-count="12">
         <a class="card" href="Contact.dc.html" style="animation-delay: {{w.delay}};">
           <img src="{{w.img}}" width="{{w.iw}}" height="{{w.ih}}" alt="{{w.title}}の作例">
-          <span class="bb" style="position: absolute; left: 10px; top: 10px; background: #B0986A; color: #161514; padding: 2px 8px; font-size: 14px;">{{w.tag}}</span>
+          <span class="bb sw-tag" style="position: absolute; left: 10px; top: 10px; padding: 2px 8px; font-size: 14px;">{{w.tag}}</span>
           <span class="cap"><span class="bb" style="display: block; font-size: 14px; color: inherit;">{{w.cat}}</span><span style="font-size: 15px; font-weight: 500;">{{w.title}}</span></span>
         </a>
       </sc-for>
     </div>
   </section>
 
-  <section aria-label="取引先一例" style="background: #B0986A; padding: 22px 0; overflow: hidden;">
+  <section aria-label="取引先一例" style="border-top: 1px solid #161514; border-bottom: 1px solid #161514; padding: 18px 0; overflow: hidden;">
     <div style="display: flex; width: max-content; gap: 44px; animation: marqL 46s linear infinite; font-size: 26px; font-weight: 600; white-space: nowrap;">
-      <span>浅草今半</span><span>◆</span><span>新宿さぼてん</span><span>◆</span><span>メリーチョコレート</span><span>◆</span><span>キリン</span><span>◆</span><span>ロイヤルホールディングス</span><span>◆</span><span>フォーシーズ</span><span>◆</span><span>平城苑</span><span>◆</span><span>シェラトン・グランデ</span><span>◆</span><span>LDH kitchen</span><span>◆</span><span>天丼てんや</span><span>◆</span>
-      <span>浅草今半</span><span>◆</span><span>新宿さぼてん</span><span>◆</span><span>メリーチョコレート</span><span>◆</span><span>キリン</span><span>◆</span><span>ロイヤルホールディングス</span><span>◆</span><span>フォーシーズ</span><span>◆</span><span>平城苑</span><span>◆</span><span>シェラトン・グランデ</span><span>◆</span><span>LDH kitchen</span><span>◆</span><span>天丼てんや</span><span>◆</span>
+      <span>浅草今半</span><span>/</span><span>新宿さぼてん</span><span>/</span><span>メリーチョコレート</span><span>/</span><span>キリン</span><span>/</span><span>ロイヤルホールディングス</span><span>/</span><span>フォーシーズ</span><span>/</span><span>平城苑</span><span>/</span><span>シェラトン・グランデ</span><span>/</span><span>LDH kitchen</span><span>/</span><span>天丼てんや</span><span>/</span>
+      <span>浅草今半</span><span>/</span><span>新宿さぼてん</span><span>/</span><span>メリーチョコレート</span><span>/</span><span>キリン</span><span>/</span><span>ロイヤルホールディングス</span><span>/</span><span>フォーシーズ</span><span>/</span><span>平城苑</span><span>/</span><span>シェラトン・グランデ</span><span>/</span><span>LDH kitchen</span><span>/</span><span>天丼てんや</span><span>/</span>
     </div>
   </section>
 
-  <div class="glowlogo" onMouseMove="{{logoMove}}" onMouseLeave="{{logoLeave}}" style="--lx: 0px; --ly: 0px; --c1: #C9B48A; --c2: #B0986A; --lop: 0; padding: 40px 0 0; display: flex; justify-content: center; overflow: hidden; margin-bottom: -0.16em;">
-    <p class="bigmark" aria-label="DETALE&amp;WORKS" style="color: #DCD8CF;">DETALE<span style="font-family: 'Cormorant Garamond', serif; font-style: normal; font-weight: 500;">&amp;</span>WORKS</p>
-  </div>
-
   </main>
-  <footer style="background: #161514; color: #F0EDE6; padding: 56px 16px 40px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center;">
-    <span class="bb" style="font-size: clamp(30px, 3.6vw, 52px); line-height: 1;">TEL:03-6674-9763　MAIL:<span style="color: inherit;">info@detale.jp</span></span>
-    <a class="btn" href="Contact.dc.html" style="background: #B0986A; color: #161514; padding: 16px 26px; min-height: 44px; box-sizing: border-box; font-weight: 600;">似たものを相談する →</a>
+  <!-- ===== SW: お問い合わせ＋大きな社名 ===== -->
+  <footer id="contact" class="sw-foot">
+    <div class="sw-foot-top">
+      <h2 class="sw-big sw-split">まずは、気になる<br>サービスを一つ。</h2>
+      <div class="sw-foot-cta">
+        <a class="sw-line" href="Contact.dc.html"><span>フォームで相談する</span><span aria-hidden="true">→</span></a>
+        <a class="sw-line" href="Contact.dc.html"><span>LINEで相談する</span><span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <div class="sw-row sw-foot-lb"><span>Let’s talk food — フードの制作は、ご相談から。</span><span>TEL 03-6674-9763 / info@detale.jp</span></div>
+    <p class="sw-mark" aria-label="DETALE&amp;WORKS"><span class="sw-mk">DETALE</span><span class="sw-mk sw-amp">&amp;</span><span class="sw-mk">WORKS</span></p>
+    <div class="sw-row sw-foot-bt"><span>株式会社ディテールアンドワークス　東京都港区北青山1-3-1 アールキューブ青山3階</span><span>©2026 DETALE &amp; WORKS</span></div>
   </footer>
 </div>
 </x-dc>
@@ -368,6 +645,7 @@ class Component extends DCLogic {
     try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
   }
   componentDidMount() {
+    setTimeout(() => { try { this.swInit(); } catch (e) {} }, 80);
     const jump = () => {
       let cid = '';
       try { cid = sessionStorage.getItem('dwCaseJump') || ''; } catch (er) {}
@@ -575,7 +853,61 @@ class Component extends DCLogic {
     this._pourT = setTimeout(() => this.setState({ pourDone: true }), 2100);
     if (!this.calm()) this._hs = setInterval(() => this.setState({ hs: ((this.state && this.state.hs) || 0) + 1 }), 2700);
   }
+  swInit() {
+    if (this._swOn) return; this._swOn = true;
+    const q = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
+    // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
+    const split = () => { q('.sw-split').forEach((el) => {
+      if (el._swSrc == null) el._swSrc = el.innerHTML; else el.innerHTML = el._swSrc;
+      const toks = []; Array.prototype.forEach.call(el.childNodes, (n) => {
+        if (n.nodeType === 3) { for (const ch of n.nodeValue) toks.push(ch === ' ' || ch === '\n' ? { t: ' ' } : { t: esc(ch) }); }
+        else if (n.nodeName === 'BR') toks.push({ br: 1 });
+        else toks.push({ t: n.outerHTML }); });
+      el.innerHTML = toks.map((k, i) => k.br ? '<br>' : '<span data-k="' + i + '">' + k.t + '</span>').join('');
+      const lines = []; let cur = null, top = null;
+      Array.prototype.forEach.call(el.childNodes, (n) => {
+        if (n.nodeName === 'BR') { cur = null; top = null; return; }
+        const t = n.offsetTop; if (cur === null || Math.abs(t - top) > 4) { cur = []; lines.push(cur); top = t; } cur.push(toks[+n.getAttribute('data-k')].t); });
+      el.innerHTML = lines.map((L, i) => '<span class="sw-ln"><span class="sw-lni" style="transition-delay: ' + (i * 0.08).toFixed(2) + 's;">' + L.join('').replace(/^ +| +$/g, '') + '</span></span>').join('');
+    }); };
+    try { split(); } catch (e) {}
+    try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { try { split(); } catch (e) {} }); } catch (e) {}
+    // 画面に入ったら現す
+    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }) : null;
+    q('.sw-split, .sw-rv, .sw-clip, .sw-mark').forEach((el) => { if (io && !reduce) io.observe(el); else el.classList.add('in'); });
+    const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    let raf = 0, lastI = -1;
+    const frame = () => { raf = 0; const vh = innerHeight;
+      // 黒い面が左右から広がる
+      q('.sw-dark').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return; el.style.setProperty('--p', reduce ? 1 : clamp((vh - r.top) / (vh * 0.8), 0, 1).toFixed(3)); });
+      if (!reduce) {
+        // 作例が少しずつ違う速さで動く
+        q('[data-sp]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return; const d = r.top + r.height / 2 - vh / 2; el.style.transform = 'translate3d(0,' + (d * -parseFloat(el.getAttribute('data-sp'))).toFixed(1) + 'px,0)'; });
+        // 散らばった作例が一列にそろう
+        q('.sw-blocks').forEach((sec) => { const r = sec.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return;
+          const p = ease(clamp((vh * 0.9 - r.top) / (r.height - vh * 0.25), 0, 1));
+          q('.sw-blk', sec).forEach((b) => { const k = 1 - p, dx = +b.getAttribute('data-dx'), dy = +b.getAttribute('data-dy'), rt = +b.getAttribute('data-r');
+            b.style.transform = 'translate3d(' + (dx * k).toFixed(2) + 'vw,' + (dy * k).toFixed(2) + 'vh,0) rotate(' + (rt * k).toFixed(2) + 'deg)'; }); });
+      }
+      // サービス: 下へ送ると一覧と写真が入れ替わる
+      q('.sw-exp').forEach((sec) => { if (innerWidth <= 860) return; const r = sec.getBoundingClientRect(); const items = q('.sw-exp-list li', sec), imgs = q('.sw-exp-r img', sec); const n = items.length; if (!n) return;
+        const tot = r.height - vh; const p = clamp(-r.top / (tot || 1), 0, 0.9999); const i = Math.floor(p * n);
+        if (i === lastI) return; const prev = lastI; lastI = i;
+        items.forEach((li, k) => li.classList.toggle('on', k === i));
+        imgs.forEach((im, k) => { im.classList.toggle('was', k === prev); im.classList.toggle('on', k === i); });
+        const c = sec.querySelector('.sw-ci'); if (c) c.textContent = String(i + 1); });
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    let rt = 0; const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { try { split(); q('.sw-split.in').forEach((el) => el.classList.add('in')); } catch (e) {} onScroll(); }, 200); };
+    window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onResize);
+    frame();
+    this._swOff = () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize); if (io) io.disconnect(); if (raf) cancelAnimationFrame(raf); };
+  }
   componentWillUnmount() {
+    if (this._swOff) this._swOff();
     clearInterval(this._casePoll);
     window.removeEventListener('mousemove', this._onMove); window.removeEventListener('wheel', this._onWheel); cancelAnimationFrame(this._craf); clearInterval(this._hs); clearTimeout(this._pourT); }
   makeGen() {
