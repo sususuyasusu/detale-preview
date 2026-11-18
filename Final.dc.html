@@ -679,6 +679,12 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   .sw-dark-in{clip-path:none!important}
   .sw-marq-in{animation:none!important}
 }
+
+/* 立方体の場面でも隅の文字を出す */
+.stage.oncube .stcopy,.stage.oncube .stno,.stage.oncube nav[aria-label],.stage.oncube #stw-d,.stage.oncube #stw-w{z-index:7!important}
+.stage.oncube #stw-d,.stage.oncube #stw-w{position:relative;z-index:7!important}
+.stage.oncube #stw-d,.stage.oncube #stw-w,.stage.oncube .stcopy,.stage.oncube .stno,.stage.oncube .snav{color:#F0EDE6!important;animation:none!important;opacity:1!important}
+.stage.oncube nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -1390,6 +1396,11 @@ class Component extends DCLogic {
       const on = /[\u3040-\u30ff\u4e00-\u9fff]/.test(el.textContent) && parseFloat(getComputedStyle(el).fontSize) >= 18;
       if (on !== el.classList.contains('sw-jab')) el.classList.toggle('sw-jab', on); }); };
     try { markJa(); let jaT = 0; new MutationObserver(() => { if (!jaT) jaT = requestAnimationFrame(() => { jaT = 0; markJa(); }); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+    // 立方体の場面が見えている間は、隅の文字を立方体より上に出す（目印 oncube）
+    try { setInterval(() => { const st = document.querySelector('section.stage'); if (!st) return;
+      const c = st.querySelector('.ph4-cube'); let on = false;
+      if (c) { const r = c.getBoundingClientRect(); if (r.width > 0 && r.bottom > 0 && r.top < innerHeight) { let op = 1, x = c; while (x && x !== st) { const cs = getComputedStyle(x); if (cs.display === 'none' || cs.visibility === 'hidden') { op = 0; break; } op *= +cs.opacity; x = x.parentElement; } on = op > 0.35; } }
+      if (on !== st.classList.contains('oncube')) st.classList.toggle('oncube', on); }, 150); } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
