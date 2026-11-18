@@ -137,7 +137,7 @@ nav a{box-sizing:border-box}
 .ampbl{display:inline-block;width:0;height:0}
 .acell{position:absolute;border-radius:50%;will-change:transform}
 .dw-hold .loaderpanel{animation-play-state:paused!important}
-.dw-sf .ampcells{filter:none!important}
+.ampcells{filter:none!important}
 /* 2026-11-18 信号: 1立方体1本・0.5秒走って強く発光→消える */
 .ph4-cube .cw-s rect{stroke:#CFE8FF;stroke-dasharray:0 0 6 94;animation:cwSig2 5s linear var(--o) infinite}
 .ph4-cube .cw-s rect.g{stroke:rgba(110,180,255,.3);stroke-width:6;stroke-dasharray:0 4 2 94;animation:cwSigG 5s linear var(--o) infinite}
@@ -943,7 +943,7 @@ class Component extends DCLogic {
           for (let q = 0; q < FS.list.length; q++) { const c = FS.list[q], G = c._gf; const fast = c.classList.contains('ampcells'); if (FS.f % 2 !== 0 && !fast) continue; const cr = c.getBoundingClientRect();
             if (cr.bottom < -80 || cr.top > innerHeight + 80 || cr.width < 1) continue;
             const W = c.offsetWidth || cr.width, H = c.offsetHeight || cr.height; const sc = cr.width / W;
-            const RZ = Math.min(fast ? 2 : 3, window.devicePixelRatio || 1) * sc;
+            const RZ = Math.min(fast ? 2 : (c.classList.contains('scene') ? 1.5 : 3), window.devicePixelRatio || 1) * sc;
             const w = Math.max(1, Math.ceil(W * RZ)), h = Math.max(1, Math.ceil(H * RZ));
             if (G.cv.width !== w || G.cv.height !== h) { G.cv.width = w; G.cv.height = h; G.cv.style.width = W + 'px'; G.cv.style.height = H + 'px';
               G.img = G.ctx.createImageData(w, h); G.F = new Float32Array(w * h); G.R = new Float32Array(w * h); G.W = new Float32Array(w * h); G.Gc = new Float32Array(w * h); G.B = new Float32Array(w * h); G.box = null; }
@@ -1343,7 +1343,7 @@ class Component extends DCLogic {
       for (const a of [-1, 1]) for (const b of [-1, 1]) for (const d of [-1, 1]) { const X = c.x + a * h, Y = c.y + b * h, Z = c.z + d * h, k = Math.round(X / (h * 0.5)) + ',' + Math.round(Y / (h * 0.5)) + ',' + Math.round(Z / (h * 0.5));
         if (!pts.has(k)) pts.set(k, { x: X, y: Y, z: Z, ph: Math.random() * 6.283, sp: 0.7 + Math.random() * 1.1 }); } }
     const L = [...pts.values()], FOC = S * 2.3, M = (t) => (t && t !== 'none' ? new DOMMatrix(t) : new DOMMatrix());
-    const SG = [], SPD = 26, RUN = 1.5, FLT = 0.32, CYC = 5, TR = 0.9;
+    const SG = [], SPD = 18, RUN = 1.5, FLT = 0.32, CYC = 5, TR = 0.9;
     let sgi = 0;
     for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue; if (sgi++ % 2) continue;
       SG.push({ c: c, ws: [...c.e.querySelectorAll('.cw-w')], off: Math.random() * CYC, cy: -1, k: [1, 1, 1], ax: 0, p: 0, pk: null, hx: 0, hy: 0, hz: 0, zapped: false }); }
