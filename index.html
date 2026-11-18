@@ -1334,7 +1334,7 @@ class Component extends DCLogic {
     const x = cv.getContext('2d'); if (!x) return; x.setTransform(dpr, 0, 0, dpr, 0, 0);
     const sp = document.createElement('canvas'); sp.width = sp.height = 128; const g = sp.getContext('2d');
     const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    gr.addColorStop(0, 'rgba(255,250,236,1)'); gr.addColorStop(0.12, 'rgba(255,232,180,.75)'); gr.addColorStop(0.35, 'rgba(255,205,130,.25)'); gr.addColorStop(1, 'rgba(255,200,120,0)');
+    gr.addColorStop(0, 'rgba(255,252,242,1)'); gr.addColorStop(0.22, 'rgba(255,240,205,1)'); gr.addColorStop(0.34, 'rgba(255,220,160,.45)'); gr.addColorStop(0.6, 'rgba(255,205,130,.08)'); gr.addColorStop(1, 'rgba(255,200,120,0)');
     g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
     const h = S / 2, pts = new Map();
     for (const c of cubes) { if (getComputedStyle(c.e).display === 'none') continue;
@@ -1351,11 +1351,11 @@ class Component extends DCLogic {
     let gfc = 0;
     const step = (now) => { if (!cv.isConnected) return;
       if (lowR && (gfc++ & 1)) { requestAnimationFrame(step); return; }
-      const A = M(getComputedStyle(par).transform).multiply(M(getComputedStyle(cw).transform)), cx = W / 2, cy = H / 2, rmax = Math.min(W, H) * 0.13;
+      const A = M(getComputedStyle(par).transform).multiply(M(getComputedStyle(cw).transform)), cx = W / 2, cy = H / 2, rmax = Math.min(W, H) * 0.04;
       x.clearRect(0, 0, W, H); x.globalCompositeOperation = 'lighter';
       for (const p of L) { const Z = A.m13 * p.x + A.m23 * p.y + A.m33 * p.z + A.m43, dd = P - Z; if (dd < S * 0.35) continue;
         const f = P / dd, X = A.m11 * p.x + A.m21 * p.y + A.m31 * p.z + A.m41, Y = A.m12 * p.x + A.m22 * p.y + A.m32 * p.z + A.m42;
-        const sx = cx + X * f, sy = cy + Y * f, r = Math.min(rmax, S * 0.10 * f); if (sx < -r || sx > W + r || sy < -r || sy > H + r) continue;
+        const sx = cx + X * f, sy = cy + Y * f, r = Math.max(1.6, Math.min(rmax, S * 0.045 * f)); if (sx < -r || sx > W + r || sy < -r || sy > H + r) continue;
         let a = 0.55 + 0.35 * Math.sin(now * 0.0021 * p.sp + p.ph);
         if (dd > FOC) a *= Math.max(0.3, 1 - (dd - FOC) / (S * 14)); else if (dd < S) a *= dd / S;
         x.globalAlpha = a; x.drawImage(sp, sx - r, sy - r, r * 2, r * 2); }
