@@ -798,8 +798,10 @@ class Component extends DCLogic {
     try { split(); } catch (e) {}
     try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { try { split(); } catch (e) {} }); } catch (e) {}
     // 画面に入ったら現す
-    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }) : null;
-    q('.sw-split, .sw-rv, .sw-clip, .sw-mark').forEach((el) => { if (io && !reduce) io.observe(el); else el.classList.add('in'); });
+    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { (e.target._swKids || [e.target]).forEach((k) => k.classList.add('in')); io.unobserve(e.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }) : null;
+    q('.sw-split, .sw-rv, .sw-mark').forEach((el) => { if (io && !reduce) io.observe(el); else el.classList.add('in'); });
+    // 切り抜きで隠れた写真は、それ自体では「画面に入った」と判定されないので、親の区画で判定する
+    q('.sw-clip').forEach((el) => { const p = el.parentElement; if (io && !reduce && p) { (p._swKids || (p._swKids = [])).push(el); io.observe(p); } else el.classList.add('in'); });
     const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
     const ease = (t) => 1 - Math.pow(1 - t, 3);
     let raf = 0, lastI = -1;
