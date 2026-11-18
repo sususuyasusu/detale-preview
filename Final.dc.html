@@ -151,8 +151,7 @@ nav a{box-sizing:border-box}
 /* 角の光は画面上の丸い光（cornerGlow）で描くので、面に貼る光はやめる */
 .cw-f::after{display:none!important}
 
-.sc0w{position:absolute;left:0;top:0;width:100%;height:100%;filter:url(#dwGoo)}
-.dw-sf .sc0w{width:50%;height:50%;transform:scale(2);transform-origin:0 0;filter:url(#dwGooH);--k:.5}
+
 .dw-sf .cw-x{display:none}
 .dw-sf .cw-f[style*="rotateY(180deg)"],.dw-sf .cw-f[style*="rotateY(-90deg)"],.dw-sf .cw-f[style*="rotateX(-90deg)"]{display:none}
 @keyframes ampIn{0%{transform:translate(-50%,-56%) scale(.25) rotate(-35deg);opacity:0}28%{opacity:1}100%{transform:translate(-50%,-56%) scale(1) rotate(0)}}
@@ -465,11 +464,11 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 
     <!-- 場面0：ソースのしずくが弾ける -->
     <sc-if value="{{sc0}}" hint-placeholder-val="{{ false }}">
-      <div class="scene" aria-hidden="true"><div class="sc0w">
+      <div class="scene" aria-hidden="true" style="filter: url(#dwGoo);">
         <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
-          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: calc({{b.size}} * var(--k, 1)); height: calc({{b.size}} * var(--k, 1)); background: {{b.color}}; animation-delay: {{b.delay}}; --dx: calc({{b.dx}} * var(--k, 1)); --dy: calc({{b.dy}} * var(--k, 1));"></span>
+          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
         </sc-for>
-      </div></div>
+      </div>
     </sc-if>
 
     <!-- 場面1：巨大な＆がとろりと現れる -->
