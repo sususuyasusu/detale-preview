@@ -480,7 +480,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 .sw-meta dd a:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* 散らばった作例 → 一列 */
-.sw-blocks{height:118vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden}
+.sw-blocks{height:118vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden;overflow:clip}
 .sw-blk-row{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:flex;align-items:center;justify-content:center;gap:1.2vw;padding:0 16px}
 .sw-blk{display:block;height:min(34vh,26vw);aspect-ratio:calc(var(--w) * 1.5);flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
 .sw-blk img{width:100%;height:100%;object-fit:cover;display:block}
@@ -705,10 +705,10 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   .sw-lead-r{min-height:0;padding:40px 16px 26px;gap:22px}
   .sw-kicker{position:static;font-size:13px;line-height:1.7;order:-1}
   .sw-lead-foot .sw-cue,.sw-phero .sw-lead-foot .sw-cue{display:none}
-  .sw-blocks{height:auto}
-  .sw-blk-row{position:relative;top:0;height:auto;flex-wrap:wrap;justify-content:flex-start;gap:8px;padding:24px 16px}
-  .sw-blk{height:auto;width:calc(50% - 4px);aspect-ratio:4/3;transform:none!important}
-  .sw-blk:first-child{width:100%;aspect-ratio:16/9}
+  .sw-blocks{height:170vh}
+  .sw-blk-row{top:56px;height:calc(100vh - 56px);flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;padding:16px}
+  .sw-blk{height:auto;width:calc(50% - 4px);aspect-ratio:1/1}
+  .sw-blk:first-child{width:100%;aspect-ratio:16/10}
   .sw-state{padding-top:22px}
   .sw-state .sw-big{font-size:clamp(24px,6.6vw,30px);line-height:1.35;margin-top:28px}
   .sw-notes{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:40px;font-size:11px;line-height:1.5}
@@ -1411,7 +1411,7 @@ class Component extends DCLogic {
         q('[data-sp]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return; const d = r.top + r.height / 2 - vh / 2; el.style.transform = 'translate3d(0,' + (d * -parseFloat(el.getAttribute('data-sp'))).toFixed(1) + 'px,0)'; });
         // 散らばった作例が一列にそろう
         q('.sw-blocks').forEach((sec) => { const r = sec.getBoundingClientRect(); if (r.bottom < 0 || r.top > vh) return;
-          const p = ease(clamp((vh * 0.9 - r.top) / (r.height - vh * 0.25), 0, 1));
+          const p = ease(clamp((vh * 0.9 - r.top) / (r.height * 0.75), 0, 1));
           q('.sw-blk', sec).forEach((b) => { const k = 1 - p, dx = +b.getAttribute('data-dx'), dy = +b.getAttribute('data-dy'), rt = +b.getAttribute('data-r');
             b.style.transform = 'translate3d(' + (dx * k).toFixed(2) + 'vw,' + (dy * k).toFixed(2) + 'vh,0) rotate(' + (rt * k).toFixed(2) + 'deg)'; }); });
       }
