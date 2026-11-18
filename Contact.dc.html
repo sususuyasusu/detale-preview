@@ -464,7 +464,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   .sw-phero-r{min-height:56vh;padding:22px 16px 26px}
 }
 .curhide .cnum{color:var(--sw-ink)!important}
-.curhide .chip:hover,.curhide .tab:hover{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
+@media (hover: hover) and (pointer: fine){.curhide .chip:hover,.curhide .tab:hover{background:var(--sw-ink)!important;color:var(--sw-bg)!important}}
 .pour{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
 .pour svg{stroke:var(--sw-bg)}
 .pour svg text{fill:var(--sw-bg)}
@@ -485,7 +485,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 @media (max-width: 860px){
   .sw-bar{padding-top:calc(9px + env(safe-area-inset-top,0px))!important}
   #lead.sw-lead{min-height:0!important;height:auto!important;align-content:start;padding:0!important}
-  .sw-lead-r{min-height:calc(100vh - 56px - env(safe-area-inset-top,0px));min-height:calc(100svh - 56px - env(safe-area-inset-top,0px));box-sizing:border-box;padding:28px 16px 26px;gap:22px;justify-content:flex-end}
+  .sw-lead-r{min-height:calc(80vh - 56px - env(safe-area-inset-top,0px));min-height:calc(80svh - 56px - env(safe-area-inset-top,0px));box-sizing:border-box;padding:28px 16px 26px;gap:22px;justify-content:flex-end}
   .sw-kicker{position:static;font-size:13px;line-height:1.7;order:-1;margin-bottom:auto}
   .sw-lead .sw-huge{font-size:15.2vw;line-height:1.08}
   .sw-lead-foot .sw-en{font-size:20px}
@@ -575,7 +575,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 /* お問い合わせ「サービスで選ぶ」: すべて同じ大きさの枠に、大きいアイコン＋名前（本人指示 2026-11-18） */
 .sw-svgrid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px!important}
 .curhide .sw-svgrid .svc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:0;aspect-ratio:1/.86;padding:18px 6px!important;text-align:center;line-height:1.4;font-size:13px!important;letter-spacing:-.03em}
-.curhide .sw-svgrid .svc:hover{background:var(--sw-ink)!important;color:var(--sw-bg)!important}
+@media (hover: hover) and (pointer: fine){.curhide .sw-svgrid .svc:hover{background:var(--sw-ink)!important;color:var(--sw-bg)!important}}
 .sw-svgrid .sw-ico{--h:56px;max-width:100%}
 @media (max-width: 860px){
   .sw-svgrid{grid-template-columns:repeat(2,1fr)}
