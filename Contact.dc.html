@@ -449,6 +449,31 @@ html.dw-barstuck .sw-topcover{display:block}
 
 /* ヘッダー自身に上向きの背景を付ける（貼り付き中だけ） */
 html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1px;bottom:100%;height:300px;background:var(--sw-bg);pointer-events:none}
+
+/* 上の帯: カテゴリー中央・CONTACTボタン右端 */
+.sw-bar{grid-template-columns:1fr auto 1fr!important}
+.sw-bar .sw-c2{justify-self:center;text-align:center}
+.sw-bar .sw-c3{justify-self:end;display:inline-flex;align-items:center;background:var(--sw-ink);color:var(--sw-bg)!important;font-weight:500;letter-spacing:.02em;padding:7px 14px;line-height:1;text-decoration:none!important;transition:opacity .25s}
+.sw-bar .sw-c3:hover{opacity:.8}
+.sw-bar .sw-c4{display:none}
+@media (max-width: 860px){
+  .sw-bar{grid-template-columns:1fr auto!important}
+  .sw-bar .sw-c2{justify-self:start;text-align:left}
+  .sw-bar .sw-c3{padding:6px 10px;font-size:13px}
+}
+
+/* 比較表: 黒い列と隣の文字の間を空ける */
+.sw-tbl .sw-us{padding-left:18px!important;padding-right:18px!important}
+.sw-tbl .sw-us + td,.sw-tbl .sw-us + th{padding-left:22px!important}
+@media (max-width: 860px){.sw-tbl .sw-us{padding-left:10px!important;padding-right:10px!important}.sw-tbl .sw-us + td,.sw-tbl .sw-us + th{padding-left:12px!important}}
+
+/* 文字の上でカーソルがガラスのレンズになる */
+.sw-glass{display:none}
+@media (hover: hover) and (pointer: fine){
+  .sw-glass{display:block;position:fixed;left:0;top:0;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;pointer-events:none;z-index:80;opacity:0;scale:.6;transition:opacity .22s ease,scale .3s cubic-bezier(.2,.9,.3,1.3);-webkit-backdrop-filter:blur(1.6px) saturate(1.8) brightness(1.08) contrast(1.05);backdrop-filter:blur(1.6px) saturate(1.8) brightness(1.08) contrast(1.05);background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.55),rgba(255,255,255,0) 38%),radial-gradient(circle at 70% 80%,rgba(255,255,255,.18),rgba(255,255,255,0) 45%);box-shadow:inset 0 1px 1.5px rgba(255,255,255,.9),inset 0 -2px 4px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.14)}
+  html.dw-glass .sw-glass{opacity:1;scale:1}
+  html.dw-glass .gcur{opacity:0!important;transition:opacity .2s}
+}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
@@ -628,10 +653,9 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
   <sc-if value="{{pourOn}}" hint-placeholder-val="{{ false }}"><div class="pour" aria-hidden="true"><div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="#161514" stroke-width="3"><path d="M60 4 L114 40 L60 76 L6 40 Z"></path><text x="60" y="49" text-anchor="middle" fill="#161514" stroke="none" style="font-family: 'Cormorant Garamond', serif; font-size: 26px;">D&amp;W</text></svg><span class="bb" style="font-size: 44px;">CONTACT</span></div></div></sc-if>
 
   <nav class="sw-bar sw-sub" aria-label="サイトメニュー">
-    <a class="sw-c1" href="Final.dc.html">DETALE &amp; WORKS [Tokyo]</a>
+    <a class="sw-c1" href="Final.dc.html">DETALE &amp; WORKS Inc.</a>
     <span class="sw-c2"><a href="Final.dc.html#about">About</a> / <a href="Works.dc.html">Works</a> / <a href="Service.dc.html">Service</a> / <a href="Final.dc.html#workflow">Flow</a> / <a href="Final.dc.html#company">Company</a></span>
-    <a class="sw-c3" href="Contact.dc.html" aria-current="page">[Contact]</a>
-    <span class="sw-c4">Food Design Studio ©2026</span>
+    <a class="sw-c3" href="Contact.dc.html" aria-current="page">CONTACT →</a>
   </nav>
 
   <main id="main">
@@ -721,7 +745,7 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
     </div>
     <div class="sw-row sw-foot-lb"><span>Let’s talk food — フードの制作は、ご相談から。</span><span>TEL 03-6674-9763 / info@detale.jp</span></div>
     <p class="sw-mark" aria-label="DETALE&amp;WORKS"><span class="sw-mk">DETALE</span><span class="sw-mk sw-amp">&amp;</span><span class="sw-mk">WORKS</span></p>
-    <div class="sw-row sw-foot-bt"><span>株式会社ディテールアンドワークス　東京都港区北青山1-3-1 アールキューブ青山3階</span><span>©2026 DETALE &amp; WORKS</span></div>
+    <div class="sw-row sw-foot-bt"><span>株式会社ディテールアンドワークス　東京都港区北青山1-3-1 アールキューブ青山3階</span><span>Food Design Studio — ©2026 DETALE &amp; WORKS</span></div>
   </footer>
 </div>
 </x-dc>
@@ -950,6 +974,15 @@ class Component extends DCLogic {
         document.documentElement.classList.toggle('dw-barstuck', on);
         if (on) cv.style.setProperty('--bcv', Math.max(0, Math.round(bar.getBoundingClientRect().top) + 2) + 'px'); };
       window.addEventListener('scroll', () => { if (!cT) cT = requestAnimationFrame(chk); }, { passive: true }); window.addEventListener('resize', chk); chk(); setTimeout(chk, 600); setTimeout(chk, 2500); } } catch (e) {}
+    // 文字の上でカーソルがガラスのレンズになる（マウスのある画面だけ・1つの丸だけ）
+    try { if (matchMedia('(hover: hover) and (pointer: fine)').matches && !document.querySelector('.sw-glass')) {
+      const gl = document.createElement('div'); gl.className = 'sw-glass'; gl.setAttribute('aria-hidden', 'true'); document.body.appendChild(gl);
+      let gx = -200, gy = -200, gr = 0; const mv = () => { gr = 0; gl.style.transform = 'translate(' + gx + 'px,' + gy + 'px)'; };
+      const isText = (t) => { if (!t || t.nodeType !== 1) return false; if (t.closest('a,button,label,h1,h2,h3,h4,.sw-lni')) return true;
+        for (const n of t.childNodes) if (n.nodeType === 3 && n.textContent.trim()) return true; return false; };
+      document.addEventListener('mousemove', (e) => { gx = e.clientX; gy = e.clientY; if (!gr) gr = requestAnimationFrame(mv);
+        const on = isText(e.target); if (on !== document.documentElement.classList.contains('dw-glass')) document.documentElement.classList.toggle('dw-glass', on); }, { passive: true });
+      document.addEventListener('mouseleave', () => document.documentElement.classList.remove('dw-glass')); } } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
