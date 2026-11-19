@@ -778,6 +778,10 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 @keyframes cwDeep{0%{scale:.03;opacity:0}15%{opacity:1}100%{scale:1;opacity:1}}
 .ph4.cf .cw-par{animation:cwDeep 2.6s cubic-bezier(.45,0,.15,1) .15s both}
 @media (prefers-reduced-motion: reduce){.ph4.cf .cw-par{animation:none}}
+/* 立方体の場面へは暗闇のまま切り替える */
+.stage.cfdark{background:#161514!important}
+.stage.cfdark .ph4,.ph4.cf{animation:none!important}
+.ph4.cf .ph4-cube{background:#161514}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1840,6 +1844,7 @@ class Component extends DCLogic {
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
     try { if (this._stage) this._stage.classList.toggle('ampjoin', this._joinAmp); } catch (e) {}
+    try { if (this._stage && sc === 3 && !this.calm()) { const st0 = this._stage; st0.classList.add('cfdark'); clearTimeout(this._cfdT); this._cfdT = setTimeout(() => st0.classList.remove('cfdark'), 900); } } catch (e) {}
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
     if (sc === 0) { this._gathered = false; this._acT.push(setTimeout(() => this.gatherAmp(), 2200)); }
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), this._joinAmp ? 1100 : 1250));
