@@ -109,9 +109,9 @@ a[href^="mailto:"]:hover,a[href^="tel:"]:hover{background-size:100% 4px}
 .snav{background-image:linear-gradient(currentColor,currentColor);background-size:0 3px;background-repeat:no-repeat;background-position:100% 100%;transition:background-size .4s cubic-bezier(.2,.8,.2,1),color .3s,transform .3s}
 .snav:hover{background-size:100% 3px;background-position:0 100%}
 @media (max-width: 700px){.stage{height:clamp(520px,88svh,720px)!important}form [style*="minmax(240px"]{grid-template-columns:1fr!important}}
-@media (prefers-reduced-motion: reduce){.gtb{animation:none!important;opacity:0}}
-@media (prefers-reduced-motion: reduce){.gcur{display:none!important}.curhide,.curhide *{cursor:auto!important}.gb{animation:none!important;background:#B0986A}}
-@media (prefers-reduced-motion: reduce){.pour{display:none!important}*{animation:none!important;transition:none!important}.ch{transform:none}}
+@media (prefers-reduced-motion: dw-off){.gtb{animation:none!important;opacity:0}}
+@media (prefers-reduced-motion: dw-off){.gcur{display:none!important}.curhide,.curhide *{cursor:auto!important}.gb{animation:none!important;background:#B0986A}}
+@media (prefers-reduced-motion: dw-off){.pour{display:none!important}*{animation:none!important;transition:none!important}.ch{transform:none}}
 
 /* 和紙の地（細かな紙の繊維） */
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.32;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .36  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -133,7 +133,7 @@ body{font-feature-settings:'palt' 1;}
 .cb{background:#161514!important;animation:none!important}
 .gcb{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:currentColor;z-index:-1;pointer-events:none;translate:-999px -999px;scale:0;transition:scale .16s ease-out;will-change:translate,scale}
 @media (hover: none), (pointer: coarse){.gcb{display:none}}
-@media (prefers-reduced-motion: reduce){.gcb{display:none}}
+@media (prefers-reduced-motion: dw-off){.gcb{display:none}}
 /* 写真の高さ自動 */
 :where(img[width][height]){height:auto}
 /* 文字は黒 */
@@ -406,7 +406,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   .sw-foot-top{margin:48px 0 72px}
   .sw-foot-lb,.sw-foot-bt{flex-direction:column;gap:4px}
 }
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion: dw-off){
   .sw-lni,.sw-mk{transform:none!important;transition:none!important}
   .sw-rv{opacity:1!important;transform:none!important;transition:none!important}
   .sw-clip{clip-path:none!important;transition:none!important}
@@ -477,15 +477,6 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-blocks.lit .sw-blk:nth-child(2) img{transition-delay:.06s}.sw-blocks.lit .sw-blk:nth-child(3) img{transition-delay:.12s}.sw-blocks.lit .sw-blk:nth-child(4) img{transition-delay:.18s}.sw-blocks.lit .sw-blk:nth-child(5) img{transition-delay:.24s}
 .sw-blk{overflow:hidden}
 
-/* 文字のにじみ（乗っている文字のかたまりだけ） */
-.sw-inkdot{display:none}
-@media (hover: hover) and (pointer: fine){
-  .sw-ink{filter:url(#swInkS)}
-  .sw-ink.sw-inkL{filter:url(#swInkL)}
-  .sw-inkdot{display:block;position:absolute;left:0;top:0;width:clamp(18px,.62em,58px);height:clamp(18px,.62em,58px);translate:-999px -999px;margin:0;left:calc(clamp(18px,.62em,58px) / -2);top:calc(clamp(18px,.62em,58px) / -2);border-radius:50%;background:currentColor;pointer-events:none;scale:0;transition:scale .2s ease-out;z-index:0}
-  .sw-ink > .sw-inkdot{scale:1}
-  html.dw-inking .gcur{opacity:0!important;transition:opacity .15s}
-}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
@@ -762,7 +753,7 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4500}}'>
 class Component extends DCLogic {
   calm() {
-    try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+    try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: dw-off)').matches; } catch (e) { return false; }
   }
   componentDidMount() {
     setTimeout(() => { try { this.swInit(); } catch (e) {} }, 80);
@@ -984,25 +975,7 @@ class Component extends DCLogic {
         document.documentElement.classList.toggle('dw-barstuck', on);
         if (on) cv.style.setProperty('--bcv', Math.max(0, Math.round(bar.getBoundingClientRect().top) + 2) + 'px'); };
       window.addEventListener('scroll', () => { if (!cT) cT = requestAnimationFrame(chk); }, { passive: true }); window.addEventListener('resize', chk); chk(); setTimeout(chk, 600); setTimeout(chk, 2500); } } catch (e) {}
-    // 文字のにじみ: カーソルが乗っている文字のかたまり1つだけに、黒い丸が入り込んでインクのように溶け合う（マウスのある画面だけ）
-    try { if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.getElementById('swInkS')) {
-      const ns = 'http://www.w3.org/2000/svg', sv = document.createElementNS(ns, 'svg'); sv.setAttribute('width', '0'); sv.setAttribute('height', '0'); sv.setAttribute('aria-hidden', 'true'); sv.style.position = 'absolute';
-      sv.innerHTML = '<filter id="swInkS"><feGaussianBlur stdDeviation="1.1"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 14 -6"/></filter><filter id="swInkL"><feGaussianBlur stdDeviation="4"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8"/></filter>';
-      document.body.appendChild(sv);
-      const dot = document.createElement('span'); dot.className = 'sw-inkdot'; dot.setAttribute('aria-hidden', 'true');
-      const SEL = 'h1,h2,h3,h4,p,li,dt,dd,td,th,label,.sw-lni,.sw-line span,.sw-c1,.sw-c2 a';
-      let cur = null, mx = 0, my = 0, rq = 0;
-      const place = () => { rq = 0; if (!cur) return; const r = cur.getBoundingClientRect(); dot.style.translate = (mx - r.left) + 'px ' + (my - r.top) + 'px'; };
-      const off = () => { if (cur) { cur.classList.remove('sw-ink', 'sw-inkL'); if (cur._inkPos) cur.style.position = ''; } cur = null; if (dot.parentNode) dot.remove(); document.documentElement.classList.remove('dw-inking'); };
-      document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY;
-        let t = e.target && e.target.closest ? e.target.closest(SEL) : null;
-        if (t && (t.closest('.stage,.sw-blocks,svg,canvas,button,.svc') || !t.textContent.trim())) t = null;
-        if (t) { const r = t.getBoundingClientRect(); if (r.width * r.height > 600000) t = null; }
-        if (t !== cur) { off(); if (t) { cur = t; if (getComputedStyle(t).position === 'static') { t.style.position = 'relative'; t._inkPos = 1; }
-          t.classList.add('sw-ink'); if (parseFloat(getComputedStyle(t).fontSize) >= 36) t.classList.add('sw-inkL'); t.appendChild(dot); document.documentElement.classList.add('dw-inking'); } }
-        if (cur && !rq) rq = requestAnimationFrame(place); }, { passive: true });
-      document.addEventListener('mouseleave', off); window.addEventListener('scroll', () => { if (cur && !rq) rq = requestAnimationFrame(place); }, { passive: true }); } } catch (e) {}
-    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: dw-off)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
     const split = () => { q('.sw-split').forEach((el) => {

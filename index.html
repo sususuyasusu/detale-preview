@@ -131,7 +131,7 @@ nav a{box-sizing:border-box}
 .bigamp{position:absolute;left:50%;top:50%;font-family:'Cormorant Garamond', serif;font-style:normal;font-weight:500;font-size:min(150vmin,1300px);line-height:1;color:var(--ink);transform:translate(-50%,-56%);animation:ampIn 1.25s cubic-bezier(.2,.8,.2,1) both;transition:opacity .25s}
 .scene:has(> .fromblk){animation:none}
 .fromblk{position:absolute;inset:0;background:#161514;z-index:9;pointer-events:none;animation:fbOut .9s ease .15s both}
-@media (prefers-reduced-motion: reduce){.fromblk{display:none}}
+@media (prefers-reduced-motion: dw-off){.fromblk{display:none}}
 @keyframes fbOut{to{opacity:0}}
 .bigamp.gone{opacity:0;transition:opacity .28s ease}
 .ampbl{display:inline-block;width:0;height:0}
@@ -274,9 +274,9 @@ a[href^="mailto:"]:hover,a[href^="tel:"]:hover{background-size:100% 4px}
 .snav{background-image:linear-gradient(currentColor,currentColor);background-size:0 3px;background-repeat:no-repeat;background-position:100% 100%;transition:background-size .4s cubic-bezier(.2,.8,.2,1),color .3s,transform .3s}
 .snav:hover{background-size:100% 3px;background-position:0 100%}
 @media (max-width: 700px){.stage{height:clamp(520px,88svh,720px)!important}form [style*="minmax(240px"]{grid-template-columns:1fr!important}}
-@media (prefers-reduced-motion: reduce){.gtb{animation:none!important;opacity:0}}
-@media (prefers-reduced-motion: reduce){.gcur{display:none!important}.curhide,.curhide *{cursor:auto!important}.gb{animation:none!important;background:#B0986A}}
-@media (prefers-reduced-motion: reduce){.loaderpanel{display:none!important}*{animation:none!important;transition:none!important}.ch{transform:none}}
+@media (prefers-reduced-motion: dw-off){.gtb{animation:none!important;opacity:0}}
+@media (prefers-reduced-motion: dw-off){.gcur{display:none!important}.curhide,.curhide *{cursor:auto!important}.gb{animation:none!important;background:#B0986A}}
+@media (prefers-reduced-motion: dw-off){.loaderpanel{display:none!important}*{animation:none!important;transition:none!important}.ch{transform:none}}
 
 /* 和紙の地（細かな紙の繊維） */
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.32;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .36  0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -301,7 +301,7 @@ body{font-feature-settings:'palt' 1;}
 .cb{background:#161514!important;animation:none!important}
 .gcb{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:currentColor;z-index:-1;pointer-events:none;translate:-999px -999px;scale:0;transition:scale .16s ease-out;will-change:translate,scale}
 @media (hover: none), (pointer: coarse){.gcb{display:none}}
-@media (prefers-reduced-motion: reduce){.gcb{display:none}}
+@media (prefers-reduced-motion: dw-off){.gcb{display:none}}
 /* 日本語見出しの細いにじみ */
 .gooT.gooJ{filter:url(#dwGooJ)}
 /* 写真の高さ自動 */
@@ -311,7 +311,7 @@ body{font-feature-settings:'palt' 1;}
 .mphl{position:fixed;inset:0;pointer-events:none;z-index:25}
 .mph{position:absolute;left:0;top:0;font-size:clamp(28px, 8.6vw, 132px);line-height:1;transform-origin:0 0;visibility:hidden;white-space:nowrap;will-change:transform}
 /* 文字が移り切るまで画面を止める */
-@media (prefers-reduced-motion: reduce){#pinspace{height:0!important}#pinbox{position:static!important}}
+@media (prefers-reduced-motion: dw-off){#pinspace{height:0!important}#pinbox{position:static!important}}
 /* ロゴは本物の文字を光らせる（v2） */
 .gl-on{background:radial-gradient(circle 230px at var(--lx,-999px) var(--ly,-999px),#E8D3A0 0%,#B0986A 34%,currentColor 74%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .gl-on *{-webkit-text-fill-color:transparent}
@@ -354,7 +354,7 @@ body{font-feature-settings:'palt' 1;}
 .stage:has(.ph4) #stw-d,.stage:has(.ph4) #stw-w,.stage:has(.ph4) .snav,.stage:has(.ph4) .stno{animation:ph4Ink 12s linear both}
 @keyframes ph4Ink{0%,26.5%{color:#161514}28%,100%{color:#F0EDE6}}
 @media (max-width:700px){.ph4{--F:42px;--A:15%}.ph4-block{right:8%}.ph4-cap{left:16px;top:calc(var(--A) - 46px)}.ph4-cap2{top:auto;bottom:24%}}
-@media (prefers-reduced-motion: reduce){.ph4 *{animation:none!important}.ph4-l i{transform:none}.ph4-band,.ph4-dark,.ph4-cap2{display:none}.ph4-cap{opacity:1}}
+@media (prefers-reduced-motion: dw-off){.ph4 *{animation:none!important}.ph4-l i{transform:none}.ph4-band,.ph4-dark,.ph4-cap2{display:none}.ph4-cap{opacity:1}}
 /* 場面04 第3幕：線の立方体と言葉の3D空間 */
 .scene.ph4.cf{animation:none}
 .ph4.cf .ph4-cube{opacity:1;animation:cfCube 11.85s linear both}
@@ -386,7 +386,7 @@ body{font-feature-settings:'palt' 1;}
 .cw-c[data-f]>.cw-f{opacity:var(--op)}
 @keyframes cwCorner{0%{opacity:.25}60%{opacity:.7}100%{opacity:1}}
 @media (max-width:700px){.cw-f[style*="rotateY(180deg)"]::after,.cw-f[style*="rotateY(-90deg)"]::after,.cw-f[style*="rotateX(-90deg)"]::after{display:none}}
-@media (prefers-reduced-motion: reduce){.cw-f::after{animation:none;opacity:.6}}
+@media (prefers-reduced-motion: dw-off){.cw-f::after{animation:none;opacity:.6}}
 @keyframes cwSig{from{stroke-dashoffset:0}to{stroke-dashoffset:-200}}
 @font-face{font-family:'DSEG14';src:url(data:font/woff2;base64,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) format('woff2');font-display:swap}
 .cw-w{font-style:normal;font-family:'DSEG14',ui-monospace,monospace;font-size:calc(var(--S) * .1);letter-spacing:.06em;color:rgba(240,237,230,.3);white-space:nowrap;position:relative;z-index:1}
@@ -394,7 +394,7 @@ body{font-feature-settings:'palt' 1;}
 @keyframes cwHi{0%{color:rgba(240,237,230,.26);text-shadow:none}35%{color:#F0EDE6;text-shadow:0 0 18px rgba(240,237,230,.55)}100%{color:#F0EDE6;text-shadow:0 0 10px rgba(240,237,230,.3)}}
 .ph4-dark,.ph4-cap2{animation-name:ph4Fade}
 @media (max-width:700px){.ph4-cube{--S:200px;perspective:800px}.cw{--camZ:-60px}.cw-x{display:none}.cw-s rect.g{stroke-width:7}.cw-f[style*="rotateY(180deg)"] .cw-s,.cw-f[style*="rotateY(-90deg)"] .cw-s,.cw-f[style*="rotateX(-90deg)"] .cw-s{display:none}.cw-s rect{stroke-width:2}}
-@media (prefers-reduced-motion: reduce){.ph4-cube{display:none}.cw-s rect{animation:none}}
+@media (prefers-reduced-motion: dw-off){.ph4-cube{display:none}.cw-s rect{animation:none}}
 /* 鏡文字を出さない */
 .cw-f{transform-style:preserve-3d}
 .cw-w{backface-visibility:hidden;-webkit-backface-visibility:hidden;display:block}
@@ -402,7 +402,7 @@ body{font-feature-settings:'palt' 1;}
 .tiltbtn{display:none;position:absolute;left:16px;top:56px;z-index:30;font-family:'Shippori Mincho',serif;font-size:13px;padding:10px 14px;min-height:44px;border:1px solid currentColor;background:rgba(240,237,230,.85);color:#161514;border-radius:22px}
 @media (hover: none) and (pointer: coarse){.tiltbtn{display:block}}
 .tilt-on .tiltbtn,.tilt-asked .tiltbtn{display:none!important}
-@media (prefers-reduced-motion: reduce){.tiltbtn{display:none!important}}
+@media (prefers-reduced-motion: dw-off){.tiltbtn{display:none!important}}
 /* 玉は文字の範囲を動く */
 .gooT .gtb{left:0!important;right:auto!important;top:0!important;animation-name:inkMorph!important;animation-direction:normal!important;will-change:translate}
 /* 玉は文字の大きさ基準 */
@@ -671,7 +671,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   .sw-foot-top{margin:48px 0 72px}
   .sw-foot-lb,.sw-foot-bt{flex-direction:column;gap:4px}
 }
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion: dw-off){
   .sw-lni,.sw-mk{transform:none!important;transition:none!important}
   .sw-rv{opacity:1!important;transform:none!important;transition:none!important}
   .sw-clip{clip-path:none!important;transition:none!important}
@@ -742,15 +742,6 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-blocks.lit .sw-blk:nth-child(2) img{transition-delay:.06s}.sw-blocks.lit .sw-blk:nth-child(3) img{transition-delay:.12s}.sw-blocks.lit .sw-blk:nth-child(4) img{transition-delay:.18s}.sw-blocks.lit .sw-blk:nth-child(5) img{transition-delay:.24s}
 .sw-blk{overflow:hidden}
 
-/* 文字のにじみ（乗っている文字のかたまりだけ） */
-.sw-inkdot{display:none}
-@media (hover: hover) and (pointer: fine){
-  .sw-ink{filter:url(#swInkS)}
-  .sw-ink.sw-inkL{filter:url(#swInkL)}
-  .sw-inkdot{display:block;position:absolute;left:0;top:0;width:clamp(18px,.62em,58px);height:clamp(18px,.62em,58px);translate:-999px -999px;margin:0;left:calc(clamp(18px,.62em,58px) / -2);top:calc(clamp(18px,.62em,58px) / -2);border-radius:50%;background:currentColor;pointer-events:none;scale:0;transition:scale .2s ease-out;z-index:0}
-  .sw-ink > .sw-inkdot{scale:1}
-  html.dw-inking .gcur{opacity:0!important;transition:opacity .15s}
-}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -839,11 +830,11 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .ph4.cf::after{content:'';position:absolute;left:50%;top:50%;width:160vmax;height:2px;margin-top:-1px;background:#9C978E;z-index:7;pointer-events:none;
   transform:translate(-50%,0) rotate(-242deg);opacity:0;animation:cfLine 1.45s cubic-bezier(.65,0,.35,1) 10.75s forwards}
 @keyframes cfLine{0%{transform:translate(-50%,0) rotate(-242deg);opacity:1}76%{transform:translate(-50%,0) rotate(-62deg);opacity:1}100%{transform:translate(-50%,0) rotate(-62deg);opacity:0}}
-@media (prefers-reduced-motion: reduce){.ph4.cf::after{display:none}.ph4.cf .ph4-cube{-webkit-mask-image:none;mask-image:none}}
+@media (prefers-reduced-motion: dw-off){.ph4.cf::after{display:none}.ph4.cf .ph4-cube{-webkit-mask-image:none;mask-image:none}}
 /* 立方体の場面: 黒の奥から立方体が現れて近づく */
 @keyframes cwDeep{0%{scale:.03;opacity:0}15%{opacity:1}100%{scale:1;opacity:1}}
 .ph4.cf .cw-par{animation:cwDeep 2.6s cubic-bezier(.45,0,.15,1) .15s both}
-@media (prefers-reduced-motion: reduce){.ph4.cf .cw-par{animation:none}}
+@media (prefers-reduced-motion: dw-off){.ph4.cf .cw-par{animation:none}}
 /* 立方体の場面へは暗闇のまま切り替える */
 .stage.cfdark{background:#161514!important;transition:background-color .45s ease}
 .stage.cfdark .ph4,.ph4.cf{animation:none!important}
@@ -876,6 +867,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 .dw-sf .ph4.cf .cw-par{animation:cwFadeSf 2.2s ease .15s both!important;scale:none!important}
 .dw-sf .ph4.cf .cw-glow{animation:cwFadeSf 2.2s ease .15s both}
 /* 場面3の終わり: 線が回って暗転 */
+.ph4.cf:not(.go) .ph4-band{animation-play-state:paused!important}
 @property --cfb{syntax:'<angle>';inherits:false;initial-value:0deg}
 @keyframes cfDarkIn{from{--cfb:0deg}to{--cfb:180deg}}
 @keyframes cfLine2{0%{transform:translate(-50%,-50%) rotate(-54deg);opacity:1}78%{transform:translate(-50%,-50%) rotate(-234deg);opacity:1}100%{transform:translate(-50%,-50%) rotate(-234deg);opacity:0}}
@@ -1536,25 +1528,7 @@ class Component extends DCLogic {
         document.documentElement.classList.toggle('dw-barstuck', on);
         if (on) cv.style.setProperty('--bcv', Math.max(0, Math.round(bar.getBoundingClientRect().top) + 2) + 'px'); };
       window.addEventListener('scroll', () => { if (!cT) cT = requestAnimationFrame(chk); }, { passive: true }); window.addEventListener('resize', chk); chk(); setTimeout(chk, 600); setTimeout(chk, 2500); } } catch (e) {}
-    // 文字のにじみ: カーソルが乗っている文字のかたまり1つだけに、黒い丸が入り込んでインクのように溶け合う（マウスのある画面だけ）
-    try { if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.getElementById('swInkS')) {
-      const ns = 'http://www.w3.org/2000/svg', sv = document.createElementNS(ns, 'svg'); sv.setAttribute('width', '0'); sv.setAttribute('height', '0'); sv.setAttribute('aria-hidden', 'true'); sv.style.position = 'absolute';
-      sv.innerHTML = '<filter id="swInkS"><feGaussianBlur stdDeviation="1.1"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 14 -6"/></filter><filter id="swInkL"><feGaussianBlur stdDeviation="4"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8"/></filter>';
-      document.body.appendChild(sv);
-      const dot = document.createElement('span'); dot.className = 'sw-inkdot'; dot.setAttribute('aria-hidden', 'true');
-      const SEL = 'h1,h2,h3,h4,p,li,dt,dd,td,th,label,.sw-lni,.sw-line span,.sw-c1,.sw-c2 a';
-      let cur = null, mx = 0, my = 0, rq = 0;
-      const place = () => { rq = 0; if (!cur) return; const r = cur.getBoundingClientRect(); dot.style.translate = (mx - r.left) + 'px ' + (my - r.top) + 'px'; };
-      const off = () => { if (cur) { cur.classList.remove('sw-ink', 'sw-inkL'); if (cur._inkPos) cur.style.position = ''; } cur = null; if (dot.parentNode) dot.remove(); document.documentElement.classList.remove('dw-inking'); };
-      document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY;
-        let t = e.target && e.target.closest ? e.target.closest(SEL) : null;
-        if (t && (t.closest('.stage,.sw-blocks,svg,canvas,button,.svc') || !t.textContent.trim())) t = null;
-        if (t) { const r = t.getBoundingClientRect(); if (r.width * r.height > 600000) t = null; }
-        if (t !== cur) { off(); if (t) { cur = t; if (getComputedStyle(t).position === 'static') { t.style.position = 'relative'; t._inkPos = 1; }
-          t.classList.add('sw-ink'); if (parseFloat(getComputedStyle(t).fontSize) >= 36) t.classList.add('sw-inkL'); t.appendChild(dot); document.documentElement.classList.add('dw-inking'); } }
-        if (cur && !rq) rq = requestAnimationFrame(place); }, { passive: true });
-      document.addEventListener('mouseleave', off); window.addEventListener('scroll', () => { if (cur && !rq) rq = requestAnimationFrame(place); }, { passive: true }); } } catch (e) {}
-    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: dw-off)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
     const split = () => { q('.sw-split').forEach((el) => {
@@ -1993,7 +1967,7 @@ class Component extends DCLogic {
     this._scene = setTimeout(() => this.nextScene(n + 1), DUR[sc]);
   }
   calm() {
-    try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+    try { return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: dw-off)').matches; } catch (e) { return false; }
   }
   stopPhys() { this._pb = null; }
   startPhys() {
