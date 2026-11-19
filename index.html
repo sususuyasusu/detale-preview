@@ -879,14 +879,15 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 .ph4.cf:not(.go) .ph4-band{animation-play-state:paused!important}
 @property --cfb{syntax:'<angle>';inherits:false;initial-value:0deg}
 @keyframes cfDarkIn{from{--cfb:0deg}to{--cfb:180deg}}
-@keyframes cfLine2{0%{transform:translate(-50%,-50%) rotate(-54deg);opacity:1}78%{transform:translate(-50%,-50%) rotate(-234deg);opacity:1}100%{transform:translate(-50%,-50%) rotate(-234deg);opacity:0}}
+@keyframes cfLine2{0%{transform:translate(-50%,-50%) rotate(-54deg);opacity:1}55%{opacity:1}100%{transform:translate(-50%,-50%) rotate(-234deg);opacity:0}}
 .ph4.cf .ph4-band.b{display:none!important}
 .ph4.cf .ph4-band.t{display:block!important;top:50%;left:50%;right:auto;bottom:auto;width:160vmax;height:2px;background:#9C978E;z-index:5;opacity:0;
-  transform:translate(-50%,-50%) rotate(-54deg);animation:cfLine2 1.3s cubic-bezier(.65,0,.35,1) 2.7s forwards}
+  transform:translate(-50%,-50%) rotate(-54deg);animation:cfLine2 1s cubic-bezier(.65,0,.35,1) 2.7s forwards}
 .ph4.cf .ph4-band.m{display:block!important;opacity:1;animation:cfDarkIn 1s cubic-bezier(.65,0,.35,1) 2.7s both;
   -webkit-mask-image:conic-gradient(from 36deg at 50% 50%,#000 0deg,#000 var(--cfb),transparent var(--cfb),transparent 180deg,#000 180deg,#000 calc(180deg + var(--cfb)),transparent calc(180deg + var(--cfb)));
   mask-image:conic-gradient(from 36deg at 50% 50%,#000 0deg,#000 var(--cfb),transparent var(--cfb),transparent 180deg,#000 180deg,#000 calc(180deg + var(--cfb)),transparent calc(180deg + var(--cfb)))}
 .stage.p4dk .ph4.cf .ph4-band.m{-webkit-mask-image:none!important;mask-image:none!important}
+.stage.p4dk .ph4.cf{background:#161514!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
