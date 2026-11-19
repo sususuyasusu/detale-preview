@@ -819,6 +819,11 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 .dw-sf .stage.uiblend nav[aria-label] .btn{background:#161514!important;color:#F0EDE6!important;transition:background-color .5s ease,color .5s ease}
 .dw-sf .stage.uiblend.cfdark nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important}
 .dw-sf.dw-uib:has(.stage.cfdark) .mph{color:#F0EDE6!important}
+/* iPhone・Safari でも、玉と & の場面（uiblite）だけは文字の部分にだけ小さく反転をかける（本人「反転されてない」2026-11-19）。
+   画面全体に重ねる層（.mphl）と立方体の場面では使わない＝落ちた原因と疑う組み合わせを避ける */
+.dw-sf .stage.uiblend.uiblite .stcopy,.dw-sf .stage.uiblend.uiblite .stno,.dw-sf .stage.uiblend.uiblite nav[aria-label],.dw-sf .stage.uiblend.uiblite #stw-d,.dw-sf .stage.uiblend.uiblite #stw-w,.dw-sf .stage.uiblend.uiblite .snav{color:#F0EDE6!important;transition:none}
+.dw-sf .stage.uiblend.uiblite .stcopy,.dw-sf .stage.uiblend.uiblite .stno,.dw-sf .stage.uiblend.uiblite nav[aria-label],.dw-sf .stage.uiblend.uiblite p:has(> #stw-d){mix-blend-mode:difference}
+.dw-sf .stage.uiblend.uiblite nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important;transition:none}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1884,7 +1889,7 @@ class Component extends DCLogic {
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
     try { if (this._stage) this._stage.classList.toggle('ampjoin', this._joinAmp); } catch (e) {}
-    try { const ub = sc === 0 || sc === 1 || sc === 3; if (this._stage) this._stage.classList.toggle('uiblend', ub); document.documentElement.classList.toggle('dw-uib', ub); } catch (e) {}
+    try { const ub = sc === 0 || sc === 1 || sc === 3; if (this._stage) this._stage.classList.toggle('uiblend', ub); document.documentElement.classList.toggle('dw-uib', ub); if (this._stage) this._stage.classList.toggle('uiblite', sc === 0 || sc === 1); } catch (e) {}
     try { const st0 = this._stage; if (st0 && !this.calm()) {
       clearInterval(this._cfdI);
       if (sc === 1) this._acT.push(setTimeout(() => st0.classList.add('cfdark'), 3700));
