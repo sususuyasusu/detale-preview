@@ -831,6 +831,14 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 .dw-sf .stage.uiblend.uiblite .stcopy,.dw-sf .stage.uiblend.uiblite .stno,.dw-sf .stage.uiblend.uiblite nav[aria-label],.dw-sf .stage.uiblend.uiblite #stw-d,.dw-sf .stage.uiblend.uiblite #stw-w,.dw-sf .stage.uiblend.uiblite .snav{color:#F0EDE6!important;transition:none}
 .dw-sf .stage.uiblend.uiblite .stcopy,.dw-sf .stage.uiblend.uiblite .stno,.dw-sf .stage.uiblend.uiblite nav[aria-label],.dw-sf .stage.uiblend.uiblite p:has(> #stw-d){mix-blend-mode:difference}
 .dw-sf .stage.uiblend.uiblite nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important;transition:none}
+/* iPhone・Safari は重い処理を使わない（落ちる対策） */
+.dw-sf .stage.uiblend .stcopy,.dw-sf .stage.uiblend .stno,.dw-sf .stage.uiblend nav[aria-label],.dw-sf .stage.uiblend p:has(> #stw-d),.dw-sf .mphl{mix-blend-mode:normal!important}
+.dw-sf .stage.uiblend.uiblite .stcopy,.dw-sf .stage.uiblend.uiblite .stno,.dw-sf .stage.uiblend.uiblite #stw-d,.dw-sf .stage.uiblend.uiblite #stw-w,.dw-sf .stage.uiblend.uiblite .snav{color:#F0EDE6!important;-webkit-text-stroke:1.2px #161514;paint-order:stroke fill}
+.dw-sf .stage.uiblend.uiblite nav[aria-label] .btn{background:#161514!important;color:#F0EDE6!important;-webkit-text-stroke:0;box-shadow:0 0 0 1px #F0EDE6}
+.dw-sf.dw-uib .mph{color:#F0EDE6!important;-webkit-text-stroke:1.2px #161514;paint-order:stroke fill}
+@keyframes cwFadeSf{0%{opacity:0}100%{opacity:1}}
+.dw-sf .ph4.cf .cw-par{animation:cwFadeSf 2.2s ease .15s both!important;scale:none!important}
+.dw-sf .ph4.cf .cw-glow{animation:cwFadeSf 2.2s ease .15s both}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
