@@ -442,6 +442,10 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
   .sw-exp-list li.on span{display:block;margin:6px 0 2px;font-size:11.5px;line-height:1.6;color:#6E6A62}
   .sw-exp-r{display:block;grid-column:2;grid-row:2;height:auto;margin:8px 16px 16px 0}
 }
+
+/* 上の帯の上のすき間を、上端に固定した背景色の板でふさぐ */
+.sw-topcover{position:fixed;left:0;right:0;top:-200px;height:calc(200px + var(--bcv,0px));background:var(--sw-bg);z-index:29;pointer-events:none;display:none}
+html.dw-barstuck .sw-topcover{display:block}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
@@ -935,6 +939,14 @@ class Component extends DCLogic {
     // 上のメニューの帯が画面上端に貼り付いているかを見て、目印 stuck を付け外し（帯の上のすき間をふさぐため）
     try { let bT = 0; const barChk = () => { bT = 0; q('.sw-bar').forEach((b) => { const on = b.getBoundingClientRect().top <= 1; if (on !== b.classList.contains('stuck')) b.classList.toggle('stuck', on); }); };
       window.addEventListener('scroll', () => { if (!bT) bT = requestAnimationFrame(barChk); }, { passive: true }); barChk(); setTimeout(barChk, 600); setTimeout(barChk, 2500); } catch (e) {}
+    // 上の帯の上のすき間ふさぎ: 帯の元の場所（目印）を通り過ぎている間、上端に背景色の板を置き、板の下端を帯の上端に合わせる
+    try { const bar = document.querySelector('.sw-bar'); if (bar && !document.querySelector('.sw-topcover')) {
+      const mk = document.createElement('div'); mk.className = 'sw-barmark'; mk.style.cssText = 'height:0;margin:0;padding:0'; bar.parentNode.insertBefore(mk, bar);
+      const cv = document.createElement('div'); cv.className = 'sw-topcover'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
+      let cT = 0; const chk = () => { cT = 0; const on = mk.getBoundingClientRect().top < 0;
+        document.documentElement.classList.toggle('dw-barstuck', on);
+        if (on) cv.style.setProperty('--bcv', Math.max(0, Math.round(bar.getBoundingClientRect().top) + 2) + 'px'); };
+      window.addEventListener('scroll', () => { if (!cT) cT = requestAnimationFrame(chk); }, { passive: true }); window.addEventListener('resize', chk); chk(); setTimeout(chk, 600); setTimeout(chk, 2500); } } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
     // 見出しを「見た目の1行ずつ」に分け、下から現れるようにする
