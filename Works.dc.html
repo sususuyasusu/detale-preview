@@ -237,7 +237,7 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 /* 散らばった作例 → 一列 */
 .sw-blocks{height:220vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden;overflow:clip}
 .sw-blk-row{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:flex;align-items:center;justify-content:center;gap:12px;padding:0 16px}
-.sw-blk{display:block;width:calc((100% - 48px) / 5);height:min(calc((100vw - 80px) / 5 * 1.5),calc(100vh - var(--sw-bar) - 64px));aspect-ratio:auto;flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
+.sw-blk{display:block;width:calc((100% - 48px) / 5);height:calc(100vh - var(--sw-bar) - 16px);aspect-ratio:auto;flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
 .sw-blk img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* 大きな文章 */

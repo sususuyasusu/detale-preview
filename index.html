@@ -482,7 +482,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 /* 散らばった作例 → 一列 */
 .sw-blocks{height:220vh;position:relative;border-bottom:1px solid var(--sw-line);overflow:hidden;overflow:clip}
 .sw-blk-row{position:sticky;top:var(--sw-bar);height:calc(100vh - var(--sw-bar));display:flex;align-items:center;justify-content:center;gap:12px;padding:0 16px}
-.sw-blk{display:block;width:calc((100% - 48px) / 5);height:min(calc((100vw - 80px) / 5 * 1.5),calc(100vh - var(--sw-bar) - 64px));aspect-ratio:auto;flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
+.sw-blk{display:block;width:calc((100% - 48px) / 5);height:calc(100vh - var(--sw-bar) - 16px);aspect-ratio:auto;flex:0 0 auto;will-change:transform;background:var(--sw-ink)}
 .sw-blk img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* 大きな文章 */
@@ -774,6 +774,10 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   transform:translate(-50%,0) rotate(-242deg);opacity:0;animation:cfLine 1.45s cubic-bezier(.65,0,.35,1) 10.75s forwards}
 @keyframes cfLine{0%{transform:translate(-50%,0) rotate(-242deg);opacity:1}76%{transform:translate(-50%,0) rotate(-62deg);opacity:1}100%{transform:translate(-50%,0) rotate(-62deg);opacity:0}}
 @media (prefers-reduced-motion: reduce){.ph4.cf::after{display:none}.ph4.cf .ph4-cube{-webkit-mask-image:none;mask-image:none}}
+/* 立方体の場面: 遠くから小さく現れて近づく */
+@keyframes cfGrow{0%{transform:scale(.06);opacity:0}16%{opacity:1}100%{transform:scale(1);opacity:1}}
+.ph4.cf .ph4-cube{transform-origin:50% 50%;animation:cfCubeW 11.85s linear both,cfWipe 1.1s cubic-bezier(.65,0,.35,1) 10.75s both,cfGrow 2.4s cubic-bezier(.5,0,.15,1) .2s both}
+@media (prefers-reduced-motion: reduce){.ph4.cf .ph4-cube{animation:cfCubeW 11.85s linear both}}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -936,7 +940,7 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
   <!-- ===== SW: 大きな文章＋脚注 ===== -->
   <section id="about" class="sw-state" aria-label="私たちについて">
     <p class="sw-label">01 — About / フード専門制作会社</p>
-    <h2 class="sw-big sw-split">外食と食品に特化した制作会社です。大手チェーンから個人店まで、その店に合うデザインを提案します<sup class="sw-fn">[*]</sup>。料理がおいしく見える写真、売りたい商品が売れるメニュー、店の世界観までつくります<sup class="sw-fn">[**]</sup>。専属のクリエイターが直接担当し、意図をそのまま、すばやく形にします<sup class="sw-fn">[***]</sup>。</h2>
+    <h2 class="sw-big sw-split">おいしさを、売れるかたちに。外食と食品の制作会社として、大手から街の名店まで100超のブランドを手がけてきました。<sup class="sw-fn">[*]</sup>思わず頼みたくなる写真、売りたい一品へ導くメニュー、店の空気まで伝わるデザインを。<sup class="sw-fn">[**]</sup>専属のクリエイターが直接向き合うから、想いはぶれずに速く届きます。<sup class="sw-fn">[***]</sup></h2>
     <div class="sw-notes">
       <p class="sw-rv"><span>[*] —</span> <b>100+</b> 取引ブランド（大手〜個人店）</p>
       <p class="sw-rv"><span>[**] —</span> <b>95%</b> ご相談のうちフードビジネス</p>
@@ -1413,7 +1417,7 @@ class Component extends DCLogic {
     // 立方体の場面が見えている間は、隅の文字を立方体より上に出す（目印 oncube）
     try { setInterval(() => { const st = document.querySelector('section.stage'); if (!st) return;
       const c = st.querySelector('.ph4-cube'); let on = false;
-      if (c) { const r = c.getBoundingClientRect(); if (r.width > 0 && r.bottom > 0 && r.top < innerHeight) { let op = 1, x = c; while (x && x !== st) { const cs = getComputedStyle(x); if (cs.display === 'none' || cs.visibility === 'hidden') { op = 0; break; } op *= +cs.opacity; x = x.parentElement; } on = op > 0.35 && !(parseFloat(getComputedStyle(c).getPropertyValue('--cfa')) > 90); } }
+      if (c) { const r = c.getBoundingClientRect(); if (r.width > innerWidth * 0.6 && r.bottom > 0 && r.top < innerHeight) { let op = 1, x = c; while (x && x !== st) { const cs = getComputedStyle(x); if (cs.display === 'none' || cs.visibility === 'hidden') { op = 0; break; } op *= +cs.opacity; x = x.parentElement; } on = op > 0.35 && !(parseFloat(getComputedStyle(c).getPropertyValue('--cfa')) > 90); } }
       if (on !== st.classList.contains('oncube')) st.classList.toggle('oncube', on); }, 150); } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
