@@ -447,6 +447,9 @@ header[style*="sticky"]{padding-top:env(safe-area-inset-top)}
 /* 上の帯の上のすき間を、上端に固定した背景色の板でふさぐ */
 .sw-topcover{position:fixed;left:0;right:0;top:-200px;height:calc(200px + var(--bcv,0px));background:var(--sw-bg);z-index:29;pointer-events:none;display:none}
 html.dw-barstuck .sw-topcover{display:block}
+
+/* ヘッダー自身に上向きの背景を付ける（貼り付き中だけ） */
+html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1px;bottom:100%;height:300px;background:var(--sw-bg);pointer-events:none}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
