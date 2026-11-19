@@ -937,7 +937,7 @@ class Component extends DCLogic {
     // 立方体の場面が見えている間は、隅の文字を立方体より上に出す（目印 oncube）
     try { setInterval(() => { const st = document.querySelector('section.stage'); if (!st) return;
       const c = st.querySelector('.ph4-cube'); let on = false;
-      if (c) { const r = c.getBoundingClientRect(); if (r.width > 0 && r.bottom > 0 && r.top < innerHeight) { let op = 1, x = c; while (x && x !== st) { const cs = getComputedStyle(x); if (cs.display === 'none' || cs.visibility === 'hidden') { op = 0; break; } op *= +cs.opacity; x = x.parentElement; } on = op > 0.35; } }
+      if (c) { const r = c.getBoundingClientRect(); if (r.width > 0 && r.bottom > 0 && r.top < innerHeight) { let op = 1, x = c; while (x && x !== st) { const cs = getComputedStyle(x); if (cs.display === 'none' || cs.visibility === 'hidden') { op = 0; break; } op *= +cs.opacity; x = x.parentElement; } on = op > 0.35 && !(parseFloat(getComputedStyle(c).getPropertyValue('--cfa')) > 90); } }
       if (on !== st.classList.contains('oncube')) st.classList.toggle('oncube', on); }, 150); } catch (e) {}
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = (c) => c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c;
