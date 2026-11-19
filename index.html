@@ -782,13 +782,20 @@ nav[aria-label="メインメニュー"][style*="sticky"]{top:env(safe-area-inset
 .stage.cfdark{background:#161514!important;transition:background-color .45s ease}
 .stage.cfdark .ph4,.ph4.cf{animation:none!important}
 .ph4.cf .ph4-cube{background:#161514}
-/* 隅の文字を背景に合わせて自動で白黒反転 */
-.stage.uiblend .stcopy,.stage.uiblend .stno,.stage.uiblend nav[aria-label],.stage.uiblend #stw-d,.stage.uiblend #stw-w,.stage.uiblend .snav{color:#F0EDE6!important;animation:none!important;opacity:1!important}
-.stage.uiblend .stcopy,.stage.uiblend .stno,.stage.uiblend nav[aria-label],.stage.uiblend p:has(> #stw-d){mix-blend-mode:difference;z-index:7!important}
-.stage.uiblend nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important}
-/* 少しスクロールすると DETALE / WORKS は下の見出しへ飛ぶ「代わりの文字」（.mphl 内の .mph）にすり替わる。これにも同じ反転を付ける（本人指摘「スライドすると反転が消える」） */
-.dw-uib .mphl{mix-blend-mode:difference}
-.dw-uib .mph{color:#F0EDE6!important}
+/* 隅の文字を背景に合わせて自然に白黒切り替え */
+/* PC の Chrome など: 差の合成で自動反転 */
+html:not(.dw-sf) .stage.uiblend .stcopy,html:not(.dw-sf) .stage.uiblend .stno,html:not(.dw-sf) .stage.uiblend nav[aria-label],html:not(.dw-sf) .stage.uiblend #stw-d,html:not(.dw-sf) .stage.uiblend #stw-w,html:not(.dw-sf) .stage.uiblend .snav{color:#F0EDE6!important;animation:none!important;opacity:1!important}
+html:not(.dw-sf) .stage.uiblend .stcopy,html:not(.dw-sf) .stage.uiblend .stno,html:not(.dw-sf) .stage.uiblend nav[aria-label],html:not(.dw-sf) .stage.uiblend p:has(> #stw-d){mix-blend-mode:difference;z-index:7!important}
+html:not(.dw-sf) .stage.uiblend nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important}
+html.dw-uib:not(.dw-sf) .mphl{mix-blend-mode:difference}
+html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
+/* iPhone・Safari: 反転の層は使わず、黒い時間帯だけ白へ0.5秒でなめらかに */
+.dw-sf .stage.uiblend .stcopy,.dw-sf .stage.uiblend .stno,.dw-sf .stage.uiblend nav[aria-label],.dw-sf .stage.uiblend #stw-d,.dw-sf .stage.uiblend #stw-w,.dw-sf .stage.uiblend .snav{color:#161514!important;animation:none!important;opacity:1!important;transition:color .5s ease}
+.dw-sf .stage.uiblend.cfdark .stcopy,.dw-sf .stage.uiblend.cfdark .stno,.dw-sf .stage.uiblend.cfdark nav[aria-label],.dw-sf .stage.uiblend.cfdark #stw-d,.dw-sf .stage.uiblend.cfdark #stw-w,.dw-sf .stage.uiblend.cfdark .snav{color:#F0EDE6!important}
+.dw-sf .stage.uiblend .stcopy,.dw-sf .stage.uiblend .stno,.dw-sf .stage.uiblend nav[aria-label],.dw-sf .stage.uiblend p:has(> #stw-d){z-index:7!important}
+.dw-sf .stage.uiblend nav[aria-label] .btn{background:#161514!important;color:#F0EDE6!important;transition:background-color .5s ease,color .5s ease}
+.dw-sf .stage.uiblend.cfdark nav[aria-label] .btn{background:#F0EDE6!important;color:#161514!important}
+.dw-sf.dw-uib:has(.stage.cfdark) .mph{color:#F0EDE6!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
