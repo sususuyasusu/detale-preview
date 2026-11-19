@@ -742,6 +742,15 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-blocks.lit .sw-blk:nth-child(2) img{transition-delay:.06s}.sw-blocks.lit .sw-blk:nth-child(3) img{transition-delay:.12s}.sw-blocks.lit .sw-blk:nth-child(4) img{transition-delay:.18s}.sw-blocks.lit .sw-blk:nth-child(5) img{transition-delay:.24s}
 .sw-blk{overflow:hidden}
 
+
+/* Service Pack の番号を左の題の下へ */
+@media (min-width: 861px){
+  .sw-exp-pin{position:sticky}
+  .sw-exp .sw-count{position:absolute;left:28%;top:33%;margin:0;font-size:14px;letter-spacing:.04em;font-variant-numeric:tabular-nums;z-index:2}
+}
+
+/* Service Pack の題: 進むたびに行間が広がる */
+.sw-exp-l .sw-huge .sw-ln + .sw-ln{margin-top:calc(var(--svs,0) * .18em);transition:margin-top .7s cubic-bezier(.2,.8,.2,1)}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -877,6 +886,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 .ph4.cf .ph4-band.m{display:block!important;opacity:1;animation:cfDarkIn 1s cubic-bezier(.65,0,.35,1) 2.7s both;
   -webkit-mask-image:conic-gradient(from 36deg at 50% 50%,#000 0deg,#000 var(--cfb),transparent var(--cfb),transparent 180deg,#000 180deg,#000 calc(180deg + var(--cfb)),transparent calc(180deg + var(--cfb)));
   mask-image:conic-gradient(from 36deg at 50% 50%,#000 0deg,#000 var(--cfb),transparent var(--cfb),transparent 180deg,#000 180deg,#000 calc(180deg + var(--cfb)),transparent calc(180deg + var(--cfb)))}
+.stage.p4dk .ph4.cf .ph4-band.m{-webkit-mask-image:none!important;mask-image:none!important}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1075,7 +1085,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
         <p class="sw-exp-note">メニューのリニューアルに必要なものを、ひとまとめに。個別に頼むよりお得で、手間もかかりません。</p>
       </div>
       <div class="sw-exp-m">
-        <p class="sw-count"><span class="sw-ci">1</span>—5</p>
+        <p class="sw-count">SCENE <span class="sw-ci">01</span> / 05</p>
         <div class="sw-exp-list">
           <p class="sw-exp-h"><span>[05] Services:</span><span>Name:</span></p>
           <ol>
@@ -1570,9 +1580,9 @@ class Component extends DCLogic {
       q('.sw-exp').forEach((sec) => { const r = sec.getBoundingClientRect(); const items = q('.sw-exp-list li', sec), imgs = q('.sw-exp-r img', sec); const n = items.length; if (!n) return;
         const tot = r.height - vh; const p = clamp(-r.top / (tot || 1), 0, 0.9999); const i = Math.floor(p * n);
         if (i === lastI) return; const prev = lastI; lastI = i;
-        items.forEach((li, k) => li.classList.toggle('on', k === i));
+        items.forEach((li, k) => li.classList.toggle('on', k === i)); sec.style.setProperty('--svs', i);
         imgs.forEach((im, k) => { im.classList.toggle('was', k === prev); im.classList.toggle('on', k === i); });
-        const c = sec.querySelector('.sw-ci'); if (c) c.textContent = String(i + 1); });
+        const c = sec.querySelector('.sw-ci'); if (c) c.textContent = String(i + 1).padStart(2, '0'); });
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
     let rt = 0; const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { try { split(); q('.sw-split.in').forEach((el) => el.classList.add('in')); } catch (e) {} onScroll(); }, 200); };
@@ -1949,7 +1959,7 @@ class Component extends DCLogic {
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
     try { if (this._stage) this._stage.classList.toggle('ampjoin', this._joinAmp); } catch (e) {}
-    try { const st3 = this._stage; if (st3 && sc === 3 && !this.calm()) this._acT.push(setTimeout(() => st3.classList.add('cfdark'), 11400 + 3200)); } catch (e) {}
+    try { const st3 = this._stage; if (st3) st3.classList.remove('p4dk'); if (st3 && sc === 3 && !this.calm()) { this._acT.push(setTimeout(() => st3.classList.add('cfdark'), 11400 + 3200)); this._acT.push(setTimeout(() => st3.classList.add('p4dk'), 11400 + 3800)); } } catch (e) {}
     try { const ub = sc === 0 || sc === 1 || sc === 3; if (this._stage) this._stage.classList.toggle('uiblend', ub); document.documentElement.classList.toggle('dw-uib', ub); if (this._stage) this._stage.classList.toggle('uiblite', sc === 0 || sc === 1); } catch (e) {}
     try { const st0 = this._stage; if (st0 && !this.calm()) {
       clearInterval(this._cfdI);

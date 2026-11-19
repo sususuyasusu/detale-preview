@@ -497,6 +497,15 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-blocks.lit .sw-blk:nth-child(2) img{transition-delay:.06s}.sw-blocks.lit .sw-blk:nth-child(3) img{transition-delay:.12s}.sw-blocks.lit .sw-blk:nth-child(4) img{transition-delay:.18s}.sw-blocks.lit .sw-blk:nth-child(5) img{transition-delay:.24s}
 .sw-blk{overflow:hidden}
 
+
+/* Service Pack の番号を左の題の下へ */
+@media (min-width: 861px){
+  .sw-exp-pin{position:sticky}
+  .sw-exp .sw-count{position:absolute;left:28%;top:33%;margin:0;font-size:14px;letter-spacing:.04em;font-variant-numeric:tabular-nums;z-index:2}
+}
+
+/* Service Pack の題: 進むたびに行間が広がる */
+.sw-exp-l .sw-huge .sw-ln + .sw-ln{margin-top:calc(var(--svs,0) * .18em);transition:margin-top .7s cubic-bezier(.2,.8,.2,1)}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
@@ -1048,9 +1057,9 @@ class Component extends DCLogic {
       q('.sw-exp').forEach((sec) => { const r = sec.getBoundingClientRect(); const items = q('.sw-exp-list li', sec), imgs = q('.sw-exp-r img', sec); const n = items.length; if (!n) return;
         const tot = r.height - vh; const p = clamp(-r.top / (tot || 1), 0, 0.9999); const i = Math.floor(p * n);
         if (i === lastI) return; const prev = lastI; lastI = i;
-        items.forEach((li, k) => li.classList.toggle('on', k === i));
+        items.forEach((li, k) => li.classList.toggle('on', k === i)); sec.style.setProperty('--svs', i);
         imgs.forEach((im, k) => { im.classList.toggle('was', k === prev); im.classList.toggle('on', k === i); });
-        const c = sec.querySelector('.sw-ci'); if (c) c.textContent = String(i + 1); });
+        const c = sec.querySelector('.sw-ci'); if (c) c.textContent = String(i + 1).padStart(2, '0'); });
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
     let rt = 0; const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { try { split(); q('.sw-split.in').forEach((el) => el.classList.add('in')); } catch (e) {} onScroll(); }, 200); };
