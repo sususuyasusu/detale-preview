@@ -505,7 +505,11 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 }
 
 /* Service Pack の題: 進むたびに行間が広がる */
-.sw-exp-l .sw-huge .sw-ln + .sw-ln{margin-top:calc(var(--svs,0) * .18em);transition:margin-top .7s cubic-bezier(.2,.8,.2,1)}
+.sw-exp-l .sw-huge{letter-spacing:calc(-.06em + var(--svs,0) * .12em)!important;transition:letter-spacing .7s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
+
+/* Service Pack の題: 文字間が広がっても右で切れない */
+.sw-exp-l .sw-huge .sw-ln{overflow:visible;clip-path:inset(0 -60vw -.08em 0)}
+.sw-exp-l{overflow:visible;position:relative;z-index:1}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}

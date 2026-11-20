@@ -751,7 +751,11 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 }
 
 /* Service Pack の題: 進むたびに行間が広がる */
-.sw-exp-l .sw-huge .sw-ln + .sw-ln{margin-top:calc(var(--svs,0) * .18em);transition:margin-top .7s cubic-bezier(.2,.8,.2,1)}
+.sw-exp-l .sw-huge{letter-spacing:calc(-.06em + var(--svs,0) * .12em)!important;transition:letter-spacing .7s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
+
+/* Service Pack の題: 文字間が広がっても右で切れない */
+.sw-exp-l .sw-huge .sw-ln{overflow:visible;clip-path:inset(0 -60vw -.08em 0)}
+.sw-exp-l{overflow:visible;position:relative;z-index:1}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -920,7 +924,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
   <sc-if value="{{intro}}" hint-placeholder-val="{{ false }}">
   <div class="loaderpanel" aria-hidden="true" style="position: fixed; inset: 0; height: 100vh; z-index: 60; background: #161514; color: #F0EDE6; animation: loaderOut 3s cubic-bezier(.7,0,.2,1) forwards; pointer-events: none; display: flex; align-items: center; justify-content: center;">
     <canvas class="dwpt" aria-hidden="true"></canvas>
-    <p class="bb" style="position: absolute; left: 24px; bottom: 6px; margin: 0; font-size: 120px; line-height: 1;">{{pct}}</p>
+    <p class="bb dwcount" style="position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); margin: 0; font-size: 60px; line-height: 1; font-variant-numeric: tabular-nums;">{{pct}}</p>
     
   </div>
   </sc-if>
@@ -1512,7 +1516,7 @@ class Component extends DCLogic {
       let held = 0, holdAt = 0;
       this._holdT = setTimeout(() => { holdAt = performance.now(); document.documentElement.classList.add('dw-hold'); }, 2200); /* dwLdLong */
       const go = () => {
-        if (holdAt && (!this._ready || performance.now() - t0 < 5020)) { this._goT = setTimeout(go, 50); return; }
+        if (holdAt && (!this._ready || performance.now() - t0 < 5020 || (this._pctShown || 0) < 100)) { /* dwCount100 */ this._goT = setTimeout(go, 50); return; }
         if (holdAt) { held = performance.now() - holdAt; holdAt = 0; document.documentElement.classList.remove('dw-hold'); }
         const el = performance.now() - t0 - held;
         if (el < 2380) { this._goT = setTimeout(go, Math.max(16, 2380 - el)); return; }
