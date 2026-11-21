@@ -1797,25 +1797,31 @@ class Component extends DCLogic {
     // 丸い粒の絵（1回だけ作る）
     const DS = 64, dot = document.createElement('canvas'); dot.width = dot.height = DS; { const o = dot.getContext('2d'); o.fillStyle = '#161514'; o.beginPath(); o.arc(DS / 2, DS / 2, DS / 2 - 1, 0, 6.2832); o.fill(); }
     // 立体の回転: & の中心と、粒ごとの奥行き（厚み）
-    let cx = 0, cy = 0; for (const q of P) { cx += q.ax; cy += q.ay; } cx /= P.length; cy /= P.length;
+    // 回転の軸＝書体の & の横の中心（粒も書体も同じ軸で回す）
+    x.font = pre + fs + 'px ' + fam; const cx = axp + x.measureText('&').width / 2; let cy = 0; for (const q of P) cy += q.ay; cy /= P.length;
     const DEP = fs * 0.16, FOC = fs * 2.4; for (const q of P) if (q.z === undefined) q.z = (Math.random() - 0.5) * DEP;
-    const T1 = 4200, T2 = 5900, T3 = 6500;
+    // 本人 2026-11-21 10:56「&を回転させて真横を向いたタイミングでフォントの&に切り替わって」:
+    // 1回転（0→360度）のうち、粒で 0→270度、真横（270度）の瞬間に書体の & に切り替わり、書体のまま 270→360度で正面へ。
+    // 切替の瞬間に段差が出ないよう、粒の厚みと前への傾きは真横に向かって0へ縮める（真横で粒も書体も同じ細い縦線になる）
+    const T1 = 4200, T2 = 6300, SW = 1.5 * Math.PI;
     const t0 = performance.now();
     const f = (now) => { if (!cv.isConnected) return; const t = now - t0; x.clearRect(0, 0, W, H);
-      const gr = t < T2 ? 0 : Math.min(1, (t - T2) / 450), base0 = g * (0.62 + 0.45 * gr);
-      const fa = t < T2 + 100 ? 0 : Math.min(1, (t - T2 - 100) / (T3 - T2 - 100));
-      const rot = t > T1 && t < T2; const ru = rot ? eio((t - T1) / (T2 - T1)) : 0, th = ru * 6.2832, cs = Math.cos(th), sn = Math.sin(th), tl = Math.sin(ru * 3.1416) * 0.22, ct = Math.cos(tl), st2 = Math.sin(tl);
-      const ga = 1 - fa * fa;
-      for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y, sz = base0, al = ga;
+      const th = t <= T1 ? 0 : t >= T2 ? 2 * Math.PI : eio((t - T1) / (T2 - T1)) * 2 * Math.PI;
+      if (th >= SW) { // 書体の & （縦の軸で回る＝横幅が cos で縮む）
+        const c = Math.max(0.002, Math.cos(th)); x.globalAlpha = 1; x.fillStyle = '#161514'; x.font = pre + fs + 'px ' + fam; x.textBaseline = 'alphabetic';
+        x.save(); x.translate(cx, 0); x.scale(c, 1); x.translate(-cx, 0); x.fillText('&', axp, base); x.restore();
+        if (t < T2 + 700) requestAnimationFrame(f); return; }
+      const rot = th > 0, k3 = Math.sin(Math.min(1, th / SW) * Math.PI), cs = Math.cos(th), sn = Math.sin(th), tl = k3 * 0.22, ct = Math.cos(tl), st2 = Math.sin(tl), base0 = g * 0.62;
+      for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y, sz = base0, al = 1;
         if (t < 2400) { const u = (t - q.d1) / 1250; if (u <= 0) continue; const e = e4(u > 1 ? 1 : u); X = q.sx + (q.dx - q.sx) * e; Y = q.sy + (q.dy - q.sy) * e; }
         else if (t < T1) { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; }
-        else if (rot) { const lx = q.ax - cx, ly = q.ay - cy, z = q.z * Math.sin(ru * 3.1416);
+        else if (rot) { const lx = q.ax - cx, ly = q.ay - cy, z = q.z * k3;
           const rx = lx * cs + z * sn, rz = -lx * sn + z * cs; const ry = ly * ct - rz * st2, rz2 = ly * st2 + rz * ct;
           const pz = FOC / (FOC + rz2); X = cx + rx * pz; Y = cy + ry * pz; sz = base0 * pz; al = Math.max(0.3, Math.min(1, 1 - (1 - pz) * 5)); }
         else { X = q.ax; Y = q.ay; }
         x.globalAlpha = al; x.drawImage(dot, X - sz / 2, Y - sz / 2, sz, sz); }
-      x.globalAlpha = 1; if (fa > 0) { x.globalAlpha = fa; x.fillStyle = '#161514'; x.font = pre + fs + 'px ' + fam; x.textBaseline = 'alphabetic'; x.fillText('&', axp, base); x.globalAlpha = 1; }
-      if (t < T3 + 600) requestAnimationFrame(f); };
+      x.globalAlpha = 1;
+      requestAnimationFrame(f); };
     requestAnimationFrame(f);
   }
   dwPrep() {
