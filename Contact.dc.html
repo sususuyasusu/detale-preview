@@ -489,6 +489,10 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 /* Service Pack の題: 文字間が広がっても右で切れない */
 .sw-exp-l .sw-huge .sw-ln{overflow:visible;clip-path:inset(0 -60vw -.08em 0)}
 .sw-exp-l{overflow:visible;position:relative;z-index:1}
+
+/* 作例の写真: 枠の中でずれる */
+.sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1);will-change:transform}
+.sw-w:hover .sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);scale:1.04}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
@@ -1027,6 +1031,8 @@ class Component extends DCLogic {
           q('.sw-blk', sec).forEach((b) => { const k = 1 - p, dx = +b.getAttribute('data-dx'), dy = +b.getAttribute('data-dy'), rt = +b.getAttribute('data-r');
             b.style.transform = 'translate3d(' + (dx * k).toFixed(2) + 'vw,' + (dy * k).toFixed(2) + 'vh,0) rotate(' + (rt * k).toFixed(2) + 'deg)'; }); const lit = p > 0.995; if (lit !== sec.classList.contains('lit')) sec.classList.toggle('lit', lit); });
       }
+      q('.sw-ph').forEach((ph) => { const r = ph.getBoundingClientRect(); if (r.bottom < -80 || r.top > vh + 80) return; /* dwPhPara */
+        const k = clamp((r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2), -1, 1); ph.style.setProperty('--py', (k * -7).toFixed(2) + '%'); });
       // サービス: 下へ送ると一覧と写真が入れ替わる
       q('.sw-exp').forEach((sec) => { const r = sec.getBoundingClientRect(); const items = q('.sw-exp-list li', sec), imgs = q('.sw-exp-r img', sec); const n = items.length; if (!n) return;
         const tot = r.height - vh; const p = clamp(-r.top / (tot || 1), 0, 0.9999); const i = Math.floor(p * n);

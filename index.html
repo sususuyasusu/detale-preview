@@ -756,6 +756,10 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 /* Service Pack の題: 文字間が広がっても右で切れない */
 .sw-exp-l .sw-huge .sw-ln{overflow:visible;clip-path:inset(0 -60vw -.08em 0)}
 .sw-exp-l{overflow:visible;position:relative;z-index:1}
+
+/* 作例の写真: 枠の中でずれる */
+.sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1);will-change:transform}
+.sw-w:hover .sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);scale:1.04}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -937,11 +941,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 
     <!-- 場面0：ソースのしずくが弾ける -->
     <sc-if value="{{sc0}}" hint-placeholder-val="{{ false }}">
-      <div class="scene" aria-hidden="true" style="filter: url(#dwGoo);">
-        <sc-for list="{{blobs}}" as="b" hint-placeholder-count="0">
-          <span class="blob" style="left: {{b.left}}; top: {{b.top}}; width: {{b.size}}; height: {{b.size}}; background: {{b.color}}; animation-delay: {{b.delay}}; --dx: {{b.dx}}; --dy: {{b.dy}};"></span>
-        </sc-for>
-      </div>
+      <div class="scene" aria-hidden="true"><canvas class="dwdw"></canvas></div>
     </sc-if>
 
     <!-- 場面1：巨大な＆がとろりと現れる -->
@@ -1504,19 +1504,20 @@ class Component extends DCLogic {
     this._ready = false;
     const t0 = performance.now(), jobs = []; /* dwPrewarm */
     try { if (document.fonts && document.fonts.load) { ["20px 'DSEG14'", "400 20px 'DW Grotesk'", "500 20px 'DW Grotesk'", "700 20px 'DW Grotesk'", "500 20px 'Inter Tight'", "500 20px 'Zen Kaku Gothic New'", "700 20px 'Zen Kaku Gothic New'"].forEach((f) => jobs.push(document.fonts.load(f, 'ABCDE あア字09&'))); } } catch (e) {}
-    setTimeout(() => { try { if (!this._cwPre) { const d = document.createElement('div'); d.innerHTML = this.cwHTML(); d.querySelectorAll('.cw-s').forEach((e) => e.remove()); this._cwPre = d; } } catch (e) {} }, 1200);
+    setTimeout(() => { try { if (!this._cwPre) { const d = document.createElement('div'); d.innerHTML = this.cwHTML(); d.querySelectorAll('.cw-s').forEach((e) => e.remove()); this._cwPre = d; } } catch (e) {} }, 1200); setTimeout(() => { try { this.dwPrep(); } catch (e) {} }, 1900); /* dwPrepEarly */
     try { if (document.fonts && document.fonts.load) { jobs.push(document.fonts.load("500 100px 'Cormorant Garamond'", '&')); jobs.push(document.fonts.load("400 100px 'Cormorant Garamond'", 'A')); } } catch (e) {}
     (this._preUrls || []).forEach((u) => { const im = new Image(); im.decoding = 'async'; im.src = u; this._pre.push(im); jobs.push(im.decode ? im.decode().catch(() => {}) : new Promise((r) => { im.onload = im.onerror = r; })); });
     const done = () => { if (this._ready) return; this._ready = true; this._readyAt = performance.now(); };
     Promise.all(jobs.map((j) => Promise.resolve(j).catch(() => {}))).then(done);
-    setTimeout(done, showIntro ? 8000 : 1500);
+    let nDone = 0; const nAll = Math.max(1, jobs.length); jobs.forEach((j) => Promise.resolve(j).then(() => nDone++, () => nDone++)); /* dwLdReal */
+    setTimeout(done, showIntro ? 5000 : 1500);
     if (!showIntro) { const go = () => { if (this._ready) this.nextScene(0); else this._goT = setTimeout(go, 50); }; go(); }
     else {
       // 幕は 2.38秒で開き始める。準備がまだなら2.2秒で幕を止め、整ったら再開。場面は幕が開き始める瞬間に始める
       let held = 0, holdAt = 0;
       this._holdT = setTimeout(() => { holdAt = performance.now(); document.documentElement.classList.add('dw-hold'); }, 2200); /* dwLdLong */
       const go = () => {
-        if (holdAt && (!this._ready || performance.now() - t0 < 5020 || (this._pctShown || 0) < 100)) { /* dwCount100 */ this._goT = setTimeout(go, 50); return; }
+        if (holdAt && (!this._ready || performance.now() - t0 < 3600 || (this._pctShown || 0) < 100)) { /* dwCount100 */ this._goT = setTimeout(go, 50); return; }
         if (holdAt) { held = performance.now() - holdAt; holdAt = 0; document.documentElement.classList.remove('dw-hold'); }
         const el = performance.now() - t0 - held;
         if (el < 2380) { this._goT = setTimeout(go, Math.max(16, 2380 - el)); return; }
@@ -1528,7 +1529,8 @@ class Component extends DCLogic {
     this._clock = setInterval(() => { if (this._time) this._time.textContent = this.tokyo(); }, 1000);
     let p = 0;
     this._load = setInterval(() => {
-      p = Math.min(this._ready ? 100 : 92, p + 1.3);
+      const tgt = Math.min(this._ready ? 100 : Math.min(95, (100 * nDone) / nAll), (100 * (performance.now() - t0)) / 3400);
+      if (tgt > p) p = Math.min(tgt, p + Math.max(0.8, (tgt - p) * 0.18));
       if (Math.floor(p) !== this._pctShown) { this._pctShown = Math.floor(p); this.setState({ pct: Math.floor(p) }); }
       if (p >= 100) clearInterval(this._load);
     }, 80);
@@ -1595,6 +1597,8 @@ class Component extends DCLogic {
           q('.sw-blk', sec).forEach((b) => { const k = 1 - p, dx = +b.getAttribute('data-dx'), dy = +b.getAttribute('data-dy'), rt = +b.getAttribute('data-r');
             b.style.transform = 'translate3d(' + (dx * k).toFixed(2) + 'vw,' + (dy * k).toFixed(2) + 'vh,0) rotate(' + (rt * k).toFixed(2) + 'deg)'; }); const lit = p > 0.995; if (lit !== sec.classList.contains('lit')) sec.classList.toggle('lit', lit); });
       }
+      q('.sw-ph').forEach((ph) => { const r = ph.getBoundingClientRect(); if (r.bottom < -80 || r.top > vh + 80) return; /* dwPhPara */
+        const k = clamp((r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2), -1, 1); ph.style.setProperty('--py', (k * -7).toFixed(2) + '%'); });
       // サービス: 下へ送ると一覧と写真が入れ替わる
       q('.sw-exp').forEach((sec) => { const r = sec.getBoundingClientRect(); const items = q('.sw-exp-list li', sec), imgs = q('.sw-exp-r img', sec); const n = items.length; if (!n) return;
         const tot = r.height - vh; const p = clamp(-r.top / (tot || 1), 0, 0.9999); const i = Math.floor(p * n);
@@ -1775,6 +1779,58 @@ class Component extends DCLogic {
     this._acT.push(setTimeout(() => {
       moves.forEach(([b, sd]) => { b.style.transition = 'width .75s cubic-bezier(.4,0,.2,1),height .75s cubic-bezier(.4,0,.2,1)'; b.style.width = b.style.height = (sd.r * 1.0).toFixed(1) + 'px'; });
     }, 1950));
+  }
+  dwParticles() {
+    // 場面1: 小さい粒で D と W を描き、場面2の & と同じ位置・大きさの & に並び替わる（粒の行き先は読み込み画面の間に計算済み＝dwPrep）
+    const st = this._stage; if (!st) return;
+    const cv = st.querySelector('canvas.dwdw');
+    if (!cv) { if ((this._dwTry = (this._dwTry || 0) + 1) < 60) this._acT.push(setTimeout(() => this.dwParticles(), 25)); return; }
+    if (cv.dataset.run) return; cv.dataset.run = '1';
+    const W = st.clientWidth, H = st.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    const pp = (this._dwPre && this._dwPre.k === W + 'x' + H) ? this._dwPre : this.dwPrep(); if (!pp) return;
+    const { P, g, axp, base, fs, pre, fam } = pp;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%';
+    const x = cv.getContext('2d'); if (!x) return; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const e4 = (t) => 1 - Math.pow(1 - t, 4), eio = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const t0 = performance.now();
+    const f = (now) => { if (!cv.isConnected) return; const t = now - t0; x.clearRect(0, 0, W, H); x.fillStyle = '#161514';
+      const gr = t < 4000 ? 0 : Math.min(1, (t - 4000) / 600), sz = g * (0.5 + 0.55 * gr);
+      const fa = t < 4250 ? 0 : Math.min(1, (t - 4250) / 550);
+      x.globalAlpha = 1 - fa * fa;
+      for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y;
+        if (t < 2400) { const u = (t - q.d1) / 1250; if (u <= 0) continue; const e = e4(u > 1 ? 1 : u); X = q.sx + (q.dx - q.sx) * e; Y = q.sy + (q.dy - q.sy) * e; }
+        else { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; }
+        x.fillRect(X - sz / 2, Y - sz / 2, sz, sz); }
+      x.globalAlpha = 1; if (fa > 0) { x.globalAlpha = fa; x.font = pre + fs + 'px ' + fam; x.textBaseline = 'alphabetic'; x.fillText('&', axp, base); x.globalAlpha = 1; }
+      if (t < 6000) requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  }
+  dwPrep() {
+    // 粒の行き先（D・W と &）を計算して取っておく。書体が読み込み済みの時だけ取っておく（未読込の代わりの書体で形を取らない）
+    const st = this._stage; if (!st) return null;
+    const W = st.clientWidth, H = st.clientHeight; if (!W || !H) return null;
+    const amp = document.createElement('span'); amp.className = 'bigamp'; amp.setAttribute('aria-hidden', 'true');
+    amp.style.cssText = 'visibility:hidden;animation:none;transition:none'; amp.innerHTML = '&amp;<i class="ampbl"></i>'; st.appendChild(amp);
+    const sr = st.getBoundingClientRect(), rg = document.createRange(); rg.selectNodeContents(amp.firstChild);
+    const tr = rg.getBoundingClientRect(), br = amp.querySelector('.ampbl').getBoundingClientRect(), cs = getComputedStyle(amp), fs = parseFloat(cs.fontSize) || 500;
+    const axp = tr.left - sr.left, base = br.top - sr.top, pre = cs.fontStyle + ' ' + cs.fontWeight + ' ', fam = cs.fontFamily; amp.remove();
+    const S = 0.25, ow = Math.ceil(W * S), oh = Math.ceil(H * S);
+    const mk = (draw) => { const c = document.createElement('canvas'); c.width = ow; c.height = oh; const o = c.getContext('2d'); o.scale(S, S); o.fillStyle = '#000'; o.textBaseline = 'alphabetic'; draw(o); return o.getImageData(0, 0, ow, oh).data; };
+    const DA = mk((o) => { o.font = pre + fs + 'px ' + fam; o.fillText('&', axp, base); });
+    let dfs = fs * 0.62; { const mc = document.createElement('canvas').getContext('2d'); mc.font = pre + dfs + 'px ' + fam; const mw = Math.max(mc.measureText('D').width, mc.measureText('W').width); if (mw > W * 0.5) dfs *= (W * 0.5) / mw; }
+    const DD = mk((o) => { o.font = pre + dfs + 'px ' + fam; o.textAlign = 'center'; o.fillText('D', W * 0.3, base - fs * 0.06); o.fillText('W', W * 0.7, base - fs * 0.06); });
+    let A = 0; for (let i = 3; i < DA.length; i += 4) if (DA[i] > 120) A++; A /= S * S;
+    const g = Math.max(3.2, Math.sqrt(A / (W < 700 ? 1800 : 2600)));
+    const pick = (D) => { const out = [], gs = g * S; for (let yy = gs / 2; yy < oh; yy += gs) for (let xx = gs / 2; xx < ow; xx += gs) if (D[((yy | 0) * ow + (xx | 0)) * 4 + 3] > 120) out.push([xx / S, yy / S]); return out; };
+    const PA = pick(DA), PD = pick(DD); if (!PA.length || !PD.length) return;
+    PA.sort((a, b) => a[0] - b[0] || a[1] - b[1]); PD.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const R = Math.max(W, H);
+    const P = PA.map((t, i) => { const q = PD[Math.floor(i * PD.length / PA.length)], an = Math.random() * 6.2832, r = R * (0.55 + Math.random() * 0.5);
+      return { sx: W / 2 + Math.cos(an) * r, sy: H / 2 + Math.sin(an) * r, dx: q[0] + (Math.random() - 0.5) * g * 0.4, dy: q[1] + (Math.random() - 0.5) * g * 0.4, ax: t[0], ay: t[1], d1: Math.random() * 450, d2: (t[0] / W) * 350 }; });
+    const res = { k: W + 'x' + H, P, g, axp, base, fs, pre, fam };
+    let ok = true; try { ok = !document.fonts || document.fonts.check(pre + '20px ' + fam, '&DW'); } catch (e) {}
+    if (ok) this._dwPre = res;
+    return res;
   }
   ampCells() {
     // ＆の字形を小さな下書き面に描き、字の太さ（内側から縁までの距離）を測って、字の中に玉を敷き詰める
@@ -1988,7 +2044,7 @@ class Component extends DCLogic {
           if (!c || parseFloat(getComputedStyle(c).getPropertyValue('--cfa')) > 2) { st0.classList.remove('cfdark'); clearInterval(this._cfdI); } }, 60); }
       else st0.classList.remove('cfdark'); } } catch (e) {}
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
-    if (sc === 0) { this._gathered = false; this._acT.push(setTimeout(() => this.gatherAmp(), 2200)); }
+    if (sc === 0) { this._gathered = true; this._dwTry = 0; this._acT.push(setTimeout(() => this.dwParticles(), 20)); }
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), this._joinAmp ? 1100 : 1250));
     this._acT.push(setTimeout(() => { try { (this._stage ? [...this._stage.querySelectorAll('.ampov')] : []).forEach((e) => e.remove()); } catch (e) {} }, 120));
     clearInterval(this._mxI);
