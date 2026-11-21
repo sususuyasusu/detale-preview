@@ -2289,5 +2289,10 @@ var al=u<1?(0.25+0.6*e):(0.86+0.14*Math.sin(now*0.003+q.ph));x.globalAlpha=al;x.
 requestAnimationFrame(f);}requestAnimationFrame(f);}
 function look(){var cv=document.querySelector('canvas.dwpt:not([data-run])');if(cv)run(cv);else if(performance.now()<12000)requestAnimationFrame(look);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',look);else look();})();</script>
+<script>/* dwHashScroll */(function(){var id=decodeURIComponent((location.hash||'').slice(1));if(!id)return;var moved=false,t0=Date.now(),stop=false;
+function bar(){var b=document.querySelector('.sw-bar');return b?b.getBoundingClientRect().height:0;}
+function go(){if(stop)return;var e=document.getElementById(id);if(!e)return false;var y=e.getBoundingClientRect().top+window.pageYOffset-bar();window.scrollTo(0,Math.max(0,y));moved=true;return true;}
+['wheel','touchstart','keydown'].forEach(function(k){window.addEventListener(k,function(){if(moved&&Date.now()-t0>600)stop=true;},{passive:true});});
+(function wait(){if(go()){[800,2000,4000].forEach(function(ms){setTimeout(go,ms);});return;}if(Date.now()-t0<15000)setTimeout(wait,100);})();})();</script>
 </body>
 </html>
