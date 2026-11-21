@@ -1506,7 +1506,7 @@ class Component extends DCLogic {
     } catch (e) { this._preUrls = []; }
     let seen = false;
     try { seen = false; sessionStorage.setItem('dwIntroSeen', '1'); } catch (e) {}
-    const showIntro = (this.props.intro ?? true) && !seen && !this.calm();
+    const showIntro = (this.props.intro ?? true) && !seen && !this.calm() && !((location.hash || '').length > 1); /* dwHashNoIntro */
     if (!showIntro) this.setState({ introDone: true });
     this._ready = false;
     const t0 = performance.now(), jobs = []; /* dwPrewarm */
@@ -2290,6 +2290,8 @@ requestAnimationFrame(f);}requestAnimationFrame(f);}
 function look(){var cv=document.querySelector('canvas.dwpt:not([data-run])');if(cv)run(cv);else if(performance.now()<12000)requestAnimationFrame(look);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',look);else look();})();</script>
 <script>/* dwHashScroll */(function(){var id=decodeURIComponent((location.hash||'').slice(1));if(!id)return;var moved=false,t0=Date.now(),stop=false;
+/* 上の帯は冒頭の演出に合わせ3.1秒後に現れる設定 → 飛び先付きで来た時は最初から出す（本人 2026-11-21 19:32） */
+try{var st=document.createElement('style');st.textContent='.sw-bar{animation:none!important;opacity:1!important}';document.head.appendChild(st);}catch(e){}
 function bar(){var b=document.querySelector('.sw-bar');return b?b.getBoundingClientRect().height:0;}
 function go(){if(stop)return;var e=document.getElementById(id);if(!e)return false;var y=e.getBoundingClientRect().top+window.pageYOffset-bar();window.scrollTo(0,Math.max(0,y));moved=true;return true;}
 ['wheel','touchstart','keydown'].forEach(function(k){window.addEventListener(k,function(){if(moved&&Date.now()-t0>600)stop=true;},{passive:true});});
