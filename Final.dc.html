@@ -758,8 +758,8 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-exp-l{overflow:visible;position:relative;z-index:1}
 
 /* 作例の写真: 枠の中でずれる */
-.sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1);will-change:transform}
-.sw-w:hover .sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);scale:1.04}
+.sw-ph img{transform:translate(0,var(--py,0%)) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1)}
+.sw-w:hover .sw-ph img{transform:translate(0,var(--py,0%)) scale(1.16);scale:1.04}
 /* ===== SW: トップの最初の場面もゴシックに（＆の字形だけは8の字のCormorantのまま） ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;letter-spacing:-.01em}
@@ -1790,7 +1790,7 @@ class Component extends DCLogic {
     if (cv.dataset.run) return; cv.dataset.run = '1';
     const W = st.clientWidth, H = st.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
     const pp = (this._dwPre && this._dwPre.k === W + 'x' + H) ? this._dwPre : this.dwPrep(); if (!pp) return;
-    const { P, g, axp, base, fs, pre, fam } = pp;
+    const { P, g, axp, base, fs, pre, fam } = pp, gD = pp.gD || g;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%';
     const x = cv.getContext('2d'); if (!x) return; x.setTransform(dpr, 0, 0, dpr, 0, 0);
     const e4 = (t) => 1 - Math.pow(1 - t, 4), eio = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -1813,8 +1813,8 @@ class Component extends DCLogic {
         if (t < T2 + 700) requestAnimationFrame(f); return; }
       const rot = th > 0, k3 = Math.sin(Math.min(1, th / SW) * Math.PI), cs = Math.cos(th), sn = Math.sin(th), tl = k3 * 0.22, ct = Math.cos(tl), st2 = Math.sin(tl), base0 = g * 0.62;
       for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y, sz = base0, al = 1;
-        if (t < 2400) { const u = (t - q.d1) / 1250; if (u <= 0) continue; const e = e4(u > 1 ? 1 : u); X = q.sx + (q.dx - q.sx) * e; Y = q.sy + (q.dy - q.sy) * e; }
-        else if (t < T1) { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; }
+        if (t < 2400) { const u = (t - q.d1) / 1250; if (u <= 0) continue; const e = e4(u > 1 ? 1 : u); X = q.sx + (q.dx - q.sx) * e; Y = q.sy + (q.dy - q.sy) * e; sz = gD * 0.62; }
+        else if (t < T1) { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; sz = (gD + (g - gD) * e) * 0.62; }
         else if (rot) { const lx = q.ax - cx, ly = q.ay - cy, z = q.z * k3;
           const rx = lx * cs + z * sn, rz = -lx * sn + z * cs; const ry = ly * ct - rz * st2, rz2 = ly * st2 + rz * ct;
           const pz = FOC / (FOC + rz2); X = cx + rx * pz; Y = cy + ry * pz; sz = base0 * pz; al = Math.max(0.3, Math.min(1, 1 - (1 - pz) * 5)); }
@@ -1833,20 +1833,29 @@ class Component extends DCLogic {
     const sr = st.getBoundingClientRect(), rg = document.createRange(); rg.selectNodeContents(amp.firstChild);
     const tr = rg.getBoundingClientRect(), br = amp.querySelector('.ampbl').getBoundingClientRect(), cs = getComputedStyle(amp), fs = parseFloat(cs.fontSize) || 500;
     const axp = tr.left - sr.left, base = br.top - sr.top, pre = cs.fontStyle + ' ' + cs.fontWeight + ' ', fam = cs.fontFamily; amp.remove();
-    const S = 0.25, ow = Math.ceil(W * S), oh = Math.ceil(H * S);
+    const S = 0.5, ow = Math.ceil(W * S), oh = Math.ceil(H * S);
     const mk = (draw) => { const c = document.createElement('canvas'); c.width = ow; c.height = oh; const o = c.getContext('2d'); o.scale(S, S); o.fillStyle = '#000'; o.textBaseline = 'alphabetic'; draw(o); return o.getImageData(0, 0, ow, oh).data; };
     const DA = mk((o) => { o.font = pre + fs + 'px ' + fam; o.fillText('&', axp, base); });
-    let dfs = fs * 0.62; { const mc = document.createElement('canvas').getContext('2d'); mc.font = pre + dfs + 'px ' + fam; const mw = Math.max(mc.measureText('D').width, mc.measureText('W').width); if (mw > W * 0.5) dfs *= (W * 0.5) / mw; }
-    const DD = mk((o) => { o.font = pre + dfs + 'px ' + fam; o.textAlign = 'center'; o.fillText('D', W * 0.3, base - fs * 0.06); o.fillText('W', W * 0.7, base - fs * 0.06); });
-    let A = 0; for (let i = 3; i < DA.length; i += 4) if (DA[i] > 120) A++; A /= S * S;
-    const g = Math.max(3.2, Math.sqrt(A / (W < 700 ? 1800 : 2600)));
-    const pick = (D) => { const out = [], gs = g * S; for (let yy = gs / 2; yy < oh; yy += gs) for (let xx = gs / 2; xx < ow; xx += gs) if (D[((yy | 0) * ow + (xx | 0)) * 4 + 3] > 120) out.push([xx / S, yy / S]); return out; };
-    const PA = pick(DA), PD = pick(DD); if (!PA.length || !PD.length) return;
+    // 本人 2026-11-21 11:52「センターに大きくDWと少しはみ出して表示」: 「DW」を1語で、画面の真ん中に、横幅が画面の108%（左右に4%ずつはみ出す）
+    // 高さは画面の80%まで（PCの横長画面で上下に切れないように）。縦は字の高さの中心を画面の中心に
+    const mc = document.createElement('canvas').getContext('2d'); mc.font = pre + '100px ' + fam; const m100 = mc.measureText('DW');
+    const asc100 = m100.actualBoundingBoxAscent || 72; let dfs = (W * 1.08) / (m100.width / 100); dfs = Math.min(dfs, (H * 0.8) / (asc100 / 100));
+    const dBase = H / 2 + (asc100 / 100) * dfs / 2;
+    const DD = mk((o) => { o.font = pre + dfs + 'px ' + fam; o.textAlign = 'center'; o.fillText('DW', W / 2, dBase); });
+    const cnt = (D) => { let n = 0; for (let i = 3; i < D.length; i += 4) if (D[i] > 120) n++; return n / (S * S); };
+    const A = cnt(DA), g = Math.max(3.2, Math.sqrt(A / (W < 700 ? 1800 : 2600)));
+    // 格子で粒の位置を取る（はみ出した部分は画面の外で捨てる）
+    const pick = (D, gg) => { const out = [], gs = gg * S; for (let yy = gs / 2; yy < oh; yy += gs) for (let xx = gs / 2; xx < ow; xx += gs) if (D[((yy | 0) * ow + (xx | 0)) * 4 + 3] > 120) out.push([xx / S, yy / S]); return out; };
+    const PA = pick(DA, g); if (!PA.length) return null; const NP = PA.length;
+    // 本人 同「粒が少しずれて重なってるから歪」: 以前は D・W の格子点が粒の数より少なく、1点に粒が2つ以上重なり、さらに位置を少し揺らしていた。
+    // → D・W 用の格子の間隔を「格子点の数 ≥ 粒の数」になるまで詰め、格子点を均等に間引いて粒1つに1点ずつ割り当てる（重なりなし・揺らしなし）
+    let gD = Math.sqrt(cnt(DD) / NP), PD = pick(DD, gD); for (let it = 0; it < 8 && PD.length < NP; it++) { gD *= 0.96; PD = pick(DD, gD); }
+    if (!PD.length) return null;
     PA.sort((a, b) => a[0] - b[0] || a[1] - b[1]); PD.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
     const R = Math.max(W, H);
-    const P = PA.map((t, i) => { const q = PD[Math.floor(i * PD.length / PA.length)], an = Math.random() * 6.2832, r = R * (0.55 + Math.random() * 0.5);
-      return { sx: W / 2 + Math.cos(an) * r, sy: H / 2 + Math.sin(an) * r, dx: q[0] + (Math.random() - 0.5) * g * 0.4, dy: q[1] + (Math.random() - 0.5) * g * 0.4, ax: t[0], ay: t[1], d1: Math.random() * 450, d2: (t[0] / W) * 350 }; });
-    const res = { k: W + 'x' + H, P, g, axp, base, fs, pre, fam };
+    const P = PA.map((t, i) => { const q = PD[Math.min(PD.length - 1, Math.floor(i * PD.length / NP))], an = Math.random() * 6.2832, r = R * (0.55 + Math.random() * 0.5);
+      return { sx: W / 2 + Math.cos(an) * r, sy: H / 2 + Math.sin(an) * r, dx: q[0], dy: q[1], ax: t[0], ay: t[1], d1: Math.random() * 450, d2: (t[0] / W) * 350 }; });
+    const res = { k: W + 'x' + H, P, g, gD, axp, base, fs, pre, fam };
     let ok = true; try { ok = !document.fonts || document.fonts.check(pre + '20px ' + fam, '&DW'); } catch (e) {}
     if (ok) this._dwPre = res;
     return res;

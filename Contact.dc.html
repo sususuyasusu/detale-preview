@@ -491,8 +491,8 @@ html.dw-barstuck .sw-bar::before{content:'';position:absolute;left:-1px;right:-1
 .sw-exp-l{overflow:visible;position:relative;z-index:1}
 
 /* 作例の写真: 枠の中でずれる */
-.sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1);will-change:transform}
-.sw-w:hover .sw-ph img{transform:translate3d(0,var(--py,0%),0) scale(1.16);scale:1.04}
+.sw-ph img{transform:translate(0,var(--py,0%)) scale(1.16);transition:scale 1.2s cubic-bezier(.19,1,.22,1)}
+.sw-w:hover .sw-ph img{transform:translate(0,var(--py,0%)) scale(1.16);scale:1.04}
 /* ===== SW: 下層ページをトップと同じ作りに揃える ===== */
 .curhide{font-family:var(--sw-f)!important;font-feature-settings:"palt" 1}
 .curhide .bb{font-family:'DW Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:500;letter-spacing:-.02em}
