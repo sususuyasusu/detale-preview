@@ -1792,17 +1792,28 @@ class Component extends DCLogic {
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%';
     const x = cv.getContext('2d'); if (!x) return; x.setTransform(dpr, 0, 0, dpr, 0, 0);
     const e4 = (t) => 1 - Math.pow(1 - t, 4), eio = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    // 丸い粒の絵（1回だけ作る）
+    const DS = 64, dot = document.createElement('canvas'); dot.width = dot.height = DS; { const o = dot.getContext('2d'); o.fillStyle = '#161514'; o.beginPath(); o.arc(DS / 2, DS / 2, DS / 2 - 1, 0, 6.2832); o.fill(); }
+    // 立体の回転: & の中心と、粒ごとの奥行き（厚み）
+    let cx = 0, cy = 0; for (const q of P) { cx += q.ax; cy += q.ay; } cx /= P.length; cy /= P.length;
+    const DEP = fs * 0.16, FOC = fs * 2.4; for (const q of P) if (q.z === undefined) q.z = (Math.random() - 0.5) * DEP;
+    const T1 = 4200, T2 = 5900, T3 = 6500;
     const t0 = performance.now();
-    const f = (now) => { if (!cv.isConnected) return; const t = now - t0; x.clearRect(0, 0, W, H); x.fillStyle = '#161514';
-      const gr = t < 4000 ? 0 : Math.min(1, (t - 4000) / 600), sz = g * (0.5 + 0.55 * gr);
-      const fa = t < 4250 ? 0 : Math.min(1, (t - 4250) / 550);
-      x.globalAlpha = 1 - fa * fa;
-      for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y;
+    const f = (now) => { if (!cv.isConnected) return; const t = now - t0; x.clearRect(0, 0, W, H);
+      const gr = t < T2 ? 0 : Math.min(1, (t - T2) / 450), base0 = g * (0.62 + 0.45 * gr);
+      const fa = t < T2 + 100 ? 0 : Math.min(1, (t - T2 - 100) / (T3 - T2 - 100));
+      const rot = t > T1 && t < T2; const ru = rot ? eio((t - T1) / (T2 - T1)) : 0, th = ru * 6.2832, cs = Math.cos(th), sn = Math.sin(th), tl = Math.sin(ru * 3.1416) * 0.22, ct = Math.cos(tl), st2 = Math.sin(tl);
+      const ga = 1 - fa * fa;
+      for (let k = 0; k < P.length; k++) { const q = P[k]; let X, Y, sz = base0, al = ga;
         if (t < 2400) { const u = (t - q.d1) / 1250; if (u <= 0) continue; const e = e4(u > 1 ? 1 : u); X = q.sx + (q.dx - q.sx) * e; Y = q.sy + (q.dy - q.sy) * e; }
-        else { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; }
-        x.fillRect(X - sz / 2, Y - sz / 2, sz, sz); }
-      x.globalAlpha = 1; if (fa > 0) { x.globalAlpha = fa; x.font = pre + fs + 'px ' + fam; x.textBaseline = 'alphabetic'; x.fillText('&', axp, base); x.globalAlpha = 1; }
-      if (t < 6000) requestAnimationFrame(f); };
+        else if (t < T1) { let u = (t - 2400 - q.d2) / 1400; u = u < 0 ? 0 : u > 1 ? 1 : u; const e = eio(u); X = q.dx + (q.ax - q.dx) * e; Y = q.dy + (q.ay - q.dy) * e; }
+        else if (rot) { const lx = q.ax - cx, ly = q.ay - cy, z = q.z * Math.sin(ru * 3.1416);
+          const rx = lx * cs + z * sn, rz = -lx * sn + z * cs; const ry = ly * ct - rz * st2, rz2 = ly * st2 + rz * ct;
+          const pz = FOC / (FOC + rz2); X = cx + rx * pz; Y = cy + ry * pz; sz = base0 * pz; al = Math.max(0.3, Math.min(1, 1 - (1 - pz) * 5)); }
+        else { X = q.ax; Y = q.ay; }
+        x.globalAlpha = al; x.drawImage(dot, X - sz / 2, Y - sz / 2, sz, sz); }
+      x.globalAlpha = 1; if (fa > 0) { x.globalAlpha = fa; x.fillStyle = '#161514'; x.font = pre + fs + 'px ' + fam; x.textBaseline = 'alphabetic'; x.fillText('&', axp, base); x.globalAlpha = 1; }
+      if (t < T3 + 600) requestAnimationFrame(f); };
     requestAnimationFrame(f);
   }
   dwPrep() {
@@ -2029,7 +2040,7 @@ class Component extends DCLogic {
   nextScene(n) {
     if (!this._sfk) { this._sfk = 1; try { if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Safari\//.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent))) document.documentElement.classList.add('dw-sf'); } catch (e) {} }
     if (this.calm()) { this.setState({ scene: 0 }); return; }
-    const DUR = [this.calm() ? 2700 : 5000, 4600, 6000, 17150, 2700, 14000];
+    const DUR = [this.calm() ? 2700 : (this._dwLead = this._dwOnce ? 300 : 2000) + 6700, 4600, 6000, 17150, 2700, 14000];
     const sc = [0, 1, 3, 2, 5][n % 5];
     (this._acT || []).forEach(clearTimeout); this._acT = [];
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
@@ -2044,7 +2055,7 @@ class Component extends DCLogic {
           if (!c || parseFloat(getComputedStyle(c).getPropertyValue('--cfa')) > 2) { st0.classList.remove('cfdark'); clearInterval(this._cfdI); } }, 60); }
       else st0.classList.remove('cfdark'); } } catch (e) {}
     this.setState({ scene: n }, () => { if (sc === 5) this.startPhys(); else this.stopPhys(); });
-    if (sc === 0) { this._gathered = true; this._dwTry = 0; this._acT.push(setTimeout(() => this.dwParticles(), 20)); }
+    if (sc === 0) { this._gathered = true; this._dwTry = 0; const lead = this._dwLead || 300; this._dwOnce = true; this._acT.push(setTimeout(() => this.dwParticles(), lead)); }
     if (sc === 1) this._acT.push(setTimeout(() => this.ampCells(), this._joinAmp ? 1100 : 1250));
     this._acT.push(setTimeout(() => { try { (this._stage ? [...this._stage.querySelectorAll('.ampov')] : []).forEach((e) => e.remove()); } catch (e) {} }, 120));
     clearInterval(this._mxI);
