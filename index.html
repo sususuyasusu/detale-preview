@@ -926,6 +926,9 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
   mask-image:conic-gradient(from 36deg at 50% 50%,#000 0deg,#000 var(--cfb),transparent var(--cfb),transparent 180deg,#000 180deg,#000 calc(180deg + var(--cfb)),transparent calc(180deg + var(--cfb)))}
 .stage.p4dk .ph4.cf .ph4-band.m{-webkit-mask-image:none!important;mask-image:none!important}
 .stage.p4dk .ph4.cf{background:#161514!important}
+
+/* 読み込みの数字の後ろに、半分の大きさの％（本人 2026-11-23） */
+.dwcount::after{content:'%';font-size:.5em;margin-left:.04em}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
@@ -1826,7 +1829,8 @@ class Component extends DCLogic {
     // 高さは画面の80%まで（PCの横長画面で上下に切れないように）。縦は字の高さの中心を画面の中心に
     const mc = document.createElement('canvas').getContext('2d'); mc.font = pre + '100px ' + fam; const m100 = mc.measureText('DW');
     const asc100 = m100.actualBoundingBoxAscent || 72; let dfs = (W * 1.08) / (m100.width / 100); dfs = Math.min(dfs, (H * 0.8) / (asc100 / 100));
-    const dBase = H / 2 + (asc100 / 100) * dfs / 2;
+    let dBase = H / 2 + (asc100 / 100) * dfs / 2;
+    if (W < 700) { /* dwSpDwBig: スマホはDWの字の高さを&と同じに（横ははみ出してよい） */ const mA = mc.measureText('&'), ascA = mA.actualBoundingBoxAscent || asc100; dfs = fs * ascA / asc100; dBase = base; }
     const DD = mk((o) => { o.font = pre + dfs + 'px ' + fam; o.textAlign = 'center'; o.fillText('DW', W / 2, dBase); });
     const cnt = (D) => { let n = 0; for (let i = 3; i < D.length; i += 4) if (D[i] > 120) n++; return n / (S * S); };
     const A = cnt(DA), g = Math.max(3.2, Math.sqrt(A / (W < 700 ? 1800 : 2600)));
