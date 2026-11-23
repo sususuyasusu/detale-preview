@@ -924,6 +924,10 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
 
 /* 読み込みの数字の後ろに、半分の大きさの％（本人 2026-11-23） */
 .dwcount::after{content:'%';font-size:.3333em;margin-left:.04em}
+
+/* dwStageFull: トップの舞台は画面の高さちょうど（下に&の帯をのぞかせない） */
+#top.stage{height:100vh!important;min-height:0!important;max-height:none!important}
+@supports (height:100dvh){#top.stage{height:100dvh!important}}
 </style>
 </helmet>
 <div class="curhide" onMouseMove="{{move}}" style="--bg: {{bg}}; --ink: {{ink}}; --sub: {{sub}}; --line: {{line}}; --card: {{card}}; --acc: {{acc}}; background: var(--bg); color: var(--ink); font-family: 'Shippori Mincho', serif; overflow: clip; position: relative; transition: background .7s, color .7s;">
