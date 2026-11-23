@@ -1227,7 +1227,8 @@ class Component extends DCLogic {
   }
   function revealGroup(list, hold) {
     /* hold=true: 動きを用意して止めておく（隠れたまま）。戻り値の関数を呼ぶと動き出す。幕が開いた瞬間に一度見えてから消える「ちらつき」を防ぐ */
-    list = list.filter(function (b) { return getComputedStyle(b).animationName === 'none' && (hold || !hidden(b, getComputedStyle(b))); });
+    /* 2026-11-23 13:59: スマホで舞台（#top）そのものを文字の塊として動かしていた（画面全体に濃さの効果＝重くカクつく）→ 舞台・大きな入れ物は除く */
+    list = list.filter(function (b) { if (b.id === 'top' || b.classList.contains('stage') || b.getBoundingClientRect().height > innerHeight * 0.5) return false; return getComputedStyle(b).animationName === 'none' && (hold || !hidden(b, getComputedStyle(b))); });
     var an = [];
     /* 冒頭の舞台・上の帯は、舞台側の指定（animation 等）に負けないよう、要素に直接動きを付ける（Web Animations）。実測: クラスの指定では濃さが変わらなかった。舞台側が濃さ（opacity）を最優先で1に固定しているので、濃さは filter の opacity() で変える */
     list.forEach(function (b, k) {
