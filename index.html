@@ -1014,7 +1014,7 @@ html.dw-uib:not(.dw-sf) .mph{color:#F0EDE6!important}
   <!-- ===== SW: 上の細い見出し帯（常に上に残る） ===== -->
   <nav class="sw-bar" aria-label="サイトメニュー">
     <a class="sw-c1" href="#top">DETALE &amp; WORKS Inc.</a>
-    <span class="sw-c2"><a href="#about">About</a> / <a href="Works.dc.html">Works</a> / <a href="Service.dc.html">Service</a> / <a href="#workflow">Flow</a> / <a href="#company">Company</a></span>
+    <span class="sw-c2"><a href="#about">About</a> / <a href="Works.dc.html">Works</a> / <a href="Service.dc.html">Service</a> / <a href="#workflow">Flow</a> / <a href="Company.dc.html">Company</a></span>
     <a class="sw-c3" href="Contact.dc.html">CONTACT →</a>
   </nav>
 
@@ -1426,9 +1426,9 @@ class Component extends DCLogic {
           const pr = document.getElementById('pinrun'), pb = document.getElementById('pinbox'), ps = document.getElementById('pinspace');
           let t;
           if (pr && pb && ps && ps.offsetHeight > 0) {
-            const topPx = Math.min(0, Math.round(innerHeight - pb.offsetHeight));
+            const topPx = 0; /* dwPinFull: 全画面のまま止める */
             if (pb._top !== topPx) { pb.style.top = topPx + 'px'; pb._top = topPx; }
-            const start = Math.max(0, pr.getBoundingClientRect().top + scrollY + pb.offsetHeight - innerHeight);
+            const start = Math.max(0, pr.getBoundingClientRect().top + scrollY);
             t = Math.min(1, Math.max(0, (scrollY - start) / ps.offsetHeight));
           } else {
             const span = Math.max(1, (b1.top + scrollY) - innerHeight * 0.5);
@@ -1999,7 +1999,7 @@ class Component extends DCLogic {
     if (this.calm()) { this.setState({ scene: 0 }); return; }
     const DUR = [this.calm() ? 2700 : (this._dwLead = this._dwOnce ? 300 : 2000) + 6700, 4600, 6000, 17150, 2700, 14000];
     const sc = [0, 1, 2, 5][n % 4]; /* dwDropSc3 */
-    (this._acT || []).forEach(clearTimeout); this._acT = [];
+    (this._acT || []).forEach(clearTimeout); this._acT = []; this._floorOpen = false; this._floorGone = false; if (sc === 5) this._acT.push(setTimeout(() => { this._floorOpen = true; }, DUR[5] - 2400));
     this._joinAmp = sc === 1 && !!this._gathered; if (sc !== 0) this._gathered = false;
     try { if (this._stage) this._stage.classList.toggle('ampjoin', this._joinAmp); } catch (e) {}
     try { const st3 = this._stage; if (st3) st3.classList.remove('p4dk'); if (st3 && sc === 3 && !this.calm()) { this._acT.push(setTimeout(() => st3.classList.add('cfdark'), 11400 + 3200)); this._acT.push(setTimeout(() => st3.classList.add('p4dk'), 11400 + 3800)); } } catch (e) {}
@@ -2050,7 +2050,7 @@ class Component extends DCLogic {
   stepPhys() {
     const B = this._pb, W = this._pw, H = this._ph, G = 0.42;
     const now = performance.now();
-    if (now > this._spawnAt) {
+    if (!this._floorOpen && now > this._spawnAt) { /* dwFloorDrop: 底が抜けたら新しい玉を出さない */
       for (let t = 0; t < B.length; t++) {
         const b = B[(this._spawnIdx + t) % B.length];
         if (!b.on) { this.spawnBall(b); this._spawnIdx = (this._spawnIdx + t + 1) % B.length; break; }
@@ -2072,12 +2072,12 @@ class Component extends DCLogic {
       const dx = b.x - mx, dy = b.y - my, d = Math.hypot(dx, dy);
     }
     const wall = (b) => {
-      if (b.y + b.r > H) { b.y = H - b.r; if (b.vy > 0) b.vy = b.vy > 2 ? -b.vy * 0.3 : 0; b.vx *= 0.94; }
+      if (!this._floorOpen && b.y + b.r > H) { b.y = H - b.r; if (b.vy > 0) b.vy = b.vy > 2 ? -b.vy * 0.3 : 0; b.vx *= 0.94; }
       if (b.x - b.r < 0) { b.x = b.r; if (b.vx < 0) b.vx = -b.vx * 0.3; }
       if (b.x + b.r > W) { b.x = W - b.r; if (b.vx > 0) b.vx = -b.vx * 0.3; }
     };
     for (const b of B) if (b.on) wall(b);
-    const GAP = 3;
+    const GAP = 3; if (this._floorOpen && !this._floorGone && B.every((b) => !b.on || b.y - b.r > H)) { this._floorGone = true; clearTimeout(this._scene); setTimeout(() => this.nextScene((this.state.scene || 0) + 1), 250); }
     const CR = 16;
     if (this._pmx !== undefined && mx > -9000) { this._cvx = Math.max(-25, Math.min(25, mx - this._pmx)); this._cvy = Math.max(-25, Math.min(25, my - this._pmy)); } else { this._cvx = 0; this._cvy = 0; }
     this._pmx = mx; this._pmy = my;
@@ -2231,7 +2231,7 @@ function bar(){var b=document.querySelector('.sw-bar');return b?b.getBoundingCli
 function go(){if(stop)return;var e=document.getElementById(id);if(!e)return false;var y=e.getBoundingClientRect().top+window.pageYOffset-bar();window.scrollTo(0,Math.max(0,y));moved=true;return true;}
 ['wheel','touchstart','keydown'].forEach(function(k){window.addEventListener(k,function(){if(moved&&Date.now()-t0>600)stop=true;},{passive:true});});
 (function wait(){if(go()){[800,2000,4000].forEach(function(ms){setTimeout(go,ms);});return;}if(Date.now()-t0<15000)setTimeout(wait,100);})();})();</script>
-<script>/* dwTextRise: サイトの文字をすべて、下からフェードイン（下から上がりながら薄い→濃い）で出す。
+<style>.sw-ln{padding-right:.12em;margin-right:-.12em}</style><script>/* dwTextRise: サイトの文字をすべて、下からフェードイン（下から上がりながら薄い→濃い）で出す。
    本人 2026-11-23「本文のすべてのテキストをしたからフェードインするように」→ 同日「全ての文字は下からフェードインさせて」。
    動き: 24px下から・不透明へ（0.9〜1.1秒）。同じ並びは0.06秒ずつずらす。
    ① 本文の文字のかたまり（段落・見出し・一覧・ボタン・表の欄・ラベル）: 画面に入った時に出す

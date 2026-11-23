@@ -656,7 +656,7 @@ html.dw-barstuck body::after{content:'';position:fixed;left:0;right:0;top:0;heig
 
   <nav class="sw-bar sw-sub" aria-label="サイトメニュー">
     <a class="sw-c1" href="Final.dc.html">DETALE &amp; WORKS Inc.</a>
-    <span class="sw-c2"><a href="Final.dc.html#about">About</a> / <a href="Works.dc.html" aria-current="page">Works</a> / <a href="Service.dc.html">Service</a> / <a href="Final.dc.html#workflow">Flow</a> / <a href="Final.dc.html#company">Company</a></span>
+    <span class="sw-c2"><a href="Final.dc.html#about">About</a> / <a href="Works.dc.html" aria-current="page">Works</a> / <a href="Service.dc.html">Service</a> / <a href="Final.dc.html#workflow">Flow</a> / <a href="Company.dc.html">Company</a></span>
     <a class="sw-c3" href="Contact.dc.html">CONTACT →</a>
   </nav>
 
@@ -1318,7 +1318,7 @@ document.addEventListener('click',function(e){var c=e.target.closest('.case-r im
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.activeElement&&document.activeElement.matches&&document.activeElement.matches('.case-r img')){open(document.activeElement);return;}
 if(!lb||!lb.classList.contains('open'))return;if(e.key==='Escape')close();else if(e.key==='ArrowRight')go(1);else if(e.key==='ArrowLeft')go(-1);});
 })();</script>
-<script>/* dwTextRise: サイトの文字をすべて、下からフェードイン（下から上がりながら薄い→濃い）で出す。
+<style>.sw-ln{padding-right:.12em;margin-right:-.12em}</style><script>/* dwTextRise: サイトの文字をすべて、下からフェードイン（下から上がりながら薄い→濃い）で出す。
    本人 2026-11-23「本文のすべてのテキストをしたからフェードインするように」→ 同日「全ての文字は下からフェードインさせて」。
    動き: 24px下から・不透明へ（0.9〜1.1秒）。同じ並びは0.06秒ずつずらす。
    ① 本文の文字のかたまり（段落・見出し・一覧・ボタン・表の欄・ラベル）: 画面に入った時に出す
