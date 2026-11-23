@@ -1225,10 +1225,16 @@ class Component extends DCLogic {
     }
     return out.filter(function (b) { return !out.some(function (o) { return o !== b && o.contains(b); }); });
   }
-  function revealGroup(list) {
-    list = list.filter(function (b) { return getComputedStyle(b).animationName === 'none' && !hidden(b, getComputedStyle(b)); });
-    list.forEach(function (b, k) { b.classList.add('dw-tr'); b.style.setProperty('--dw-trd', Math.min(0.5, k * 0.06).toFixed(2) + 's'); });
-    requestAnimationFrame(function () { requestAnimationFrame(function () { list.forEach(function (b) { b.classList.add('dw-tr-in'); }); }); });
+  function revealGroup(list, hold) {
+    /* hold=true: 動きを用意して止めておく（隠れたまま）。戻り値の関数を呼ぶと動き出す。幕が開いた瞬間に一度見えてから消える「ちらつき」を防ぐ */
+    list = list.filter(function (b) { return getComputedStyle(b).animationName === 'none' && (hold || !hidden(b, getComputedStyle(b))); });
+    var an = [];
+    /* 冒頭の舞台・上の帯は、舞台側の指定（animation 等）に負けないよう、要素に直接動きを付ける（Web Animations）。実測: クラスの指定では濃さが変わらなかった。舞台側が濃さ（opacity）を最優先で1に固定しているので、濃さは filter の opacity() で変える */
+    list.forEach(function (b, k) {
+      b.classList.add('dw-tr-own');
+      try { var a = b.animate([{ filter: 'opacity(0)', translate: '0 24px' }, { filter: 'opacity(1)', translate: '0 0' }], { duration: 1100, delay: Math.min(500, k * 60), easing: 'cubic-bezier(.19,1,.22,1)', fill: 'backwards' }); if (hold) a.pause(); an.push(a); } catch (e) {}
+    });
+    return function () { an.forEach(function (a) { try { a.play(); } catch (e) {} }); };
   }
   var seen = new WeakSet();
   function scan() {
@@ -1263,12 +1269,14 @@ class Component extends DCLogic {
     revealGroup(blocksIn(bar));
   }
   /* ⑤ 冒頭の演出に重なる文字: 粒が動き出した時（無い時はすぐ） */
+  var goStage = null;
   function stageWatch(t0) {
     var top = document.getElementById('top');
-    if (!top) { if (Date.now() - t0 < 15000) setTimeout(function () { stageWatch(t0); }, 150); return; }
+    if (!top) { if (Date.now() - t0 < 15000) setTimeout(function () { stageWatch(t0); }, 30); return; }
+    if (!goStage) goStage = revealGroup(blocksIn(top), true); /* 見つけた時点で隠しておく（読み込み画面の裏） */
     var cv = document.querySelector('canvas.dwdw');
-    if (cv && !cv.dataset.run && Date.now() - t0 < 20000) { setTimeout(function () { stageWatch(t0); }, 60); return; }
-    revealGroup(blocksIn(top));
+    if (cv && !cv.dataset.run && Date.now() - t0 < 20000) { setTimeout(function () { stageWatch(t0); }, 30); return; }
+    goStage();
   }
   var t = 0; function later() { clearTimeout(t); t = setTimeout(scan, 120); }
   function start() {
