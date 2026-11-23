@@ -1942,7 +1942,7 @@ class Component extends DCLogic {
           q.vx += (fx - q.x) * 26 * dt; q.vy += (fy - q.y) * 26 * dt; q.vx *= 1 - 3.6 * dt; q.vy *= 1 - 3.6 * dt; }
         else if (phase === 2) { q.vx += (gx - q.x) * 34 * dt; q.vy += (gy - q.y) * 34 * dt; q.vx *= 1 - 7 * dt; q.vy *= 1 - 7 * dt; q.tr = q.tr * (1 - 1.6 * dt); }
         else { if (q.bx === undefined) { q.bx = q.x - gx; q.by = q.y - gy; q.br = Math.max(q.tr, q.r); q.dir = 1; const R0 = UV * 0.22; q.bw = (0.55 + 0.9 * R0 / (R0 + Math.hypot(q.bx, q.by))) * (0.92 + Math.random() * 0.16); }
-          if (t > 2.12 && !q.soft) { q.soft = 1; const G = window.__dwSoftG || (window.__dwSoftG = 'radial-gradient(circle closest-side,' + INK + ' 68%,' + String(INK).replace(/rgba?\(([^,]+),([^,]+),([^,)]+).*$/, 'rgba($1,$2,$3,0)') + ' 100%)'); q.el.style.background = G; }
+          if (t > 2.05 && q.r > UV * 0.05 && !q.soft) { q.soft = 1; const G = window.__dwSoftG || (window.__dwSoftG = 'radial-gradient(circle closest-side,' + INK + ' 68%,' + String(INK).replace(/rgba?\(([^,]+),([^,]+),([^,)]+).*$/, 'rgba($1,$2,$3,0)') + ' 100%)'); q.el.style.background = G; }
           const u = t - 2.0, pop = 1 + 0.45 * (0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, u / 0.4))), kk = Math.max(0, Math.min(1, (u - 0.08) / 0.95)), A = 1 / (1 - 0.92 * Math.pow(kk, 1.3));
           const th = (2.8 * u * u + 2.6 * u * u * u) * q.bw, cs = Math.cos(th), sn = Math.sin(th), X = q.bx * pop * Math.pow(A, 0.5), Y = q.by * pop * Math.pow(A, 0.5), cx = gx + (cr.width / 2 - gx) * kk, cy = gy + (cr.height / 2 - gy) * kk;
           q.x = cx + X * cs - Y * sn; q.y = cy + X * sn + Y * cs; q.vx = 0; q.vy = 0; q.tr = Math.min(q.br * Math.pow(A, 1.75) * 1.15, DG); q.r = q.tr; q.vr = 0;
