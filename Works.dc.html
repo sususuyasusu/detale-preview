@@ -1389,7 +1389,11 @@ if(!lb||!lb.classList.contains('open'))return;if(e.key==='Escape')close();else i
       var el = n.parentElement; if (!el || seen.has(el)) continue; seen.add(el);
       if (el.closest(SKIP_UP) || el.closest('input,textarea,select,option')) continue;
       var b = pick(el); if (!b || b.classList.contains('dw-tr') || b.closest('.dw-tr')) continue;
-      if (b.querySelector('.dw-tr')) continue;
+      if (b.querySelector('.dw-tr')) {
+        /* 同じ枠の中で別の文字が先に対象になっていた時（例: 見出し＋その下のメール・電話のリンク）: その文字自体を単位にする */
+        if (el === b || el.closest('.dw-tr') || el.querySelector('.dw-tr')) continue;
+        b = el; if (getComputedStyle(b).display === 'inline') b.style.display = 'inline-block';
+      }
       if (b.closest(SKIP_UP)) continue;
       if (fixedAncestor(b)) continue;
       var cs = getComputedStyle(b);
