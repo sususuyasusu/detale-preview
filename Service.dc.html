@@ -1169,18 +1169,27 @@ class Component extends DCLogic {
   }
 }
 </script>
-<script>/* dwTextRise: 本文の文章すべてを、画面に入った時に下からふわっと出す（本人 2026-11-23「本文のすべてのテキストをしたからフェードインするように」）。
-   既に動きがある見出し（sw-split）・注記（sw-rv）・写真（sw-clip）と同じ動き（24px下から・不透明へ・1.1秒）にそろえる。
-   対象: 自分の中に文字を持つ「かたまり」（段落・見出し・一覧・ボタン・表・ラベル等）。
-   対象外: 上の帯・メニュー・読み込み画面・冒頭の演出（固定の舞台）・既に動きのあるもの・自分で動かしている部品・入力欄。
-   画面の組み立てが後から進むので、増えた分も拾う。最初から画面内にあるものは読み込み後すぐに出す。動きを減らす設定の人には出さない。 */
+<script>/* dwTextRise: サイトの文字をすべて、下からフェードイン（下から上がりながら薄い→濃い）で出す。
+   本人 2026-11-23「本文のすべてのテキストをしたからフェードインするように」→ 同日「全ての文字は下からフェードインさせて」。
+   動き: 24px下から・不透明へ（0.9〜1.1秒）。同じ並びは0.06秒ずつずらす。
+   ① 本文の文字のかたまり（段落・見出し・一覧・ボタン・表の欄・ラベル）: 画面に入った時に出す
+   ② 大きな見出し（下から隠し出し sw-split）・一番下の大きな社名（sw-mark）: 今の下からの動きに「薄い→濃い」を足す
+   ③ 冒頭の大きな社名の1文字ずつの動き（.ch）: 下からの動きに「薄い→濃い」を足す
+   ④ 上の帯（会社名・メニュー・お問い合わせ）: 帯が見えた時に左から順に出す（トップは帯が3.1秒後に出るので、それを待つ）
+   ⑤ 冒頭の演出に重なる文字（ABOUT〜WORKFLOW・©・CONTACT・場面番号）: 冒頭の演出（粒）が動き出した時に出す
+   動きの指定は「translate」を使い、各部品がもともと持つ動き（transform）とぶつからないようにする。
+   対象外: 読み込み画面・場面転換で動く重なり文字（mph）・入力欄・読み上げ専用・画面に出ないもの。動きを減らす設定の人には何もしない。 */
 (function () {
   if (window.__dwTextRise) return; window.__dwTextRise = 1;
   var reduce = false; try { reduce = matchMedia('(prefers-reduced-motion: dw-off)').matches; } catch (e) {}
   if (reduce || !('IntersectionObserver' in window)) return;
-  var css = '.dw-tr{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform 1.1s cubic-bezier(.19,1,.22,1);transition-delay:var(--dw-trd,0s)}.dw-tr.dw-tr-in{opacity:1;transform:none}';
+  var E = 'cubic-bezier(.19,1,.22,1)';
+  var css = '.dw-tr{opacity:0;translate:0 24px;transition:opacity .9s ease,translate 1.1s ' + E + ';transition-delay:var(--dw-trd,0s)}.dw-tr.dw-tr-in{opacity:1;translate:none}'
+    + '.sw-lni{opacity:0;transition:transform 1.1s ' + E + ',opacity .9s ease}.sw-split.in .sw-lni{opacity:1}'
+    + '.sw-mk{opacity:0;translate:0 .2em;transition:transform 1.3s ' + E + ',translate 1.3s ' + E + ',opacity 1s ease}.sw-mark.in .sw-mk{opacity:1;translate:none}'
+    + '.ch{animation-name:dwUpCh!important}@keyframes dwUpCh{from{transform:translateY(105%);opacity:0}to{transform:translateY(0);opacity:1}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
-  var SKIP_UP = '#top,.skip,.sr-only,.sw-count,.sw-bar,header,nav,.dw-loader,[class*="loader"],[class*="intro"],.sw-split,.sw-rv,.sw-clip,.sw-mark,.sw-ma,.dw-lb,.dw-tr,script,style,svg,canvas,button[aria-hidden],[aria-hidden="true"]';
+  var SKIP_UP = '#top,.skip,.sr-only,.sw-count,.sw-bar,.mphl,.mph,.dw-loader,[class*="loader"],[class*="intro"],.sw-split,.sw-rv,.sw-clip,.sw-mark,.sw-ma,.dw-lb,.dw-tr,.ch,script,style,svg,canvas,button[aria-hidden]';
   var BLOCK = /^(block|flex|grid|list-item|inline-block|inline-flex|table|table-cell|table-row|flow-root)$/;
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) show(e.target); });
@@ -1194,12 +1203,13 @@ class Component extends DCLogic {
     pend.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.bottom > 0 && (r.top < innerHeight * 0.94 || (bottom && r.top < innerHeight))) show(el); }); }
   window.addEventListener('scroll', function () { if (!tk) tk = requestAnimationFrame(sweep); }, { passive: true });
   setInterval(function () { if (pend.size) sweep(); }, 1200);
-  function ownText(el) { for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.nodeValue.trim()) return true; return false; }
   function fixedAncestor(el) {
-    for (var a = el; a && a !== document.body; a = a.parentElement) {
-      var cs = getComputedStyle(a);
-      if (cs.position === 'fixed') return true;
-    }
+    for (var a = el; a && a !== document.body; a = a.parentElement) if (getComputedStyle(a).position === 'fixed') return true;
+    return false;
+  }
+  function hidden(b, cs) {
+    if (cs.visibility === 'hidden' || cs.display === 'none') return true;
+    for (var a = b, i = 0; a && i < 6; a = a.parentElement, i++) if (+getComputedStyle(a).opacity === 0) return true; /* 指を乗せた時だけ出る文字などは触らない */
     return false;
   }
   function pick(el) {
@@ -1208,6 +1218,19 @@ class Component extends DCLogic {
     while (b && b !== document.body) { var d = getComputedStyle(b).display; if (BLOCK.test(d)) break; b = b.parentElement; }
     return b && b !== document.body ? b : null;
   }
+  function blocksIn(root) {
+    /* root の中の文字のかたまりを、上から順に返す（入れ子は外側1つにまとめない＝文字を直接持つかたまり単位） */
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n, out = [];
+    while ((n = w.nextNode())) {
+      if (!n.nodeValue.trim()) continue; var el = n.parentElement; if (!el || el.closest('.sr-only,.skip,.mph,.mphl,.ch,script,style')) continue;
+      var b = pick(el); if (b && root.contains(b) && out.indexOf(b) < 0 && !b.classList.contains('dw-tr')) out.push(b);
+    }
+    return out.filter(function (b) { return !out.some(function (o) { return o !== b && o.contains(b); }); });
+  }
+  function revealGroup(list) {
+    list.forEach(function (b, k) { b.classList.add('dw-tr'); b.style.setProperty('--dw-trd', Math.min(0.5, k * 0.06).toFixed(2) + 's'); });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { list.forEach(function (b) { b.classList.add('dw-tr-in'); }); }); });
+  }
   var seen = new WeakSet();
   function scan() {
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), n, groups = new Map();
@@ -1215,22 +1238,40 @@ class Component extends DCLogic {
       if (!n.nodeValue.trim()) continue;
       var el = n.parentElement; if (!el || seen.has(el)) continue; seen.add(el);
       if (el.closest(SKIP_UP) || el.closest('input,textarea,select,option')) continue;
-      var b = pick(el); var R = window.__dwTrDbg; if (!b || b.classList.contains('dw-tr') || b.closest('.dw-tr')) continue;
+      var b = pick(el); if (!b || b.classList.contains('dw-tr') || b.closest('.dw-tr')) continue;
       if (b.querySelector('.dw-tr')) continue;
       if (b.closest(SKIP_UP)) continue;
       if (fixedAncestor(b)) continue;
       var cs = getComputedStyle(b);
-      if (cs.transform !== 'none' || b.style.transform || cs.animationName !== 'none') { if (R) R.push(['動きあり', b.className, b.textContent.trim().slice(0, 20)]); continue; }
-      if (cs.visibility === 'hidden' || cs.display === 'none') continue;
-      var r = b.getBoundingClientRect(); if (r.height > innerHeight * 0.9) { if (R) R.push(['大きい', b.className, b.textContent.trim().slice(0, 20)]); continue; } /* 画面より大きい入れ物は動かさない（中の文字で動かす） */
+      if (cs.animationName !== 'none') continue; /* 自分の動き（色や大きさのくり返し等）を持つ部品は触らない */
+      if (hidden(b, cs)) continue;
+      var r = b.getBoundingClientRect(); if (r.height > innerHeight * 0.9) continue; /* 画面より大きい入れ物は動かさない */
       b.classList.add('dw-tr');
       var p = b.parentElement, k = groups.get(p) || 0; groups.set(p, k + 1);
       if (k) b.style.setProperty('--dw-trd', Math.min(0.32, k * 0.06).toFixed(2) + 's');
       io.observe(b); pend.add(b);
     }
   }
+  /* ④ 上の帯: 帯が見えるようになってから（トップは3.1秒後）、中の文字を左から順に */
+  function barWatch(t0) {
+    var bar = document.querySelector('.sw-bar');
+    if (!bar) { if (Date.now() - t0 < 15000) setTimeout(function () { barWatch(t0); }, 150); return; }
+    if (+getComputedStyle(bar).opacity < 0.6) { if (Date.now() - t0 < 20000) setTimeout(function () { barWatch(t0); }, 80); else revealGroup(blocksIn(bar)); return; }
+    revealGroup(blocksIn(bar));
+  }
+  /* ⑤ 冒頭の演出に重なる文字: 粒が動き出した時（無い時はすぐ） */
+  function stageWatch(t0) {
+    var top = document.getElementById('top');
+    if (!top) { if (Date.now() - t0 < 15000) setTimeout(function () { stageWatch(t0); }, 150); return; }
+    var cv = document.querySelector('canvas.dwdw');
+    if (cv && !cv.dataset.run && Date.now() - t0 < 20000) { setTimeout(function () { stageWatch(t0); }, 60); return; }
+    revealGroup(blocksIn(top));
+  }
   var t = 0; function later() { clearTimeout(t); t = setTimeout(scan, 120); }
-  function start() { scan(); new MutationObserver(later).observe(document.body, { childList: true, subtree: true }); }
+  function start() {
+    scan(); new MutationObserver(later).observe(document.body, { childList: true, subtree: true });
+    var t0 = Date.now(); barWatch(t0); stageWatch(t0);
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
