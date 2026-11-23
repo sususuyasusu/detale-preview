@@ -1839,8 +1839,8 @@ class Component extends DCLogic {
     PA.sort((a, b) => a[0] - b[0] || a[1] - b[1]); PD.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
     const R = Math.max(W, H);
     const P = PA.map((t, i) => { const q = PD[Math.min(PD.length - 1, Math.floor(i * PD.length / NP))], an = Math.random() * 6.2832, r = R * (0.55 + Math.random() * 0.5);
-      return { sx: W / 2 + Math.cos(an) * r, sy: H / 2 + Math.sin(an) * r, dx: q[0], dy: q[1], ax: t[0], ay: t[1], d1: Math.random() * 450, d2: (t[0] / W) * 350 }; });
-    const res = { k: W + 'x' + H, P, g, gD, axp, base, fs, pre, fam };
+      return { sx: W / 2 + Math.cos(an) * r, sy: H / 2 + Math.sin(an) * r, dx: t[0], dy: t[1], ax: t[0], ay: t[1], /* dwGatherAmp: 集まる先もDWでなく& */ d1: Math.random() * 450, d2: (t[0] / W) * 350 }; });
+    const res = { k: W + 'x' + H, P, g, gD: g, axp, base, fs, pre, fam };
     let ok = true; try { ok = !document.fonts || document.fonts.check(pre + '20px ' + fam, '&DW'); } catch (e) {}
     if (ok) this._dwPre = res;
     return res;
