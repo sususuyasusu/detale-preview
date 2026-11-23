@@ -1897,7 +1897,7 @@ class Component extends DCLogic {
     const step = () => { if (!cont.isConnected) return; const now = performance.now(), t = (now - t0) / 1000; let dt = (now - last) / 1000; last = now; const rdt = Math.min(dt, 0.1); if (dt > 0.034) dt = 0.034;
       if (cont._blk && now - cont._blk > 280) { for (const q of balls) q.el.style.display = 'none'; return; }
       if (phase === 0 && t > 0.5) phase = 1;
-      const SW = t > 1.05 ? Math.pow(Math.min(1, (t - 1.05) / 0.95), 2.2) : 0;
+      const SW = t > 1.05 ? Math.pow(Math.min(1, (t - 1.05) / 0.95), 2.2) : 0; /* dwSwirlCont */ const JT = SW * (1 - Math.min(1, Math.max(0, (t - 1.65) / 0.35)));
       if (phase === 1) { const k = Math.min(1, (t - 0.5) / 1.3); acc += (95 + 420 * k) * rdt; while (acc >= 1 && balls.length < CAP) { acc -= 1; bud(now, k); } if (balls.length >= CAP) acc = 0; if (t > 2.0) phase = 2; }
       if (phase === 2) { phase = 3; let zb = null, zs = -1e9; balls.forEach((q) => { const dd = Math.hypot(q.x - gx, q.y - gy), sc2 = q.tr * 3 - dd; if (q.tr > 6 && sc2 > zs) { zs = sc2; zb = q; } });
         zb = null; balls.forEach((q) => { q.el.style.transition = 'none'; q.el.style.backgroundColor = INK; });
@@ -1916,14 +1916,13 @@ class Component extends DCLogic {
           if (q.r * 2 > q.base * 1.9) { q.base = q.r * 1.2; q.el.style.width = q.el.style.height = (q.base * 2).toFixed(0) + 'px'; }
           q.el.style.zIndex = '5'; q.el.style.transform = 'translate(' + q.x.toFixed(1) + 'px,' + q.y.toFixed(1) + 'px) translate(-50%,-50%) scale(' + (q.r / q.base).toFixed(3) + ')'; continue; }
         if (q.born && now >= q.born) { q.tr = q.tr0; q.born = 0; }
-        if (phase < 2) { const fx = gx + (q.hx - gx) * (1 + 0.45 * SW) + (Math.random() - 0.5) * SW * UV * 0.012 + Math.sin(now * 0.0021 + q.ph) * q.tr * 0.14, fy = gy + (q.hy - gy) * (1 + 0.45 * SW) + (Math.random() - 0.5) * SW * UV * 0.012 + Math.cos(now * 0.0018 + q.ph) * q.tr * 0.14;
+        if (phase < 2) { const fx = gx + (q.hx - gx) * (1 + 0.45 * SW) + (Math.random() - 0.5) * JT * UV * 0.012 + Math.sin(now * 0.0021 + q.ph) * q.tr * 0.14, fy = gy + (q.hy - gy) * (1 + 0.45 * SW) + (Math.random() - 0.5) * JT * UV * 0.012 + Math.cos(now * 0.0018 + q.ph) * q.tr * 0.14;
           q.vx += (fx - q.x) * 26 * dt; q.vy += (fy - q.y) * 26 * dt; q.vx *= 1 - 3.6 * dt; q.vy *= 1 - 3.6 * dt; }
         else if (phase === 2) { q.vx += (gx - q.x) * 34 * dt; q.vy += (gy - q.y) * 34 * dt; q.vx *= 1 - 7 * dt; q.vy *= 1 - 7 * dt; q.tr = q.tr * (1 - 1.6 * dt); }
-        else { if (q.bx === undefined) { q.bx = q.x - gx; q.by = q.y - gy; q.br = Math.max(q.tr, q.r); q.dir = 1; const R0 = UV * 0.22; q.bw = (0.55 + 0.9 * R0 / (R0 + Math.hypot(q.bx, q.by))) * (0.92 + Math.random() * 0.16); }
-          if (t > 2.05 && q.r > UV * 0.05 && !q.soft) { q.soft = 1; const G = window.__dwSoftG || (window.__dwSoftG = 'radial-gradient(circle closest-side,' + INK + ' 68%,' + String(INK).replace(/rgba?\(([^,]+),([^,]+),([^,)]+).*$/, 'rgba($1,$2,$3,0)') + ' 100%)'); q.el.style.background = G; }
-          const u = t - 2.0, pop = 1 + 0.45 * (0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, u / 0.4))), kk = Math.max(0, Math.min(1, (u - 0.08) / 0.95)), A = 1 / (1 - 0.92 * Math.pow(kk, 1.3));
-          const th = (2.8 * u * u + 2.6 * u * u * u) * q.bw, cs = Math.cos(th), sn = Math.sin(th), X = q.bx * pop * Math.pow(A, 0.5), Y = q.by * pop * Math.pow(A, 0.5), cx = gx + (cr.width / 2 - gx) * kk, cy = gy + (cr.height / 2 - gy) * kk;
-          q.x = cx + X * cs - Y * sn; q.y = cy + X * sn + Y * cs; q.vx = 0; q.vy = 0; q.tr = Math.min(q.br * Math.pow(A, 1.75) * 1.15, DG); q.r = q.tr; q.vr = 0;
+        else { if (q.bx === undefined) { q.bx = q.x - gx; q.by = q.y - gy; q.br = q.r; q.dir = 1; const R0 = UV * 0.22; q.bw = (0.55 + 0.9 * R0 / (R0 + Math.hypot(q.bx, q.by))) * (0.92 + Math.random() * 0.16); }
+          const u = t - 2.0, pop = 1 + 0.42 * (1 - Math.exp(-u / 0.46)), kk = Math.max(0, Math.min(1, (u - 0.08) / 0.95)), A = 1 / (1 - 0.92 * Math.pow(kk, 1.3));
+          const th = (2.8 * u * u + 2.6 * u * u * u) * q.bw, cs = Math.cos(th), sn = Math.sin(th), X = q.bx * pop * Math.pow(A, 0.5), Y = q.by * pop * Math.pow(A, 0.5), kc = kk * kk * (3 - 2 * kk), cx = gx + (cr.width / 2 - gx) * kc, cy = gy + (cr.height / 2 - gy) * kc;
+          q.x = cx + X * cs - Y * sn; q.y = cy + X * sn + Y * cs; q.vx = 0; q.vy = 0; q.tr = Math.min(q.br * (1 + 0.3 * (1 - Math.exp(-u / 0.44))) * Math.pow(A, 1.75), DG); q.r = q.tr; q.vr = 0;
           const outv = q.x + q.r < 0 || q.x - q.r > cr.width || q.y + q.r < 0 || q.y - q.r > cr.height; if (outv !== !!q.hid) { q.hid = outv; q.el.style.display = outv ? 'none' : ''; } if (outv) continue;
           if (q.r * 2 > q.base * 2.6 && q.base < 60) { q.base = Math.min(60, q.r * 1.3); q.el.style.width = q.el.style.height = (q.base * 2).toFixed(0) + 'px'; }
           if (!cont._blk) { /* dwSoftBlk */ const dk = Math.min(1, Math.max(0, (u - 0.15) / 0.6)); if (!cont._c0) { const pr = (x) => (String(x).match(/[\d.]+/g) || []).map(Number); let c = pr(getComputedStyle(cont).backgroundColor); if (c.length < 3 || c[3] === 0) c = pr(getComputedStyle(document.body).backgroundColor); cont._c0 = c.slice(0, 3); cont._c1 = pr(INK).slice(0, 3); cont.style.transition = 'none'; } if (dk > 0) { const e = dk * dk * (3 - 2 * dk), m = Math.pow(e, 1.4), c0 = cont._c0, c1 = cont._c1; cont.style.backgroundColor = 'rgb(' + [0, 1, 2].map((i) => Math.round(c0[i] + (c1[i] - c0[i]) * m)).join(',') + ')'; } if (dk >= 1) { cont._blk = now; cont.style.backgroundColor = INK; } } }
