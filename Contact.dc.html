@@ -1178,8 +1178,17 @@ class Component extends DCLogic {
   var SKIP_UP = '#top,.skip,.sr-only,.sw-count,.sw-bar,header,nav,.dw-loader,[class*="loader"],[class*="intro"],.sw-split,.sw-rv,.sw-clip,.sw-mark,.sw-ma,.dw-lb,.dw-tr,script,style,svg,canvas,button[aria-hidden],[aria-hidden="true"]';
   var BLOCK = /^(block|flex|grid|list-item|inline-block|inline-flex|table|table-cell|table-row|flow-root)$/;
   var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('dw-tr-in'); io.unobserve(e.target); } });
+    es.forEach(function (e) { if (e.isIntersecting) show(e.target); });
   }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  var pend = new Set();
+  function show(el) { el.classList.add('dw-tr-in'); io.unobserve(el); pend.delete(el); }
+  /* 取りこぼし拾い: ①ページの一番下（それ以上スクロールできない所）の行 ②写真の枠などで切り抜かれて「画面に入った」と判定されない文字
+     → スクロールのたびに位置だけで判定し、画面の下から6%より上に来ていれば出す。一番下まで来たら画面内のものを全部出す */
+  var tk = 0;
+  function sweep() { tk = 0; var bottom = window.pageYOffset + innerHeight >= document.documentElement.scrollHeight - 4;
+    pend.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.bottom > 0 && (r.top < innerHeight * 0.94 || (bottom && r.top < innerHeight))) show(el); }); }
+  window.addEventListener('scroll', function () { if (!tk) tk = requestAnimationFrame(sweep); }, { passive: true });
+  setInterval(function () { if (pend.size) sweep(); }, 1200);
   function ownText(el) { for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.nodeValue.trim()) return true; return false; }
   function fixedAncestor(el) {
     for (var a = el; a && a !== document.body; a = a.parentElement) {
@@ -1212,7 +1221,7 @@ class Component extends DCLogic {
       b.classList.add('dw-tr');
       var p = b.parentElement, k = groups.get(p) || 0; groups.set(p, k + 1);
       if (k) b.style.setProperty('--dw-trd', Math.min(0.32, k * 0.06).toFixed(2) + 's');
-      io.observe(b);
+      io.observe(b); pend.add(b);
     }
   }
   var t = 0; function later() { clearTimeout(t); t = setTimeout(scan, 120); }
