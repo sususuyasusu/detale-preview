@@ -1178,6 +1178,7 @@ class Component extends DCLogic {
    ④ 上の帯（会社名・メニュー・お問い合わせ）: 帯が見えた時に左から順に出す（トップは帯が3.1秒後に出るので、それを待つ）
    ⑤ 冒頭の演出に重なる文字（ABOUT〜WORKFLOW・©・CONTACT・場面番号）: 冒頭の演出（粒）が動き出した時に出す
    動きの指定は「translate」を使い、各部品がもともと持つ動き（transform）とぶつからないようにする。
+   既にある「スクロールに合わせて下から出る」部品（.rv・Chrome系のみ動く）は、その動きのあるブラウザではそのまま、無いブラウザ（Safari等）ではこちらで動かす。
    対象外: 読み込み画面・場面転換で動く重なり文字（mph）・入力欄・読み上げ専用・画面に出ないもの。動きを減らす設定の人には何もしない。 */
 (function () {
   if (window.__dwTextRise) return; window.__dwTextRise = 1;
@@ -1189,7 +1190,7 @@ class Component extends DCLogic {
     + '.sw-mk{opacity:0;translate:0 .2em;transition:transform 1.3s ' + E + ',translate 1.3s ' + E + ',opacity 1s ease}.sw-mark.in .sw-mk{opacity:1;translate:none}'
     + '.ch{animation-name:dwUpCh!important}@keyframes dwUpCh{from{transform:translateY(105%);opacity:0}to{transform:translateY(0);opacity:1}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
-  var SKIP_UP = '#top,.skip,.sr-only,.sw-count,.sw-bar,.mphl,.mph,.dw-loader,[class*="loader"],[class*="intro"],.sw-split,.sw-rv,.sw-clip,.sw-mark,.sw-ma,.dw-lb,.dw-tr,.ch,script,style,svg,canvas,button[aria-hidden]';
+  var SKIP_UP = '#top,.skip,.sr-only,.sw-bar,.mphl,.mph,.dw-loader,[class*="loader"],[class*="intro"],.sw-split,.sw-rv,.sw-clip,.sw-mark,.sw-ma,.dw-lb,.dw-tr,.ch,script,style,svg,canvas,button[aria-hidden]';
   var BLOCK = /^(block|flex|grid|list-item|inline-block|inline-flex|table|table-cell|table-row|flow-root)$/;
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) show(e.target); });
